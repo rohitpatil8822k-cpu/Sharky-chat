@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  
+  <title>Sharky Chat – Real-time Chat, Games & Friends | Dive In</title>
+  <meta name="description" content="Join Sharky Chat for fun real-time chatrooms, new friends, and live games. Safe, creative & secure conversation for everyone. Start chatting now on any device!" />
+  <meta name="keywords" content="chat, sharky chat, sharky, sharky chat.com, sharky world, team sharky, chatroom, real-time, games, friends, social, online, fun, safe" />
+  <meta name="author" content="Sharky Chat Team" />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://sharkychat.com/" />
+
+  <link rel="icon" href="/logo.png" type="image/png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/logo.png">
+  <meta name="theme-color" content="#0d1a2a" />
+  <link rel="manifest" href="/manifest.json">
+
+  <meta property="og:title" content="Sharky Chat – Real-time Chat, Games & Friends" />
+  <meta property="og:description" content="Dive into Sharky Chat’s live chatrooms. Meet people, chat, enjoy multiplayer games, and make new friends. Fun & secure conversations on all devices!" />
+  <meta property="og:image" content="https://sharkychat.com/logo.png" />
+  <meta property="og:url" content="https://sharkychat.com/" />
+  <meta property="og:type" content="website" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sharky Chat – Real-time Chat & Games" />
+  <meta name="twitter:description" content="Play, chat, and make new friends on Sharky Chat. Join open chatrooms and multiplayer games now!" />
+  <meta name="twitter:image" content="https://sharkychat.com/logo.png" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Sharky Chat",
+      "url": "https://sharkychat.com",
+      "logo": "https://sharkychat.com/logo.png",
+      "description": "Real-time chatrooms, games, and friends. Fun and secure chatting experience for everyone. Accessible on mobile and desktop.",
+      "sameAs": [
+        "https://sharkychat.com/"
+      ]
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      color: #f5f7fa;
+      background: linear-gradient(135deg, #0d1a2a, #1a2a4d);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      overflow: hidden;
+      position: relative;
+    }
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 480px;
+      padding: 36px 32px 48px 32px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 112, 255, 0.3);
+      backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeInDown 1.2s ease forwards;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #edf2fc;
+      text-shadow: 0 2px 10px rgba(0, 156, 255, 0.75);
+      letter-spacing: 2px;
+      user-select: text;
+    }
+    p.tagline {
+      font-weight: 400;
+      font-size: 1.4rem;
+      margin-bottom: 24px;
+      color: #aecdff;
+      text-shadow: 0 1px 4px rgba(0,112,255,0.5);
+      user-select: text;
+    }
+    p#redirectMsg {
+      font-size: 1.1rem;
+      color: #8ab9ff;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+      user-select: none;
+      min-height: 28px;
+      opacity: 0.9;
+      font-style: italic;
+      transition: color 0.3s ease;
+    }
+    p#redirectMsg:hover {
+      color: #4fc3f7;
+    }
+    .smoke {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 120px;
+      z-index: 5;
+      pointer-events: none;
+      overflow: visible;
+      filter: brightness(0.6);
+    }
+    .smoke div {
+      position: absolute;
+      bottom: 0;
+      width: 110px;
+      height: 110px;
+      background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 80%);
+      border-radius: 50%;
+      opacity: 0.45;
+      animation: riseSmoke 14s linear infinite;
+      filter: blur(16px);
+      will-change: transform, opacity;
+    }
+    .smoke div:nth-child(1) { left: 12%; animation-delay: 0s; animation-duration: 14s; }
+    .smoke div:nth-child(2) { left: 32%; animation-delay: 4s; animation-duration: 13s; }
+    .smoke div:nth-child(3) { left: 52%; animation-delay: 8s; animation-duration: 15s; }
+    .smoke div:nth-child(4) { left: 72%; animation-delay: 6s; animation-duration: 14s; }
+    .smoke div:nth-child(5) { left: 88%; animation-delay: 10s; animation-duration: 16s; }
+    #clickBubbles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 15;
+    }
+    .click-bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(50,160,255,0.85) 0%, rgba(50,160,255,0) 80%);
+      box-shadow: 0 0 18px 5px rgba(50,160,255,0.75);
+      animation: bubbleRise 1.25s ease forwards;
+      will-change: transform, opacity;
+      width: 28px;
+      height: 28px;
+      pointer-events: none;
+    }
+    @keyframes riseSmoke {
+      0% { transform: translateY(0) scale(0.8); opacity: 0.42; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-180px) scale(1.5); opacity: 0; }
+    }
+    @keyframes bubbleRise {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-140px) scale(0.6); opacity: 0; }
+    }
+    @keyframes fadeInDown {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 480px) {
+      .container { max-width: 90vw; padding: 28px 20px 36px 20px; }
+      h1 { font-size: 2.2rem; }
+      p.tagline { font-size: 1.1rem; margin-bottom: 18px; }
+      p#redirectMsg { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav aria-label="Main site navigation"></nav>
+  <main class="container" role="main" aria-label="Welcome message and redirect notice">
+    <h1>Welcome to Sharky Chat</h1>
+    <p class="tagline">Login and enjoy a world of fun conversations</p>
+    <p id="redirectMsg" aria-live="polite">Redirecting to login page in 10s...</p>
+    <section style="display:none;">
+      Sharky Chat is a secure real-time chatroom website that offers multiplayer games and open chatrooms for making new friends, social fun, and entertainment. Accessible on laptop, iOS, and Android.
+    </section>
+  </main>
+  <footer style="display: none;">
+    &copy; 2025 Sharky Chat. All rights reserved.
+  </footer>
+  <div class="smoke" aria-hidden="true">
+    <div></div><div></div><div></div><div></div><div></div>
+  </div>
+  <div id="clickBubbles" aria-hidden="true"></div>
+  <script>
+    let timeLeft = 10;
+    const msg = document.getElementById("redirectMsg");
+    const timer = setInterval(() => {
+      timeLeft--;
+      if(timeLeft >= 0){ msg.textContent = `Redirecting to login page in ${timeLeft}s...`; }
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        window.location.href = "/profile.html";
+      }
+    }, 1000);
+    const bubblesContainer = document.getElementById('clickBubbles');
+    document.addEventListener('click', (e) => {
+      const bubble = document.createElement('div');
+      bubble.className = 'click-bubble';
+      bubble.style.left = (e.clientX - 14) + 'px';
+      bubble.style.top = (e.clientY - 14) + 'px';
+      bubblesContainer.appendChild(bubble);
+      bubble.addEventListener('animationend', () => { bubble.remove(); });
+    });
+  </script>
+</body>
+</html>
