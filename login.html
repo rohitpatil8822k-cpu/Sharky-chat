@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sharky Chat | Login/Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary-bg: radial-gradient(circle at 50% 30%, #111431 0%, #0a0d1f 70%);
+      --accent: #3a98ff;
+      --header-accent: #1e6fdb;
+      --panel-bg: rgba(10, 15, 39, 0.85);
+      --card-radius: 20px;
+      --glow: 0 0 16px #3a98ffaa, 0 0 36px #3a98ffaa;
+      --transition-time: 0.4s;
+      --input-bg: #121832cc;
+      --input-focus-bg: #1e3d99;
+      --input-shadow: inset 0 0 10px #000b;
+    }
+    * {
+      margin:0; padding:0; box-sizing:border-box;
+    }
+    html, body {
+      height: 100%;
+      font-family: 'Roboto', sans-serif;
+      background: var(--primary-bg);
+      color: #e0e7ff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: hidden;
+      user-select: none;
+      scroll-behavior: smooth;
+    }
+    header {
+      margin-top: 36px;
+      font-family: 'MedievalSharp', cursive;
+      font-weight: 600;
+      font-size: 3rem;
+      color: var(--accent);
+      text-shadow: var(--glow);
+      letter-spacing: 0.1em;
+      user-select:none;
+      text-align: center;
+      width: 100%;
+      max-width: 380px;
+      animation: fadeInDown 1s ease forwards;
+    }
+    .login-register-card {
+      margin-top: 48px;
+      width: 95vw;
+      max-width: 400px;
+      background: var(--panel-bg);
+      border-radius: var(--card-radius);
+      padding: 36px 32px;
+      box-shadow: 0 0 40px #3a98ff66;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      animation: fadeInUp 1s ease forwards;
+    }
+    .tabs {
+      display: flex;
+      width: 100%;
+      margin-bottom: 28px;
+      gap: 6px;
+      user-select:none;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 14px 0;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.07em;
+      border: none;
+      border-radius: 12px 12px 0 0;
+      cursor: pointer;
+      background: #0f1432;
+      color: #9db4ffcc;
+      box-shadow: inset 0 0 6px #091023;
+      transition:
+        background var(--transition-time) ease,
+        color var(--transition-time) ease,
+        transform var(--transition-time) ease;
+    }
+    .tab-btn:hover:not(.active) {
+      color: #a4bef7;
+      background: #131b4a;
+    }
+    .tab-btn.active {
+      background: linear-gradient(90deg, #3a98ff, #1e6fdb);
+      color: #eef2ff;
+      box-shadow:
+        0 0 24px #3a98ffcc,
+        inset 0 0 24px #1e6fdb;
+      transform: scale(1.05) translateY(-3px);
+      z-index: 5;
+    }
+    form {
+      width: 100%;
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity var(--transition-time) ease, transform var(--transition-time) ease;
+      min-height: 290px;
+    }
+    form.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    input, select {
+      padding: 14px 16px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      background: var(--input-bg);
+      box-shadow: var(--input-shadow);
+      color: #dde6ff;
+      transition: box-shadow 0.3s ease, background 0.3s ease;
+      width: 98%;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+    input:focus, select:focus {
+      outline: none;
+      background: var(--input-focus-bg);
+      box-shadow: 0 0 16px var(--accent);
+      color: #fff;
+    }
+    ::placeholder {
+      color: #bfccff90;
+      font-weight: 400;
+    }
+    .show-hide {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      user-select: none;
+      width: 100%;
+      color: #9db4ffcc;
+      font-weight: 500;
+      font-size: 0.98rem;
+    }
+    .show-hide input[type=password], .show-hide input[type=text] {
+      flex: 1;
+      font-weight: 500;
+    }
+    .show-hide input[type=checkbox] {
+      cursor: pointer;
+      accent-color: var(--accent);
+      width: 22px; height:22px;
+      margin-left: 6px;
+      margin-top: 0;
+      filter: drop-shadow(0 0 1px #4299ffcc);
+    }
+    .submit-btn {
+      background: linear-gradient(90deg, #3a98ff 15%, #1e6fdb 90%);
+      color: white;
+      font-weight: 700;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 0;
+      letter-spacing: 0.08em;
+      font-size: 1.12em;
+      cursor: pointer;
+      box-shadow: 0 0 24px #3a98ffaa;
+      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
+    .submit-btn:hover {
+      background: linear-gradient(90deg, #1e6fdb 25%, #3a98ff 90%);
+      box-shadow: 0 0 40px #1e6fdbcc;
+      transform: scale(1.05);
+    }
+    .forgot-pass {
+      font-size: 1rem;
+      color: #a4bef7;
+      cursor: pointer;
+      text-align: right;
+      user-select:none;
+      margin-top: -6px;
+      margin-bottom: 0;
+      transition: color 0.3s ease;
+      width: 100%;
+      font-weight: 600;
+    }
+    .forgot-pass:hover {
+      color: #3a98ff;
+      text-decoration: underline;
+    }
+    .notif-card {
+      min-width: 200px;
+      max-width: 340px;
+      background: linear-gradient(120deg, #1b2a4d, #3a98ff29);
+      color: #e0e7ffcc;
+      font-size: 1em;
+      border-radius: 16px;
+      padding: 16px 22px 14px 18px;
+      box-shadow: 0 0 28px #3a98ff88;
+      position: relative;
+      border: 2px solid #b9d0ff33;
+      font-family: 'Roboto', sans-serif;
+      animation: notifIn 0.6s ease forwards;
+      font-weight: 700;
+      pointer-events: auto;
+      margin: 6px 0;
+      word-break: break-word;
+      user-select:none;
+    }
+    .notif-emoji {
+      font-size: 1.3rem;
+      padding-right: 10px;
+      user-select:none;
+    }
+    .notif-close {
+      position: absolute;
+      top: 8px;
+      right: 16px;
+      font-size: 1.25em;
+      color: #ecefffc9;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-weight: 700;
+      transition: color 0.3s, transform 0.2s;
+      user-select:none;
+    }
+    .notif-close:hover {
+      color: #3a98ff;
+      transform: scale(1.2);
+    }
+    @keyframes notifIn {
+      from {opacity: 0; filter: blur(3px);}
+      to {opacity: 1; filter: blur(0);}
+    }
+    .notif-close:focus {
+      outline: none;
+    }
+
+    .google-btn {
+      margin-top: 14px;
+      padding: 13px 0;
+      background: white;
+      color: #225fed;
+      font-weight: 700;
+      border-radius: 12px;
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      border: none;
+      transition: box-shadow 0.25s ease;
+      gap: 12px;
+      width: 100%;
+      box-shadow: 0 0 12px #3a98ff88;
+      user-select:none;
+    }
+    .google-btn:hover {
+      box-shadow: 0 0 24px #3a98ffdd;
+    }
+    .google-btn img {
+      height: 24px;
+      width: 24px;
+    }
+
+    /* Animations for fadeIn */
+    @keyframes fadeInDown {
+      0% {opacity: 0; transform: translateY(-26px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeInUp {
+      0% {opacity: 0; transform: translateY(26px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 450px) {
+      header {
+        font-size: 2.4rem;
+        margin-top: 24px;
+      }
+      .login-register-card {
+        max-width: 95vw;
+        padding: 28px 20px;
+      }
+      .tab-btn {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>SHARKY CHAT</header>
+
+  <div class="login-register-card" role="region" aria-label="Login and Register forms">
+    <div id="notif-container" aria-live="polite" aria-atomic="true"></div>
+    <div class="tabs" role="tablist" aria-label="Login and Register tabs">
+      <button class="tab-btn active" onclick="switchTab('login')" role="tab" aria-selected="true" aria-controls="loginForm" id="tab-login">Login</button>
+      <button class="tab-btn" onclick="switchTab('register')" role="tab" aria-selected="false" aria-controls="registerForm" id="tab-register">Register</button>
+    </div>
+
+    <form id="loginForm" class="active" novalidate role="tabpanel" aria-labelledby="tab-login">
+      <input type="email" id="loginEmail" placeholder="Email" autocomplete="email" required aria-label="Email" />
+      <div class="show-hide">
+        <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" required aria-label="Password" />
+        <input type="checkbox" onclick="togglePassword('loginPassword')" aria-label="Show password"> Show
+      </div>
+      <div class="forgot-pass" role="link" tabindex="0" onclick="location.href='pass-reset.html'" onkeypress="if(event.key==='Enter'){location.href='pass-reset.html';}">Forgot Password?</div>
+      <div class="error-msg" id="loginError" role="alert" aria-live="assertive"></div>
+      <button class="submit-btn" type="submit">Login</button>
+      <button type="button" class="google-btn" id="googleLogin" aria-label="Continue with Google">
+        <img src="https://img.icons8.com/color/48/google-logo.png" alt="Google logo" /> Continue with Google
+      </button>
+    </form>
+
+    <form id="registerForm" novalidate role="tabpanel" aria-labelledby="tab-register">
+      <input type="text" id="regUsername" placeholder="Username" autocomplete="username" required aria-label="Username" />
+      <input type="number" id="regAge" placeholder="Age (18+)" min="18" required aria-label="Age" />
+      <select id="regGender" required aria-label="Select Gender">
+        <option value="" disabled selected>Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+      <input type="email" id="regEmail" placeholder="Email" autocomplete="email" required aria-label="Email" />
+      <div class="show-hide">
+        <input type="password" id="regPassword" placeholder="Password" autocomplete="new-password" required aria-label="Password" />
+        <input type="checkbox" onclick="togglePassword('regPassword')" aria-label="Show password"> Show
+      </div>
+      <div class="error-msg" id="registerError" role="alert" aria-live="assertive"></div>
+      <button class="submit-btn" type="submit">Register</button>
+      <button type="button" class="google-btn" id="googleSignup" aria-label="Sign up with Google">
+        <img src="https://img.icons8.com/color/48/google-logo.png" alt="Google logo" /> Sign up with Google
+      </button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+    import {
+      getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+      setPersistence, browserLocalPersistence,
+      GoogleAuthProvider, signInWithPopup, isSignInWithEmailLink, signInWithEmailLink
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+      measurementId: "G-HT9T3P9KST"
+    };
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    await setPersistence(auth, browserLocalPersistence).catch(() => {});
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    function showNotif(msg, opts = {}) {
+      const c = document.getElementById('notif-container');
+      const div = document.createElement('div');
+      let em = '';
+      if(msg.toLowerCase().includes("password")) em = '🔑';
+      if(msg.toLowerCase().includes("user")||msg.toLowerCase().includes("email")) em = '📧';
+      if(msg.toLowerCase().includes("try")||msg.toLowerCase().includes("too many")) em = "🕓";
+      if(msg.toLowerCase().includes("taken")) em = "⚠️";
+      if(msg.toLowerCase().includes("success")||msg.includes("✅")) em = "✅";
+      if(msg.toLowerCase().includes("18+")) em = "🚫";
+      div.className = 'notif-card';
+      div.setAttribute("role", "alert");
+      div.setAttribute("aria-live", "assertive");
+      div.innerHTML = `<span class="notif-emoji">${em}</span>${opts.strong ? `<strong>${msg}</strong>` : msg}
+        <button class="notif-close" title="Dismiss" aria-label="Dismiss notification">×</button>`;
+      c.appendChild(div);
+      div.querySelector('.notif-close').onclick = () => {
+        div.classList.add('hideMe');
+        setTimeout(() => div.remove(), 340);
+      };
+      setTimeout(() => {
+        if(div.parentNode) {
+          div.classList.add('hideMe');
+          setTimeout(() => div.remove(), 340);
+        }
+      }, opts.time || 4500 + Math.random()*700);
+    }
+
+    function generateUsernameSuggestions(base) {
+      const clean = base.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+      const nums = [101, 202, 303, Math.floor(Math.random() * 900 + 100)];
+      const suffixes = ["_x", "_pro", "_king", ""];
+      return suffixes.map((suf, i) => `${clean}${suf}${nums[i]}`);
+    }
+
+    // Switch tab function
+    window.switchTab = (tab) => {
+      const loginForm = document.getElementById("loginForm");
+      const registerForm = document.getElementById("registerForm");
+      const tabs = document.querySelectorAll(".tab-btn");
+      tabs.forEach(btn => {
+        btn.classList.remove("active");
+        btn.setAttribute("aria-selected", "false");
+      });
+      if (tab === "login") {
+        registerForm.classList.remove("active");
+        setTimeout(() => loginForm.classList.add("active"), 50);
+        tabs[0].classList.add("active");
+        tabs[0].setAttribute("aria-selected", "true");
+      } else {
+        loginForm.classList.remove("active");
+        setTimeout(() => registerForm.classList.add("active"), 50);
+        tabs[1].classList.add("active");
+        tabs[1].setAttribute("aria-selected", "true");
+      }
+    };
+
+    window.togglePassword = (id) => {
+      const el = document.getElementById(id);
+      el.type = el.type === "password" ? "text" : "password";
+    };
+
+    // Register form submission
+    document.getElementById("registerForm").addEventListener("submit", async(e) => {
+      e.preventDefault();
+      const age = parseInt(document.getElementById("regAge").value);
+      if (age < 18) {
+        showNotif("18+ only allowed.", {strong:true});
+        return;
+      }
+      const usernameRaw = document.getElementById("regUsername").value.trim();
+      const usernameLower = usernameRaw.toLowerCase();
+      if (!usernameRaw.match(/^[a-zA-Z0-9_]{3,}$/)) {
+        showNotif("Username must be 3+ chars (letters/numbers/_).", {strong:true});
+        return;
+      }
+      const q = query(collection(db, "users"), where("username_lower", "==", usernameLower));
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        const sugg = generateUsernameSuggestions(usernameRaw);
+        showNotif(
+          `Username taken. Choose: <b>${sugg.join("</b>, <b>")}</b>`,
+          {strong:true,time:7000}
+        );
+        return;
+      }
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPassword").value;
+      const gender = document.getElementById("regGender").value;
+      try {
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        await setDoc(doc(db, "users", userCred.user.uid), {
+          uid: userCred.user.uid,
+          username: usernameRaw,
+          username_lower: usernameLower,
+          age,
+          gender,
+          email,
+          createdAt: new Date().toISOString()
+        });
+        logEvent(analytics, 'sign_up', {method: 'email'});
+        window.location.href = `profile.html`;
+      } catch (err) {
+        let msg = String(err.message);
+        if (msg.includes("already in use")) msg = "This email is already registered.";
+        showNotif(msg, {strong:true});
+      }
+    });
+
+    // Login form submission
+    document.getElementById("loginForm").addEventListener("submit", async(e) => {
+      e.preventDefault();
+      try {
+        const userCred = await signInWithEmailAndPassword(auth,
+          document.getElementById("loginEmail").value,
+          document.getElementById("loginPassword").value
+        );
+        logEvent(analytics, 'login', {method: 'email'});
+        window.location.href = `profile.html`;
+      } catch (err) {
+        let msg = String(err.message);
+        if (msg.includes("user-not-found")) msg = "Wrong Email: No user found.";
+        else if (msg.includes("wrong-password")) msg = "Wrong Password.";
+        else if (msg.includes("too many requests")) msg = "Too many login attempts. Try later.";
+        showNotif(msg, {strong:true});
+      }
+    });
+
+    // Google login with default age and username from Gmail
+    document.getElementById("googleLogin").addEventListener("click", async () => {
+      try {
+        const res = await signInWithPopup(auth, provider);
+        const user = res.user;
+        const userDocRef = doc(db, "users", user.uid);
+        const userSnap = await getDocs(query(collection(db, "users"), where("uid", "==", user.uid)));
+        if (!userSnap.empty) {
+    
+          window.location.href = "profile.html";
+        } else {
+          const usernameFromEmail = user.email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '').toLowerCase() || "sharkychatter";
+          await setDoc(userDocRef, {
+            uid: user.uid,
+            email: user.email,
+            username: usernameFromEmail,
+            username_lower: usernameFromEmail.toLowerCase(),
+            age: 18,
+            gender: "Other",
+            createdAt: new Date().toISOString()
+          });
+          window.location.href = "profile.html";
+        }
+      } catch (err) {
+        showNotif(err.message, {strong:true});
+      }
+    });
+
+    // Google Signup button same as login btn for SPA experience
+    document.getElementById("googleSignup").addEventListener("click", () => {
+      document.getElementById("googleLogin").click();
+    });
+
+    (async () => {
+      if (isSignInWithEmailLink(auth, window.location.href)) {
+        let email = window.localStorage.getItem('emailForSignIn');
+        if (!email) {
+          email = prompt('Please enter your email to complete sign-in:');
+          if (!email) {
+            showNotif("Email is required to complete login via link.", {strong:true});
+            return;
+          }
+        }
+        try {
+          const result = await signInWithEmailLink(auth, email, window.location.href);
+          window.localStorage.removeItem('emailForSignIn');
+          logEvent(analytics, 'login', {method: 'emailLink'});
+          showNotif(`Welcome back, ${result.user.email}! Redirecting...`, {strong:true, time:3500});
+          setTimeout(() => {
+            window.location.href = "profile.html";
+          }, 3500);
+        } catch (err) {
+          showNotif(`Login link is invalid or expired. Please try again.`, {strong:true});
+          window.localStorage.removeItem('emailForSignIn');
+        }
+      }
+    })();
+
+    window.onload = () => {
+      document.getElementById("notif-container").style.display = "flex";
+    };
+  </script>
+</body>
+</html>
