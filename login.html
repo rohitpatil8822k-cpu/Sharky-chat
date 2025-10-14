@@ -7,26 +7,27 @@
   <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --primary-bg: radial-gradient(circle at 50% 30%, #111431 0%, #0a0d1f 70%);
-      --accent: #3a98ff;
-      --header-accent: #1e6fdb;
-      --panel-bg: rgba(10, 15, 39, 0.85);
-      --card-radius: 20px;
-      --glow: 0 0 16px #3a98ffaa, 0 0 36px #3a98ffaa;
+      --primary-bg: linear-gradient(135deg, #222436 0%, #15151f 90%);
+      --accent: #8fbbff;
+      --header-accent: #405377;
+      --panel-bg: rgba(42, 46, 71, 0.90);
+      --card-radius: 22px;
+      --glow: 0 0 20px #8fbbff99, 0 0 42px #8fbbff88;
       --transition-time: 0.4s;
-      --input-bg: #121832cc;
-      --input-focus-bg: #1e3d99;
-      --input-shadow: inset 0 0 10px #000b;
+      --input-bg: #24263bcc;
+      --input-focus-bg: #354a67;
+      --input-shadow: inset 0 0 10px #1a2038cc;
+      --button-shadow: 0 0 24px #89a3ddaa;
     }
     * {
       margin:0; padding:0; box-sizing:border-box;
     }
     html, body {
+      min-height: 100vh;
       height: 100%;
       font-family: 'Roboto', sans-serif;
       background: var(--primary-bg);
-      color: #e0e7ff;
-      min-height: 100vh;
+      color: #e6e9f7;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -36,38 +37,44 @@
       scroll-behavior: smooth;
     }
     header {
-      margin-top: 36px;
+      margin-top: 38px;
       font-family: 'MedievalSharp', cursive;
       font-weight: 600;
-      font-size: 3rem;
+      font-size: 3.1rem;
       color: var(--accent);
       text-shadow: var(--glow);
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       user-select:none;
       text-align: center;
       width: 100%;
-      max-width: 380px;
+      max-width: 420px;
       animation: fadeInDown 1s ease forwards;
+      border-radius: 28px;
+      background: linear-gradient(90deg, #23253b 77%, #35375c 100%);
+      border-bottom: 2.5px solid #46537033;
+      padding-bottom: 8px;
     }
     .login-register-card {
-      margin-top: 48px;
-      width: 95vw;
-      max-width: 400px;
+      margin-top: 56px;
+      width: 96vw;
+      max-width: 410px;
       background: var(--panel-bg);
       border-radius: var(--card-radius);
-      padding: 36px 32px;
-      box-shadow: 0 0 40px #3a98ff66;
+      padding: 43px 36px 38px 36px;
+      box-shadow: 0 0 50px #8fbbff33, 0 0 10px #3a98ff22;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
       animation: fadeInUp 1s ease forwards;
+      border: 1.7px solid #6c7dba1f;
+      backdrop-filter: blur(3px);
     }
     .tabs {
       display: flex;
       width: 100%;
-      margin-bottom: 28px;
-      gap: 6px;
+      margin-bottom: 30px;
+      gap: 10px;
       user-select:none;
     }
     .tab-btn {
@@ -75,30 +82,30 @@
       padding: 14px 0;
       font-family: 'Orbitron', sans-serif;
       font-weight: 700;
-      font-size: 1.1rem;
-      letter-spacing: 0.07em;
+      font-size: 1.08rem;
+      letter-spacing: 0.09em;
       border: none;
-      border-radius: 12px 12px 0 0;
+      border-radius: 15px 15px 0 0;
       cursor: pointer;
-      background: #0f1432;
-      color: #9db4ffcc;
-      box-shadow: inset 0 0 6px #091023;
+      background: #23253b;
+      color: #bfceffbe;
+      box-shadow: inset 0 0 10px #35375c77;
       transition:
         background var(--transition-time) ease,
         color var(--transition-time) ease,
         transform var(--transition-time) ease;
     }
     .tab-btn:hover:not(.active) {
-      color: #a4bef7;
-      background: #131b4a;
+      color: #d0e1ff;
+      background: #2a2c49;
     }
     .tab-btn.active {
-      background: linear-gradient(90deg, #3a98ff, #1e6fdb);
-      color: #eef2ff;
+      background: linear-gradient(90deg, #8fbbff 35%, #405377 110%);
+      color: #f2f4ff;
       box-shadow:
-        0 0 24px #3a98ffcc,
-        inset 0 0 24px #1e6fdb;
-      transform: scale(1.05) translateY(-3px);
+        0 0 32px #8fbbffbb,
+        inset 0 0 30px #40537788;
+      transform: scale(1.07) translateY(-3px);
       z-index: 5;
     }
     form {
@@ -107,9 +114,9 @@
       flex-direction: column;
       gap: 18px;
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(18px);
       transition: opacity var(--transition-time) ease, transform var(--transition-time) ease;
-      min-height: 290px;
+      min-height: 295px;
     }
     form.active {
       display: flex;
@@ -117,37 +124,37 @@
       transform: translateY(0);
     }
     input, select {
-      padding: 14px 16px;
-      font-size: 1rem;
-      border-radius: 10px;
+      padding: 15px 17px;
+      font-size: 1.03rem;
+      border-radius: 13px;
       border: none;
       background: var(--input-bg);
       box-shadow: var(--input-shadow);
-      color: #dde6ff;
+      color: #ccd6ff;
       transition: box-shadow 0.3s ease, background 0.3s ease;
       width: 98%;
       font-weight: 500;
       letter-spacing: 0.04em;
+      border-bottom: 2px solid #4245702c;
+      margin-bottom: 6px;
     }
     input:focus, select:focus {
       outline: none;
       background: var(--input-focus-bg);
-      box-shadow: 0 0 16px var(--accent);
+      box-shadow: 0 0 18px var(--accent);
       color: #fff;
     }
     ::placeholder {
-      color: #bfccff90;
+      color: #c9defa97;
       font-weight: 400;
     }
     .show-hide {
       display: flex;
       align-items: center;
-      gap: 12px;
-      user-select: none;
+      gap: 13px;
       width: 100%;
-      color: #9db4ffcc;
-      font-weight: 500;
-      font-size: 0.98rem;
+      color: #b9c7f7c7;
+      font-size: 1rem;
     }
     .show-hide input[type=password], .show-hide input[type=text] {
       flex: 1;
@@ -156,73 +163,82 @@
     .show-hide input[type=checkbox] {
       cursor: pointer;
       accent-color: var(--accent);
-      width: 22px; height:22px;
+      width: 21px; height:21px;
       margin-left: 6px;
-      margin-top: 0;
-      filter: drop-shadow(0 0 1px #4299ffcc);
+      filter: drop-shadow(0 0 1px #8fbbffb8);
     }
     .submit-btn {
-      background: linear-gradient(90deg, #3a98ff 15%, #1e6fdb 90%);
+      background: linear-gradient(90deg, #89a3dd 12%, #405377 94%);
       color: white;
       font-weight: 700;
       border: none;
-      border-radius: 14px;
-      padding: 16px 0;
-      letter-spacing: 0.08em;
-      font-size: 1.12em;
+      border-radius: 16px;
+      padding: 17px 0;
+      letter-spacing: 0.09em;
+      font-size: 1.13em;
       cursor: pointer;
-      box-shadow: 0 0 24px #3a98ffaa;
-      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      box-shadow: var(--button-shadow);
+      transition: background 0.32s, box-shadow 0.32s, transform 0.2s;
     }
     .submit-btn:hover {
-      background: linear-gradient(90deg, #1e6fdb 25%, #3a98ff 90%);
-      box-shadow: 0 0 40px #1e6fdbcc;
-      transform: scale(1.05);
+      background: linear-gradient(90deg, #405377 17%, #89a3dd 89%);
+      box-shadow: 0 0 42px #728ad6cc;
+      transform: scale(1.07);
     }
     .forgot-pass {
-      font-size: 1rem;
-      color: #a4bef7;
+      font-size: 1.02rem;
+      color: #6d91da;
       cursor: pointer;
       text-align: right;
       user-select:none;
-      margin-top: -6px;
+      margin-top: -3px;
       margin-bottom: 0;
       transition: color 0.3s ease;
       width: 100%;
       font-weight: 600;
+      letter-spacing: 0.03em;
     }
     .forgot-pass:hover {
-      color: #3a98ff;
+      color: #8fbbff;
       text-decoration: underline;
+    }
+    .error-msg {
+      color: #fd6b6b;
+      font-size: 1em;
+      margin-bottom: 0px;
+      text-align: left;
+      font-weight: 700;
+      min-height: 22px;
+      letter-spacing:0.02em;
     }
     .notif-card {
       min-width: 200px;
-      max-width: 340px;
-      background: linear-gradient(120deg, #1b2a4d, #3a98ff29);
-      color: #e0e7ffcc;
-      font-size: 1em;
-      border-radius: 16px;
+      max-width: 360px;
+      background: linear-gradient(115deg, #23253b 60%, #8fbbff26 100%);
+      color: #e0e7ffd0;
+      font-size: 1.03em;
+      border-radius: 19px;
       padding: 16px 22px 14px 18px;
-      box-shadow: 0 0 28px #3a98ff88;
+      box-shadow: 0 0 32px #8fbbff88;
       position: relative;
-      border: 2px solid #b9d0ff33;
+      border: 2.2px solid #89a3dd29;
       font-family: 'Roboto', sans-serif;
       animation: notifIn 0.6s ease forwards;
       font-weight: 700;
       pointer-events: auto;
-      margin: 6px 0;
+      margin: 7px 0;
       word-break: break-word;
       user-select:none;
     }
     .notif-emoji {
-      font-size: 1.3rem;
-      padding-right: 10px;
+      font-size: 1.32rem;
+      padding-right: 11px;
       user-select:none;
     }
     .notif-close {
       position: absolute;
-      top: 8px;
-      right: 16px;
+      top: 7px;
+      right: 17px;
       font-size: 1.25em;
       color: #ecefffc9;
       cursor: pointer;
@@ -233,7 +249,7 @@
       user-select:none;
     }
     .notif-close:hover {
-      color: #3a98ff;
+      color: #8fbbff;
       transform: scale(1.2);
     }
     @keyframes notifIn {
@@ -243,14 +259,13 @@
     .notif-close:focus {
       outline: none;
     }
-
     .google-btn {
-      margin-top: 14px;
+      margin-top: 15px;
       padding: 13px 0;
-      background: white;
-      color: #225fed;
+      background: #f5f5fa;
+      color: #405377;
       font-weight: 700;
-      border-radius: 12px;
+      border-radius: 13px;
       font-family: 'Roboto', sans-serif;
       display: flex;
       justify-content: center;
@@ -258,21 +273,22 @@
       cursor: pointer;
       letter-spacing: 0.04em;
       border: none;
-      transition: box-shadow 0.25s ease;
-      gap: 12px;
+      transition: box-shadow 0.27s ease;
+      gap: 13px;
       width: 100%;
-      box-shadow: 0 0 12px #3a98ff88;
+      box-shadow: 0 0 17px #8fbbff55;
       user-select:none;
+      border-bottom: 2px solid #8fbbff33;
     }
     .google-btn:hover {
-      box-shadow: 0 0 24px #3a98ffdd;
+      box-shadow: 0 0 38px #8fbbffbd;
+      background: #f1f8ff;
+      color: #89a3dd;
     }
     .google-btn img {
       height: 24px;
       width: 24px;
     }
-
-    /* Animations for fadeIn */
     @keyframes fadeInDown {
       0% {opacity: 0; transform: translateY(-26px);}
       100% {opacity: 1; transform: translateY(0);}
@@ -281,19 +297,26 @@
       0% {opacity: 0; transform: translateY(26px);}
       100% {opacity: 1; transform: translateY(0);}
     }
-
-    /* Responsive tweaks */
-    @media (max-width: 450px) {
+    @media (max-width: 460px) {
       header {
-        font-size: 2.4rem;
-        margin-top: 24px;
+        font-size: 2.1rem;
+        margin-top: 20px;
+        padding-bottom: 5px;
       }
       .login-register-card {
-        max-width: 95vw;
-        padding: 28px 20px;
+        max-width: 98vw;
+        padding: 26px 11px;
       }
       .tab-btn {
-        font-size: 0.95rem;
+        font-size: 0.90rem;
+        border-radius: 10px 10px 0 0;
+      }
+      form {
+        min-height: 250px;
+      }
+      .notif-card {
+        font-size: 0.99em;
+        padding: 14px 10px 11px 11px;
       }
     }
   </style>
@@ -395,7 +418,7 @@
           div.classList.add('hideMe');
           setTimeout(() => div.remove(), 340);
         }
-      }, opts.time || 4500 + Math.random()*700);
+      }, opts.time || 4300 + Math.random()*650);
     }
 
     function generateUsernameSuggestions(base) {
@@ -405,7 +428,6 @@
       return suffixes.map((suf, i) => `${clean}${suf}${nums[i]}`);
     }
 
-    // Switch tab function
     window.switchTab = (tab) => {
       const loginForm = document.getElementById("loginForm");
       const registerForm = document.getElementById("registerForm");
@@ -432,7 +454,6 @@
       el.type = el.type === "password" ? "text" : "password";
     };
 
-    // Register form submission
     document.getElementById("registerForm").addEventListener("submit", async(e) => {
       e.preventDefault();
       const age = parseInt(document.getElementById("regAge").value);
@@ -479,7 +500,6 @@
       }
     });
 
-    // Login form submission
     document.getElementById("loginForm").addEventListener("submit", async(e) => {
       e.preventDefault();
       try {
@@ -498,7 +518,6 @@
       }
     });
 
-    // Google login with default age and username from Gmail
     document.getElementById("googleLogin").addEventListener("click", async () => {
       try {
         const res = await signInWithPopup(auth, provider);
@@ -506,7 +525,6 @@
         const userDocRef = doc(db, "users", user.uid);
         const userSnap = await getDocs(query(collection(db, "users"), where("uid", "==", user.uid)));
         if (!userSnap.empty) {
-    
           window.location.href = "profile.html";
         } else {
           const usernameFromEmail = user.email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '').toLowerCase() || "sharkychatter";
@@ -526,7 +544,6 @@
       }
     });
 
-    // Google Signup button same as login btn for SPA experience
     document.getElementById("googleSignup").addEventListener("click", () => {
       document.getElementById("googleLogin").click();
     });
