@@ -6,9 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;500;700&family=Poppins:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
-    /* Header styles */
     header {
-      background: #555555; /* full grey */
+      background: #555555;
       position: fixed;
       top: 0;
       left: 0;
@@ -1155,18 +1154,15 @@
   const db = getFirestore(app);
   const storage = getStorage(app);
 
-  // Elements reused in both parts
   const mainHeader = document.getElementById("mainHeader");
   const menuBtn = document.getElementById("menuBtn");
   const closeBtn = document.querySelector(".menu-dropdown .close-btn");
   const themeSwitch = document.getElementById("themeSwitch");
 
-  // Notification elements
   const menuNotif = document.getElementById("menuNotif");
   const friendsNotif = document.getElementById("friends-notif");
   const messagesNotif = document.getElementById("messages-notif");
 
-  // Profile related elements
   const profilePic = document.getElementById("profilePic");
   const roleSelect = document.getElementById("role");
   const adminPanelBtn = document.getElementById("adminPanelBtn");
@@ -1174,26 +1170,21 @@
   const usernameBadgeWrapper = document.getElementById("usernameBadgeWrapper");
   const usernameSpan = document.getElementById("username");
 
-  // Other UI elements
   const professionSelect = document.getElementById("profession");
   const hobbiesTextarea = document.getElementById("hobbies");
   const heightInput = document.getElementById("height");
   const weightInput = document.getElementById("weight");
 
-  // Shared variables
   let uid = "", selectedColor = "#60a5fa", username = "", userCountry = "";
 
-  // Country/state list for the profile part
   const statesList = {
     "India": ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"],
     "USA": ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
     "UK": ["England","Northern Ireland","Scotland","Wales"]
   };
 
-  // Colors array for profile username color picker
   const colors = ['#f87171','#fbbf24','#34d399','#60a5fa','#a78bfa','#f472b6','#fb923c','#4ade80','#c084fc','#38d214','#facc15','#94a3b8'];
 
-  // Items metadata as in part 1
   const itemsMeta = {
     banner: {
        "banner_stars_profile": { id: "banner_stars_profile", name: "Stars Profile Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94c0fcfa-2a7a-46f1-ad8d-9ae08a932228.png" },
@@ -1221,7 +1212,6 @@
     }
   };
 
-  // Helper functions (merged from both parts)
 
   function bumpBadge(el, number) {
     if (!el) return;
@@ -1332,16 +1322,14 @@
     renderStates(userCountry);
   }
 
-  // Merged Auth State Changed logic
   onAuthStateChanged(auth, async user => {
     if (!user) {
       alert("Please login first.");
-      window.location.href = "index.html";
+      window.location.href = "login.html";
       return;
     }
     uid = user.uid;
 
-    // --- Profile data loading ---
     const docRef = doc(db, "users", uid);
     const snap = await getDoc(docRef);
     let userData = {};
@@ -1394,12 +1382,10 @@
       renderEquippedFieldsFromInventory(snapEq.data());
     }
 
-    // --- Setup notifications ---
     setupMenuNotifications(uid, username);
     setupMessageNotifications(uid, username);
   });
 
-  // Profile save function
   window.saveProfile = async () => {
     const stateVal = document.getElementById("state").value;
     await setDoc(doc(db, "users", uid), {
@@ -1418,7 +1404,6 @@
     showPopup();
   };
 
-  // Profile action handlers
   window.changePassword = () => { location.href = 'change-password.html'; };
   window.changeEmail = () => { location.href = 'change-email.html'; };
   window.logout = async () => { await signOut(auth); location.href = "login.html"; };
@@ -1430,7 +1415,6 @@
     } catch(e) { alert(e.message || e); }
   };
 
-  // Notifications functions (from Part 2)
 
   function setupMenuNotifications(uid, username) {
     onSnapshot(
@@ -1459,7 +1443,6 @@
     }
     let unseenTracker = {};
     let usernamesData = {};
-    // Load usernames of friends batch wise (max 10 per query)
     let batchSize = 10;
     for (let i = 0; i < myFriends.length; i += batchSize) {
       let batch = myFriends.slice(i, i + batchSize);
@@ -1508,7 +1491,6 @@
     }
   }
 
-  // UI Interaction Event Handlers
 
   profilePic.onclick = () => { location.href = "gallery.html"; };
 
