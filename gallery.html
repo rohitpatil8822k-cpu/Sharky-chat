@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Choose Your Avatar | Sharky Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      background: #1f1f1f;
+      color: #d1d1d1;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    header {
+      background: #292929;
+      padding: 20px 0 10px 0;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      position: relative;
+      user-select: none;
+    }
+    header h1 {
+      font-family: 'Poppins', sans-serif;
+      color: #b0b0b0;
+      font-size: 2.3rem;
+      letter-spacing: 4px;
+      margin: 0;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-shadow: 0 1px 3px rgba(255 255 255 / 0.1);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 10px 24px 10px;
+    }
+    /* Controls container above gallery */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 600px;
+      width: 100%;
+      margin: 16px 0 24px 0;
+      padding: 0 5px;
+      user-select: none;
+    }
+    /* Dropdown */
+    select#categorySelector {
+      background: #3a3a3a;
+      color: #ccc;
+      border: 2px solid #555;
+      border-radius: 28px;
+      padding: 10px 16px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      cursor: pointer;
+      outline: none;
+      min-width: 180px;
+      box-shadow: 0 0 10px #111 inset;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      user-select: none;
+    }
+    select#categorySelector:hover,
+    select#categorySelector:focus {
+      border-color: #5a85ff;
+      box-shadow: 0 0 14px #5a85ffcc inset;
+      color: #eee;
+      background: #444;
+    }
+    /* Back button */
+    button.back-btn {
+      background: transparent;
+      border: 2px solid #666;
+      border-radius: 28px;
+      padding: 10px 24px;
+      color: #aaa;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 8px #000 inset;
+      user-select: none;
+    }
+    button.back-btn:hover {
+      background: #555;
+      border-color: #eee;
+      color: #eee;
+      box-shadow: 0 0 18px #5a85ffcc;
+    }
+    /* Gallery Grid */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 28px;
+      max-width: 600px;
+      width: 100%;
+      margin: 0;
+      user-select: none;
+    }
+    /* Pic wrapper */
+    .pic-wrapper {
+      border-radius: 22px;
+      background: #2d2d2d;
+      box-shadow: 0 5px 15px rgb(0 0 0 / 0.75);
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      aspect-ratio: 1 / 1;
+      cursor: pointer;
+      overflow: hidden;
+      border: 2px solid transparent;
+    }
+    .pic-wrapper:hover {
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 0 15px 28px rgb(96 165 250 / 0.65);
+      border-color: #5a85ff;
+      z-index: 5;
+    }
+    /* Avatar pics */
+    .avatar-pic {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3.5px solid transparent;
+      box-shadow: 0 1.5px 6px rgb(0 0 0 / 0.9);
+      transition: border-color 0.28s ease, box-shadow 0.28s ease;
+      background-color: #555;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+    .pic-wrapper.selected,
+    .pic-wrapper:hover {
+      border-color: #5a85ff;
+      box-shadow: 0 0 18px #5a85ffcc, 0 0 8px #5a85ffcc inset;
+      z-index: 10;
+    }
+    .pic-wrapper.selected .avatar-pic {
+      border-color: #5a85ff;
+      box-shadow: 0 0 14px #5a85ffcc;
+    }
+    /* Success message */
+    .success-msg {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #4caf50dd;
+      border-radius: 40px;
+      padding: 14px 28px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #f0f0f0;
+      box-shadow: 0 5px 16px #4caf5066;
+      user-select: none;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 9000;
+    }
+    .success-msg.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* Popup */
+    .select-popup-sheet {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%) translateY(100%);
+      background: linear-gradient(135deg, #575757 70%, #3f3f3f 100%);
+      color: #e2e2e2;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px #000000cc;
+      padding: 18px 32px 18px 32px;
+      z-index: 2010;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-align: center;
+      opacity: 0;
+      animation: popupSlideIn 0.3s cubic-bezier(0.63,0,0.44,1.15) forwards;
+      display: flex;
+      flex-direction: column;
+      min-width: 240px;
+      font-family: 'Poppins', sans-serif;
+      user-select: none;
+    }
+    @keyframes popupSlideIn {
+      to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+    .popup-select-btn {
+      background: #5a85ff;
+      border: none;
+      border-radius: 20px;
+      color: #fff;
+      font-size: 1.15rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      padding: 11px 36px;
+      margin: 16px auto 0 auto;
+      cursor: pointer;
+      box-shadow: 0 6px 20px #5a85ffaa;
+      transition: background 0.3s ease;
+      outline: none;
+      user-select: none;
+      letter-spacing: 0.4px;
+      width: 130px;
+    }
+    .popup-select-btn:hover {
+      background: #3d5ecc;
+      box-shadow: 0 7px 25px #3d5ecccc;
+    }
+    @media (max-width: 600px) {
+      .gallery {
+        grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+        gap: 22px;
+        max-width: 480px;
+      }
+      select#categorySelector {
+        min-width: 140px;
+        font-size: 1rem;
+        padding: 8px 14px;
+      }
+      button.back-btn {
+        padding: 8px 18px;
+        font-size: 1rem;
+      }
+      .avatar-pic {
+        width: 75px;
+        height: 75px;
+      }
+    }
+    @media (max-width: 400px) {
+      .gallery {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        max-width: 320px;
+      }
+      select#categorySelector {
+        min-width: 120px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SHARKY GALLERY</h1>
+  </header>
+  <main>
+    <div class="controls">
+      <select id="categorySelector" aria-label="Choose Category"></select>
+      <button class="back-btn" onclick="window.location.href='profile.html'">Back to Profile</button>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </main>
+  <div class="success-msg" id="successMsg">Profile Picture Saved!</div>
+  <script>
+    const categories = [
+        { name: 'Avatar',      key: 'avatar',    icon: 'person',           images: [
+        "https://cdn-icons-png.flaticon.com/512/147/147144.png",
+        "https://cdn-icons-png.flaticon.com/512/1946/1946429.png",
+        "https://cdn-icons-png.flaticon.com/512/236/236831.png",
+        "https://cdn-icons-png.flaticon.com/512/2922/2922510.png",
+        "https://cdn-icons-png.flaticon.com/512/2922/2922518.png",
+        "https://cdn-icons-png.flaticon.com/512/2922/2922656.png",
+        "https://cdn-icons-png.flaticon.com/512/2922/2922561.png",
+        "https://cdn-icons-png.flaticon.com/512/2922/2922506.png",
+        "https://cdn-icons-png.flaticon.com/512/2922/2922513.png",
+        "https://cdn-icons-png.flaticon.com/512/2922/2922575.png",
+        "https://cdn-icons-png.flaticon.com/512/2922/2922533.png",
+        "https://cdn-icons-png.flaticon.com/512/2922/2922556.png",
+        "https://cdn-icons-png.flaticon.com/512/2202/2202112.png"
+      ]},
+      { name: 'Anime Guy',   key: 'animeGuy',  icon: 'boy',              images: [
+          "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F10fa8127-bcbf-43b6-9dd2-4f8a0393b0ec.jpeg?alt=media&token=94c03a71-dce3-49c9-9749-08dfc4414268",
+      "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F32e0096a-a745-446a-b43d-33ecbe7eba0e.jpeg?alt=media&token=d3b74a1c-c61c-4c01-bd41-6b5d0c6e1136",
+       "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F33b377a8-834a-4386-8269-92a1aa8127ac.jpeg?alt=media&token=8fd6485c-b315-45a1-b703-a0a498014924",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F459269e7-8afd-44f1-8e6f-1a914aec8079.jpeg?alt=media&token=4997024f-f7be-447f-b24b-f88fdce6e2ce",
+       "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F55a2fc09-e7cd-4485-ab75-ef94d73e9244.jpeg?alt=media&token=fe54db1f-ff4c-4474-998f-e289dc2fb546",
+       "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F9f05e084-40ee-40a1-a789-6410f82b51b6.jpeg?alt=media&token=533328b2-c957-4c8c-981f-50abf9b99161",
+       "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FAnime%20Pp.jpeg?alt=media&token=6dbc3154-7630-4b6e-8620-ddbe3dfdd90b",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FBad%20boy%20pfp%20ideas%20%F0%9F%98%8E%20%23animeicons%20%23boys%20%23pfp.jpeg?alt=media&token=f26b1668-8cd3-4ff6-bda6-739fbd9210dc",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FLee%20Yeowoon%20_%20My%20Bias%20Gets%20On%20The%20Last%20Train%20(1).jpeg?alt=media&token=10566d41-415d-4ef1-95d1-b58b97628764",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FYikyung%20chibi.jpeg?alt=media&token=852046cd-907c-4257-98f9-3dcb81b33bec",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FLee%20Yeowoon%20_%20My%20Bias%20Gets%20On%20The%20Last%20Train.jpeg?alt=media&token=12ea801b-fda6-48d9-aa5c-db47a61adebf",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FYikyung%20chibi.jpeg?alt=media&token=852046cd-907c-4257-98f9-3dcb81b33bec",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Fcfc65863-2d05-4afc-8c10-afd5a2e8fd92.jpeg?alt=media&token=1411a69e-f0c9-46a6-98a1-088fec51695f",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Ff8f5f5c3-f3f6-4c4b-b1e1-daf6b2a54d2f.jpeg?alt=media&token=d72d5c5b-fcde-415d-990e-57b5f30e2af7",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F%E2%9D%9B%20Choi%20Yikyung%E2%94%8ASketch%E2%94%8ABL%20Manhwa%20%E1%B6%BB%20%F0%9D%97%93%20%E2%9D%9C.jpeg?alt=media&token=85fc7738-6925-4401-973e-438ef34eeded",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F%F0%9F%92%9C%F0%9F%A5%80%20%F0%9D%93%93%F0%9D%93%B8%F0%9D%93%B7%20%F0%9D%93%BD%20%F0%9D%93%92%F0%9D%93%AA%F0%9D%93%BB%F0%9D%93%AE%20%F0%9D%94%80%F0%9D%93%B1%F0%9D%93%AA%F0%9D%93%BD%20%F0%9D%93%BD%F0%9D%93%B1%F0%9D%93%AE%F0%9D%94%82%20%F0%9D%93%A2%F0%9D%93%AA%F0%9D%94%82%20%F0%9D%93%AC%F0%9D%93%AA%F0%9D%93%BE%F0%9D%93%BC%F0%9D%93%AE%20%F0%9D%93%98%F0%9D%93%BD%20%F0%9D%93%BC%20%F0%9D%93%B8%F0%9D%93%B7%F0%9D%93%B5.jpeg?alt=media&token=3d002da7-9363-4070-92d2-ff7781f9158a",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F%F0%96%B9%AD.jpeg?alt=media&token=bf87d85d-bc87-4876-a863-4283b1ee75c1",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F%E2%9D%A6.jpeg?alt=media&token=88717979-5fef-4a6a-abaa-de513b3c9a47",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F%23perfil%20%23profile%20%23instagram.jpeg?alt=media&token=f12e1918-4f48-46b3-b771-f7e350051715",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F3a9bc6bc-380e-4bb6-b433-f185b848aa5d.jpeg?alt=media&token=7b5f3c91-2b94-44ec-a408-e359e6a2992f",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F3b527bca-7291-4639-aad4-1cc1e17adb09.jpeg?alt=media&token=3571cd1f-1245-416f-aaca-c5680b3ce58c",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F56472236-0a70-40ce-ae09-ac95d533b553.jpeg?alt=media&token=614f7121-b8b6-497c-8745-003afdeb699f",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F6e35f098-00e2-41c7-a870-9ac1800f1a30.jpeg?alt=media&token=d238d5ff-e09b-42b2-a395-27811c0d1291",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F9a7252af-141d-4bf8-8195-5d37b82f6766.jpeg?alt=media&token=ae752550-c93c-4b97-927b-b4a1cef58544",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F9fb22e91-37b6-4f49-adab-d11e7fd3595c.jpeg?alt=media&token=99e09428-ed08-407c-af6d-761f8c39f3b0",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FJay%20Jo(Jo%20Ja-Hyun).jpeg?alt=media&token=96c8b249-4510-4d3d-8909-5f89391f6c12",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Fa2b3f314-3bf2-4bbe-a710-8ab6744d6b1c.jpeg?alt=media&token=214caf23-23ff-4bde-b76d-c3c79dcd07e9",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Fa2b3f314-3bf2-4bbe-a710-8ab6744d6b1c.jpeg?alt=media&token=214caf23-23ff-4bde-b76d-c3c79dcd07e9",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Fbbb526fb-60bc-46d3-89a2-157635d79489.jpeg?alt=media&token=14ef9ca7-c4cb-4d16-bc71-9dbb64932537",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Fc547835d-a3da-486f-8a28-2754958a0168.jpeg?alt=media&token=84cd74e7-4bf7-4bdb-bc14-693da43ab5bd",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Fl.jpeg?alt=media&token=4ff6f1ea-bc44-430c-baa5-2d681b52df90",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F%E3%80%8C%20Matching%20icons%20%E3%80%8D.jpeg?alt=media&token=c03b4622-a7a3-44b8-8553-3d26cd07adb7",
+        "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F%E3%80%8C%20%F0%9D%90%82%F0%9D%90%88%F0%9D%90%8E%F0%9D%90%8D%20%E3%80%8D.jpeg?alt=media&token=ff2e8015-9fc1-4206-9125-c05886258344",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F52342b96-faf3-4699-a417-0d83ece9f604.jpeg?alt=media&token=63d24090-f82d-4313-af22-ce47328f93fa",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F523bf8d1-0904-4167-a965-8839844ff78d.jpeg?alt=media&token=ed0d6f84-49a6-4deb-9120-c2baee4b208f",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FIcon%20anime.jpeg?alt=media&token=a80c410b-006f-4fd9-bc8b-315894b316de",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F74c714e8-d72e-4e9d-ae38-8a1c360871e7.jpeg?alt=media&token=590a7d43-aa9c-4cc7-9b92-9a310266df80",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FAnime%20wallpaper%20aesthetic.jpeg?alt=media&token=02cee45b-d511-4b01-bfd5-ae159f4fd8e6",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F217b3585-5600-42c0-b5fa-ef90375f42a5.jpeg?alt=media&token=df892676-e0e0-41de-908d-fa824c917a1c",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FPhilip%20Andres%20Vargas.jpeg?alt=media&token=b70667f8-7730-42b3-8c1c-b59e44109368",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F%F0%92%8A%B9%EF%B8%8E.jpeg?alt=media&token=79fd7282-e26c-44d6-9c8a-b9124585573c",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Fbecae3e1-6566-43b4-8db4-413fbff96071.jpeg?alt=media&token=c4f3dd84-c71b-4ac7-8008-176948af87f6",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F1b3972df-e426-455c-b87a-d1cede1b4caa.jpeg?alt=media&token=887ca328-3a4b-41d8-9ffb-9031c8e86b84",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Ff201f1b5-7553-46d3-92c6-557141047a78.jpeg?alt=media&token=d4dd7361-6cd1-4024-b34d-9e6e085352a9",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F%E2%8C%97_%20%CA%9C%E1%B4%80%CA%8F%E1%B4%80%E1%B4%8B%E1%B4%80%E1%B4%A1%E1%B4%80%20%E1%B4%80%E1%B4%8B%C9%AA%20%E2%80%A7%E2%82%8A%20%E0%AB%AA'%DE%83.jpeg?alt=media&token=224412bb-12e3-4dfe-86b1-747193bb9f63",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FOne%20day%2C%20the%20shadows%20will%20call%20your%20name_.jpeg?alt=media&token=0d559902-463e-4080-850b-3faa1e628364",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F22baf204-c495-435b-ab44-e36598868a6a.jpeg?alt=media&token=91e89fdd-3013-40cd-b449-f164daac91ba",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F%E2%80%A2'_Shuu%E2%94%8Axdrann.jpeg?alt=media&token=53e87326-0b77-4724-83b3-bb0ce8aa638a",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Fgojo%20satoru%20%F0%9F%92%A5%F0%9F%94%A5.jpeg?alt=media&token=820f9b74-daa0-4646-80fa-1349ec625db6",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F998d7bd7-bdb7-4767-a3de-ba289bce53f6.jpeg?alt=media&token=04786912-da71-4e66-9d79-b145b846f081",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Fbc3808a1-7917-44ef-9c89-65963742664f.jpeg?alt=media&token=ea1ed13d-c5f8-4a8e-996c-211c757bb1a6",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F%E2%99%A1.jpeg?alt=media&token=b765215a-3585-4998-8f15-b2fc7f44321a",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Fs.jpeg?alt=media&token=e8690164-d5fc-4c42-8332-d347e10e1cef",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F4241cbd8-d411-4c4d-9f16-1ad723bb90c3.jpeg?alt=media&token=48321a08-131e-45e1-a167-9e1dacc5b915",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FTom%20Shelby.jpeg?alt=media&token=fb0c052e-aa6f-4e67-8fe1-353a2ad27bce",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FAydan%20%F0%9F%A5%A5%20on%20TikTok.jpeg?alt=media&token=a23992cb-a309-474c-b452-2cbb64883a4b",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2F16982efc-da59-4fd6-b93f-23856fb2221c.jpeg?alt=media&token=21392e64-eecd-48b1-a1bc-ebc7a174c862",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2FLaughing.jpeg?alt=media&token=82ea8827-9880-41e7-92d0-91b1bf3cf355",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20guy%2Fd38436bd-7919-4f53-ae21-7d292a6b6540.jpeg?alt=media&token=667bb44f-e08e-4eed-8cff-7d1df73b8363"
+      ] },
+      { name: 'Anime Girl',  key: 'animeGirl', icon: 'girl',             images: [
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F303b0523-be6e-4b05-a60e-e18744558517.jpeg?alt=media&token=6595f1f9-3267-47c2-9095-6587da6c5acf",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F30b5d5fd-d76c-42b2-a9c7-cb109f8a741c.jpeg?alt=media&token=04ed4ce1-833e-4421-b98e-da50a1b90925",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F4d98e1bb-524d-4f4d-99cc-9690091c9646.jpeg?alt=media&token=0e7738d0-aa87-42cb-bd27-5d90bbcbfd9f",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F579d4625-6314-4401-8bf9-403a6fe999b6.jpeg?alt=media&token=a85e00a6-b707-4f0a-b6f2-fc7e43251407",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F5d9e8ddd-ecb7-4c2c-bee7-28fa575dc14f.jpeg?alt=media&token=6817076b-9f5a-4172-9ec0-971352488247",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F6a477b98-ecdd-4363-ba3c-ca32ebd24c49.jpeg?alt=media&token=7f70bdf8-6779-462b-9927-d4924969b2c4",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F6cd0278d-9708-4501-b5e5-f4bf080cdb1a.jpeg?alt=media&token=d8de6cc5-9a4f-4f6b-a1b1-4f81a19e4a9a",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F6fa0097c-3ec5-467c-a495-ff1329323119.jpeg?alt=media&token=36d3cbaa-e13b-4101-8d7b-258d5630c7ea",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F73b1eeda-721a-4226-80e3-f3c8d4b14d6f.jpeg?alt=media&token=81ae5140-41d3-4acb-bf76-63e4cb7960aa",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F81ce9d03-4298-4405-90af-43e76529a2d8.jpeg?alt=media&token=90ed6c51-107b-42bf-aee2-5c5c502d6392",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F83fbeee7-d0de-40bf-8dd7-1fe505ebc41f.jpeg?alt=media&token=dbdc6c50-bbad-4e38-80e6-c29798dd9ca3",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F87163e90-9af8-4202-96a2-6b22b75311ea.jpeg?alt=media&token=bc59809a-a374-472e-b773-9b18ca7793b9",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F9b0e2c38-34b4-4e43-9ba8-72e5e6e0824e.jpeg?alt=media&token=8ba7f437-c919-44b9-8f73-42c3db0166f2",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2FA%20Silent%20Voice%20OC%20%E2%99%A1.jpeg?alt=media&token=ffd88519-228c-4d2d-9e90-51ac99063fa0",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2FIllustration%20Design.jpeg?alt=media&token=ad8b6f3b-b5a3-4e0d-85d8-e06ffe1f1162",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2FMatching%20pfp%202_2.jpeg?alt=media&token=61a2e02e-d2ce-4fc2-a49e-1785c978b330",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2FTensura%20oc.jpeg?alt=media&token=6f15422f-ec1c-4728-956f-764cd38a1259",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fa3af7420-b0d9-40f7-9c50-77c20ec2b5fd.jpeg?alt=media&token=8321cba8-881e-48dc-ad09-98a833084267",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fanime%20girl.jpeg?alt=media&token=96dc0207-565e-459b-a4e1-5f97199d3dea",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fbb83b49e-1efd-4d79-ad53-4184c475a3c9.jpeg?alt=media&token=f0856e66-fe2c-4906-8584-8e08e45e9215",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fbb98ae26-06f8-4867-9a94-eb8f7baac92f.jpeg?alt=media&token=53bc9d7d-ccc5-4200-b19a-44b033958d5d",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fcac2f59e-bb67-46cd-9c4b-af730987e7d1.jpeg?alt=media&token=ab7d367c-12f4-4660-b7f2-a3c86ac9d26b",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fcae5f973-ca72-48b2-8f16-5549dcdaaf12.jpeg?alt=media&token=821250bc-4203-4385-86f6-d341cd0fc558",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fcdb1e3d0-5737-417f-8712-a7402230b598.jpeg?alt=media&token=3c370115-31ac-47c7-9c95-c1541531d30d",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fcfb1902f-0c32-4802-8ac6-13ac2421214d.jpeg?alt=media&token=fbbc0fe4-8816-4258-bac0-ea12046dacc1",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fd41391d1-373f-4223-ac11-ff9f0706f4d2.jpeg?alt=media&token=26cbbd4d-446a-4d09-8b14-8118b9c9e27c",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fe7d90ea7-6957-4621-845f-613f13708d34.jpeg?alt=media&token=79a33fd4-0705-4878-ad82-68a747b96f85",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fec2bef8a-635e-4292-8734-a4a3cbbe0309.jpeg?alt=media&token=58499100-0e70-4ee4-bcad-e98bdf82629d",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fef14e89e-b8a5-4ecd-8eff-652d434659bc.jpeg?alt=media&token=7490fc02-f4b3-492a-aede-53f49b0a43ba",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Ff937adc9-9500-4818-88b4-a92146d1cfb6.jpeg?alt=media&token=773a7809-3cbf-40a1-a1c5-1a64584b935c",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fgirl%20pfp.jpeg?alt=media&token=19485891-ecef-4583-b702-56e622ad9359",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2Fpixel%20art%20girl%20ai.jpeg?alt=media&token=9381312c-c68f-44db-b70f-39449fc19f46",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%E1%B6%BB%EA%92%B7%EA%92%A6.jpeg?alt=media&token=dc6d5024-7073-47a9-9a59-3d599c6aa752",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%E2%99%A1.jpeg?alt=media&token=dc2f59af-6a36-4e33-8cde-ca0ac3d13b95",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%F0%9D%97%AF%F0%9D%97%B2%F0%9D%97%AE%F0%9D%98%82%F0%9D%98%81%F0%9D%97%B6%F0%9D%97%B3%F0%9D%98%82%F0%9D%97%B9%20%F0%9D%97%B0%F0%9D%97%AE%F0%9D%97%BD%F0%9D%98%81%F0%9D%98%82%F0%9D%97%BF%F0%9D%97%B2.jpeg?alt=media&token=3b161512-dbc9-4602-9d03-c73635003b17",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%F0%9D%99%8E%F0%9D%99%96%F0%9D%99%AB%F0%9D%99%9A%20%3D%20%F0%9D%99%81%F0%9D%99%A4%F0%9D%99%A1%F0%9D%99%A1%F0%9D%99%A4%F0%9D%99%AC%20%F0%9D%99%A2%F0%9D%99%9A.jpeg?alt=media&token=a00192b5-9f2b-4e31-80b5-88254be8e577",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%F0%9D%99%96%F0%9D%99%9E%F0%9D%99%A3%F0%9D%99%96%F0%9D%99%96%F0%9D%99%A7%F0%9D%99%A1%F0%9D%99%96%F0%9D%99%9E%F0%9D%99%A9%F0%9D%99%9D%20%E2%8B%86%20_%CB%9A%20%E2%9F%A1%20%E0%A3%AA%20%CB%96.jpeg?alt=media&token=2c693fa5-4be7-4b44-8f54-11ba6cc4638f",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%F0%9F%96%A4%F0%9F%A5%B9.jpeg?alt=media&token=a6bd29db-39a2-40b2-9bf2-95f23ee0fcdc"
+      ] },
+      { name: 'Cars',        key: 'cars',      icon: 'directions_car',   images: [
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCars%2Fcdc2e54c-f571-4494-b2ef-779f72a06f29.jpeg?alt=media&token=06abb5bb-8b33-479f-88b1-4416943c4504",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCars%2FPorsche%20GT3RS.jpeg?alt=media&token=46a4b506-11da-4f69-99a7-bddd0e70e168",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCars%2F472a5848-02f0-476e-8c73-07dfc7ec71fb.jpeg?alt=media&token=819065f4-b226-44ea-a913-a9eb4b0406f3",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCars%2F9e2fe865-4038-4a71-af67-43251ee9cc40.jpeg?alt=media&token=b69240bf-5582-4830-b3e1-11c7303b8465",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FBmw%2FBMW%20Satoru%20Gojo.jpeg?alt=media&token=79b05a93-0570-4d9d-99bd-404bbdf127a1",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FBmw%2Fcapoditutticapi.jpeg?alt=media&token=c47c39c0-c824-4cb2-876d-1294c2140f50",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FBmw%2Ff1b378a6-d667-4a8d-a200-89825809dbc1.jpeg?alt=media&token=58ac889c-1351-44ff-85be-4b68adf81839",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FBmw%2Fisagi%20bmw%20m4.jpeg?alt=media&token=5b1f94cc-4b81-40c8-84d4-9f739d4464ff",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FBmw%2F%D0%B1%D0%B5%D1%85%D0%B0.jpeg?alt=media&token=444211fa-bdb9-40e4-bf5d-5314fde1e999",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FBmw%2F%F0%9F%96%A4.jpeg?alt=media&token=d9e84406-9853-4e71-ab7d-7570027ee316"
+ 
+      ] },
+      { name: 'Aesthetic DPz', key: 'aesthetic', icon: 'auto_awesome',   images: [
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F0d2c3cde-69f9-4a55-99fb-54f33ee5c38b.jpeg?alt=media&token=2beeb8a1-186c-46b5-bf91-8bebdff8de38",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F3497664b-7fc9-4670-b630-3e7172c16167.jpeg?alt=media&token=866736a2-c53c-41f5-a86a-7301ce78078e",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F34edf3d3-17ba-463d-b9fe-5b2eb1055907.jpeg?alt=media&token=c2e795c1-be49-4b35-9537-bf17b2b75f4d",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F59126120-6e69-4393-8126-4e00243a14c7.jpeg?alt=media&token=1187716c-c512-4b9b-85ff-d2f3d214f46c",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F7b9d0833-52ea-4774-95d7-24b8045f6bf0.jpeg?alt=media&token=3f2fe87c-2ec8-4f81-94e5-c2b190ed1e0d",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F8ac8ffc8-f694-4bd9-a0f3-73cf3a6acfbb.jpeg?alt=media&token=1dc0cadd-f0fd-4ec9-b3fd-fba2fca3923f",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2FANKIT%20NAME%20PFP.jpeg?alt=media&token=0632b61a-3cf5-4704-9f2c-7de5a1da3e2f",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2FStan%20Knight%20_%20stanislas%20knight%20aesthetic%20_%20insomnia%20_%20insomnia%20aesthetic%20_%20the%20royal%20thorns%20_%20L%C3%A9a%20Nemezia%20_%20lea%20nemezia%20_%20wattpad.jpeg?alt=media&token=b2c2cdba-4ac8-4aaa-9480-616f2d9169fc",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fclassic%20%E2%9A%9C%EF%B8%8F.jpeg?alt=media&token=87366370-6c9d-4479-a183-837cd6006c2e",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fd758e964-77d4-4ce8-85e3-00ab43f7d856.jpeg?alt=media&token=d5725c01-bb17-465c-bf6a-36b1668c9abe",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fe3b9b9d4-ba68-47d5-8ad0-6b3de3933a66.jpeg?alt=media&token=2e93f8c7-74bf-42a2-bbd9-ae6def497543",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fe7b566ae-b4cf-40a7-a75f-d95ea9b3bbb0.jpeg?alt=media&token=77e3cb54-bafd-4b32-bdf1-a08d40abae10",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fe96e1b22-8c41-4fdd-8a45-c1b89e0d22a1.jpeg?alt=media&token=2b6fabc7-3506-4fef-8d2f-ed1da3855e49",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Ff92c1633-506a-41ec-9061-e69e7493c176.jpeg?alt=media&token=176d6191-bceb-4ffa-ad46-8c694fb5e0a2",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fjameson%20hawthorne%20_%20the%20inheritance%20games.jpeg?alt=media&token=d69d5eee-b0ac-4b49-822e-94d3e2739b2b",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fjohn%20supnik.jpeg?alt=media&token=1938378a-ab86-41c5-9d91-30d1743360ef",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fwill%20grayson%20%E2%98%85%20devils%20night%20series.jpeg?alt=media&token=08d71e8e-d7a1-450a-b1f4-ce984aefb569",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F%E2%80%90%E2%9D%AA%F0%9D%99%87%F0%9D%99%96%F0%9D%99%A7%F0%9D%99%96%F0%9D%99%9E%F0%9D%99%97%20%F0%9D%99%80%F0%9D%99%99%F0%9D%99%9E%F0%9D%99%A9%F0%9D%99%A4%F0%9D%99%A3%E2%9D%AB%E2%B8%99.jpeg?alt=media&token=acdce8c9-4207-40e7-b2ce-04f75d077722",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F%E2%9C%A7%E0%BC%BA%E2%99%A1%E0%BC%BB%E2%9C%A7.jpeg?alt=media&token=885a5f3a-92f8-4f4f-8267-84a8957b1218",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F%F0%9D%90%AC%F0%9D%90%9A%F0%9D%90%A5%F0%9D%90%9A%F0%9D%90%AB%20%F0%9D%90%AC%F0%9D%90%A2%F0%9D%90%A4%F0%9D%90%9A%F0%9D%90%A7%F0%9D%90%9D%F0%9D%90%9A%F0%9D%90%AB%20%E2%9C%A6%20%F0%9D%90%A9%F0%9D%90%9E%F0%9D%90%9E%F0%9D%90%AB%20%F0%9D%90%9E%20%F0%9D%90%A4%F0%9D%90%9A%F0%9D%90%A6%F0%9D%90%A2%F0%9D%90%A5.jpeg?alt=media&token=f5a6727e-2ecd-4a00-b1ef-73c80a697567",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F%F0%9F%93%B8%20%20%EA%A9%9C%20_%E1%90%9F%CB%99%E2%8B%86%E2%9C%B6.jpeg?alt=media&token=7401a050-c491-4e1f-a75b-a2a8d56768c9",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F%F0%9F%98%8B%F0%9F%A9%B7.jpeg?alt=media&token=670df3b3-8b71-4098-87de-c05a65b1687b",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F1eed483b-ecce-478c-a83f-6df9d2cdbc08.jpeg?alt=media&token=2262ea04-d3b7-4e49-87bc-e0ab0b18b5f6",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F%23foryoupage%20%23explore%20%23explorepage%20%23edit%20%23fyp.jpeg?alt=media&token=e51b11b7-fb6c-466f-89b8-9e2d0ea6e641",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F97a8ae97-627f-4470-9f85-c8e068d75c50.jpeg?alt=media&token=7b613ddc-1df1-417f-85b0-4fd65bdb4b22",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fb93a54d4-bb90-481a-9ed8-e51c34130669.jpeg?alt=media&token=333afb61-c032-4110-9bb1-abe3b716894a",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F17a7f093-d8ff-41ed-8d46-67366b81abca.jpeg?alt=media&token=d482ea81-e5e6-407c-bbd8-cffb1da24dd6",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F%23fashion%20%20%20%23wallpaper%20%23aesthetic%20%23nailsofinstagram%20%23icon%20%23outfitstyle%20%23outfitstyle%20%23profile%20%23memories%20%23instagram%20_%23art%20%23photography.jpeg?alt=media&token=466d596d-47bf-48ab-8586-792a32374f8c",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fd2b787b7-d339-40fc-93aa-807f7e9d4220.jpeg?alt=media&token=ba068627-cbf4-4f9f-8147-0140b7407484",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2FFuck%20you.jpeg?alt=media&token=6868c700-bb37-4707-8c66-6834012f6531",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Ff02f03f6-1b47-47f0-be2b-e49f1d925d1f.jpeg?alt=media&token=f8e4f39e-7a5b-4a08-92b2-ddab1f424ef5",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F313ea4fd-a427-4204-b723-0c12bb1d6a79.jpeg?alt=media&token=311b8640-7511-42cb-bbc4-9066c4a2fc9b",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F%F0%9F%8D%81.jpeg?alt=media&token=f8ef3609-9862-4a04-96b0-7525161c8062",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2F%E2%99%A1.jpeg?alt=media&token=8d08723e-1fec-4f40-9ac4-52b753d97e37"
+      ] },
+      { name: 'Nature',      key: 'nature',    icon: 'forest',           images: [
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2F8e1e00ea-b4f1-4a0e-bf2d-0d13338688cc.jpeg?alt=media&token=4a89b795-e1dd-4ec5-939d-db4b0697092f",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2FFOLLOW_SAVE%20FOR%20MORE.jpeg?alt=media&token=d5926dd4-d23b-4903-a240-400a34329894",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2Fa270189c-e08a-4022-9e09-087a40c486d9.jpeg?alt=media&token=317ddbdd-fe47-48b3-a6fd-1384de6e4aa2",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2Fe7611a74-155d-4040-b6c8-31fda295b635.jpeg?alt=media&token=9e017f5a-290c-4195-a9b3-219d4cb749f0",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2Frelated%20discord%20server%20in%20my%20bio%20%E2%9D%A4%EF%B8%8F.jpeg?alt=media&token=a78f781b-49fb-4231-8f97-319ca62cba1b",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2F%DD%81%E2%82%8A%20%E2%8A%B9%20_.jpeg?alt=media&token=9d5f31e7-994f-40a6-8057-266843302615"
+      ] },
+      { name: 'Cats',        key: 'cats',      icon: 'pets',             images: [
+
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2F%23cats.jpeg?alt=media&token=cd8a55b2-95cd-4933-a2d1-5e1ddbb22f66",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2F17d98314-648c-4cbd-be09-9eb27e0ec3e2.jpeg?alt=media&token=7cc009a5-bfa9-49a5-8d6c-2a487768e26c",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2F25cea8b8-bbc7-40a3-9824-8a7d01227ede.jpeg?alt=media&token=736a691b-ff5e-4aca-8c98-bf4e2a3b8753",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2F435bc208-7922-419b-813e-3da98dd4c8d4.jpeg?alt=media&token=d93d285c-ae65-42e2-92b9-e4068dbc4ede",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2F4707c444-4c1a-4561-a4ae-a143ed4a1f73.jpeg?alt=media&token=f5007194-3a1c-4075-816d-fde991f78652",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2F52e2b882-55f6-4fe0-a4e1-1c894bedd5c7.jpeg?alt=media&token=28734b61-9d0b-4de8-bfdf-fd4292d20cf6",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2F774250c1-1595-41c6-a406-e096f078044e.jpeg?alt=media&token=da6670d7-7a7d-4842-b6ff-5ee50545834b",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2FCat%20%F0%9F%98%BA.jpeg?alt=media&token=bd6c09c8-5954-4c35-b0ca-baa626b8500c",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2FHi.jpeg?alt=media&token=1e1b38fa-442c-41ce-a9bd-32acc2f6b796",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2Fd62df22a-5a63-4336-a81e-ab349de86379.jpeg?alt=media&token=98adbd0d-4540-4eab-aeb8-535ba6c8361d",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2Fdf64125e-6687-4931-864e-b0b8108b8f7b.jpeg?alt=media&token=a1d1eece-9d61-4feb-bfe2-ffdcc84e8eb5",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2F%D1%81%D1%83%D0%BF%D0%B5%D1%80%20%D0%BC%D0%B8%D0%BB%D0%B8%20%D0%BA%D0%BE%D1%82%D0%B8%D0%BA%D0%B8.jpeg?alt=media&token=a5973daa-722c-4522-9262-271494c26f02"
+      ] },
+    ];
+
+
+    let currentCatIndex = 0;
+    let openPopup = null;
+    const gallery = document.getElementById("gallery");
+    const categorySelector = document.getElementById("categorySelector");
+    const successMsg = document.getElementById("successMsg");
+
+    // Populate dropdown
+    categories.forEach((cat, idx) => {
+      const option = document.createElement("option");
+      option.value = idx;
+      option.textContent = cat.name;
+      categorySelector.appendChild(option);
+    });
+
+    categorySelector.value = 0;
+
+    categorySelector.addEventListener("change", () => {
+      currentCatIndex = parseInt(categorySelector.value, 10);
+      renderGallery();
+    });
+
+    function renderGallery() {
+      gallery.innerHTML = '';
+      const saved = localStorage.getItem("selectedAvatar");
+      categories[currentCatIndex].images.forEach(url => {
+        if (!url) return;
+        const wrap = document.createElement("div");
+        wrap.className = "pic-wrapper";
+        if (saved && url === saved) wrap.classList.add("selected");
+        const img = document.createElement("img");
+        img.src = url;
+        img.className = "avatar-pic";
+        img.alt = categories[currentCatIndex].name;
+        wrap.appendChild(img);
+        wrap.onclick = e => {
+          e.stopPropagation();
+          showSelectPopup(url, wrap);
+        };
+        gallery.appendChild(wrap);
+      });
+      document.body.onclick = function(e) {
+        if (openPopup && !e.target.classList.contains('popup-select-btn')) {
+          openPopup.remove();
+          openPopup = null;
+        }
+      };
+    }
+
+    function showSelectPopup(url, wrap) {
+      if (openPopup) {
+        openPopup.remove();
+        openPopup = null;
+      }
+      const popup = document.createElement('div');
+      popup.className = 'select-popup-sheet';
+      popup.innerHTML = `
+        Change profile picture?<br>
+        <button class="popup-select-btn">Select</button>
+      `;
+      document.body.appendChild(popup);
+      openPopup = popup;
+      popup.querySelector('.popup-select-btn').onclick = function(e) {
+        e.stopPropagation();
+        selectPic(url, wrap);
+        popup.remove();
+        openPopup = null;
+      };
+    }
+
+    function selectPic(url, wrap) {
+      document.querySelectorAll('.pic-wrapper.selected').forEach(s => s.classList.remove("selected"));
+      wrap.classList.add("selected");
+      localStorage.setItem("selectedAvatar", url);
+      successMsg.classList.add("show");
+      setTimeout(() => successMsg.classList.remove("show"), 1900);
+    }
+
+    renderGallery();
+  </script>
+</body>
+</html>
