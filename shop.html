@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sharky Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;600;700&family=Segoe+UI&display=swap" rel="stylesheet"/>
+  <style>
+    header {
+      background: #555555;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 2000;
+      width: 100vw;
+      box-shadow: 0 2px 17px #22222290;
+      min-height: auto;
+      user-select: none;
+      border-radius: 0;
+      transition: box-shadow 0.23s;
+      color: #d1d1d1;
+      font-family: "Poppins", Arial, sans-serif;
+      font-size: 1rem;
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      min-height: auto;
+      position: relative;
+      z-index: 1;
+      cursor: default;
+      color: inherit;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-container img {
+      height: 30px;
+      animation: float 3.3s ease-in-out infinite;
+      user-select: none;
+      pointer-events: none;
+      filter: none;
+      image-rendering: crisp-edges;
+    }
+    @keyframes float { 0%,100% {transform:translateY(0);} 50%{transform:translateY(-4px);} }
+    .logo-text {
+      font-family: "Orbitron", Arial, Helvetica, sans-serif;
+      font-size: 1.1rem;
+      color: #bbbbbb;
+      text-shadow: 0 0 5px #88888888;
+      font-weight: 800;
+      letter-spacing: 0.055em;
+      margin-left: 2px;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .menu-btn {
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      min-width: 38px;
+      height: 36px;
+      color: #d0d0d0;
+      outline: none;
+      border: none;
+      background: none;
+      border-radius: 9px;
+      position: relative;
+      user-select: none;
+      transition: background 0.16s, transform 0.2s cubic-bezier(0.4,0,0.2,1);
+      gap: 6px;
+    }
+    .menu-btn:active {background:#444444;transform:scale(0.93);}
+    .menu-btn .notif-badge {
+      background: linear-gradient(105deg,#f87171 65%,#fb923c 110%);
+      color:white;
+      font-weight:700;
+      font-family:"Orbitron",sans-serif;
+      min-width:14px; height:14px; padding:0 6px;
+      font-size:12px; border-radius:50%;
+      display:flex; justify-content:center; align-items:center;
+      position:absolute; top:-4px; right:-4px;
+      border: 1px solid #555555;
+      box-shadow: 0 2px 6px #ef444488;
+      pointer-events:none; z-index:10; user-select:none;
+    }
+    .menu-dropdown {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      height: 100vh;
+      width: 220px;
+      background: rgba(85,85,85,0.97);
+      box-shadow: -4px 0 26px rgba(0,0,0,0.77);
+      padding-top: 54px;
+      padding-bottom: 22px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      font-family: "Poppins", Arial, sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      overflow-y: auto;
+      transition: right 0.31s cubic-bezier(0.65,0.01,0.32,1.03);
+      z-index: 2500;
+      user-select: none;
+      color: #d1d1d1;
+    }
+    header.expanded .menu-dropdown {right:0;}
+    .menu-dropdown .close-btn {
+      position: absolute; left: 11px; top:13px;
+      background: transparent; border: none; cursor:pointer;
+      padding: 0; outline:none; z-index:2600; width:30px; height:30px;
+      display:flex; align-items:center; justify-content:center;
+      transition: transform 0.2s ease; color: #bbbbbb; user-select:none;
+    }
+    .menu-dropdown .close-btn:hover,
+    .menu-dropdown .close-btn:focus {
+      color:#e0e0e0;transform:scale(1.22);
+    }
+    .menu-dropdown .close-btn svg {width:22px;height:22px;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+    .menu-dropdown a {
+      color: #bbbbbb;
+      padding: 13px 17px 13px 46px;
+      text-decoration: none;
+      border-bottom: 2px solid #444444;
+      display: flex; align-items: center; gap: 15px; background: none;
+      transition: background 0.13s, color 0.13s, padding-left 0.11s, transform 0.16s;
+      letter-spacing: 0.02em; user-select: none; font-weight: 600; font-size: 0.85rem;
+      will-change: transform; position: relative;
+    }
+    .menu-dropdown a:hover,.menu-dropdown a:focus {background:#666666;color:#fff;padding-left:51px;outline:none;transform:scale(1.05)translateX(-2px);}
+    .menu-dropdown a:active {background:#444444;color:#fbbf24;transform:scale(0.97);}
+    .menu-dropdown .notif-badge {
+      position:absolute; right:10px; top:50%;
+      transform:translateY(-50%);
+      box-shadow:none; border:none; font-weight:700;
+      font-size:13px; min-width:22px; height:18px;
+      background: linear-gradient(120deg, #fae024 70%, #f87171 100%);
+      color: #222b3a; display:inline-flex; align-items:center; justify-content:center;
+      font-family:"Orbitron",sans-serif; border-radius:7px;
+      user-select:none;padding:0 6px;line-height:18px;white-space:nowrap;
+    }
+    .menu-dropdown a .icon {
+      display:inline-flex;width:22px;height:22px;position:absolute;left:15px;top:50%;
+      transform:translateY(-50%);
+      fill: #bbbbbb; filter:drop-shadow(0 1px 6px #bbbbbb66);transition:fill 0.13s,filter 0.11s;
+    }
+    .menu-dropdown a:hover .icon,.menu-dropdown a:focus .icon {
+      fill: #fff; filter:drop-shadow(0 2px 8px #fff4);
+    }
+    html, body {
+      background: #171b20;
+      color: #e4e5e8;
+      min-height: 100vh;
+      width: 100vw;
+      font-family: 'Poppins', 'Orbitron', Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      box-sizing: border-box;
+    }
+    ::-webkit-scrollbar {width:8px;background:transparent;}
+    ::-webkit-scrollbar-thumb {background: #242932; border-radius: 7px;}
+    .shop-title {
+      text-align: center;
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-size: 1.7rem;
+      color: #7a8494;
+      font-weight: 900;
+      letter-spacing: .07em;
+      margin-top: 83px;
+      margin-bottom: 5px;
+      text-shadow: 0 1px 14px #1e293b30;
+    }
+    .wallet-bar {
+      margin: 20px auto 0 auto;
+      max-width: 368px;
+      border-radius: 11px;
+      background: #22262c;
+      box-shadow: 0 3px 12px #434e588a;
+      padding: 11px 24px;
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      justify-content: center;
+      font-family: 'Orbitron', Arial, sans-serif;
+      position: static;
+      width: 100vw;
+      max-width: 440px;
+      box-sizing: border-box;
+      border-bottom: 2.5px solid #7a849466;
+    }
+    .wallet-bar-separator {
+      width:100vw;
+      margin:0 auto;
+      max-width:440px;
+      height:0;
+      border-bottom:2.5px solid #7a849466;
+      position:relative;
+      top:0;
+      z-index:10;
+    }
+    .wallet-currency { display: flex; align-items: center; gap: 9px; }
+    .wc-icon { width: 27px; height: 27px; border-radius: 50%; background: #25272b; box-shadow: 0 1px 7px #7a84944b; object-fit: cover; }
+    .wc-type { font-family: 'Orbitron', Arial, sans-serif; font-size: 1.03rem; color: #c4cad4; font-weight: 700; letter-spacing: .03em; }
+    .wc-count { font-family: 'Poppins', Arial, sans-serif; font-size: 1.03rem; color: #ccd6ee; font-weight: 800; text-shadow: 0 1px 9px #7889a252; }
+    main { padding: 12px 8px 18px 8px; max-width: 440px; width: 100vw; margin: 0 auto 0 auto; box-sizing: border-box; position: relative; font-family: 'Poppins', Arial, sans-serif; font-size: 1.03rem; }
+    .shop-section { margin: 0 0 15px 0; }
+    .shop-category-title { font-family: 'Orbitron', Arial, Helvetica, sans-serif; font-weight: 700; font-size: 1.15rem; color: #7a8494; margin: 28px 0 10px 0; letter-spacing: 0.02em; text-shadow: 0 1px 11px #10223b24; }
+    .shop-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; margin-bottom: 20px; }
+    .item-card { background: #1f2229; border-radius: 13px; box-shadow: 0 2px 10px #6c727e17; padding: 11px 8px 14px 8px; max-width: 120px; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; margin-bottom: 7px; user-select: none; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; border: 1.5px solid #272b33; }
+    .item-card img { border-radius: 8px; width: 52px; height: 52px; object-fit: cover; box-shadow: 0 1px 8px #7a849430; background: #233; margin-bottom: 8px; display:block; }
+    .item-card .item-name { font-family: 'Poppins', Arial, sans-serif; font-size: 0.89rem; font-weight: 700; color: #e4e5e8; text-align: center; margin-bottom: 7px; user-select: none; line-height: 1.1; word-break: break-word; text-shadow: 0 1px 10px #e4e5e831; }
+    .item-card .price-row { display: flex; align-items: center; gap: 5px; margin-bottom: 6px; font-family: 'Orbitron', Arial, sans-serif; }
+    .item-card .item-price { font-family: 'Orbitron', Arial, sans-serif; font-size: 0.96rem; color: #f8b338; font-weight: 900; letter-spacing:.01em; text-shadow: 0 1px 5px #f8b33828; }
+    .item-card .item-currency-icon { width: 15px; height: 15px; vertical-align: middle; border-radius: 50%; }
+    .item-card .buy-btn { margin-top: 2px; background: linear-gradient(98deg,#434e58 51%,#7a8494 100%); color: #fff; border: none; outline: none; border-radius: 11px; font-weight: 700; font-family: 'Poppins', Arial, sans-serif; cursor: pointer; padding: 5px 12px; font-size: 0.93rem; transition: background 0.18s, color 0.18s; box-shadow: 0 1px 7px #434e5833; }
+    .item-card .buy-btn:disabled { background: #434e58; color: #bfc8d6; cursor: not-allowed; box-shadow: none; opacity: 0.85; }
+    .item-card .buy-btn.success { background: #22d3ee; color: #fff; }
+    #popup {
+      display: none;
+      position: fixed;
+      left: 50%;
+      top: 20%;
+      transform: translateX(-50%) scale(.93);
+      background: #22262c;
+      color: #e4e5e8;
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-size: 1.06rem;
+      font-weight: 700;
+      box-shadow: 0 8px 30px #505a663a;
+      border-radius: 18px;
+      padding: 20px 18vw 28px 18vw;
+      z-index: 9999;
+      text-align: center;
+      border: 2px solid #434e58;
+      letter-spacing: .01em;
+      min-width:220px;
+      max-width:300px;
+      animation: popIn .43s;
+    }
+    #popup img { width:55px; height:55px; border-radius:10px; margin-bottom:10px; box-shadow:0 1px 8px #434e583c; background:#233; object-fit:cover; }
+    #popup .popup-title {font-size:1.02rem; color:#7a8494; margin-bottom:7px;}
+    #popup .popup-item-name {font-size:.95rem; color:#e4e5e8; font-weight:700;}
+    #popup .popup-btn { margin-top:14px; background:linear-gradient(98deg,#434e58 61%,#7a8494 100%); color:#fff; border:none; outline:none; border-radius:12px; font-weight:700; font-family:'Poppins',Arial,sans-serif; cursor:pointer; padding:7px 28px; font-size:0.98rem; transition:background .16s, color .16s; }
+    @keyframes popIn { 0%{opacity:0;transform:translateX(-50%)scale(.7);}70%{opacity:.8;transform:translateX(-50%)scale(1.09);}100%{opacity:1;transform:translateX(-50%)scale(1);} }
+    @media (max-width: 600px) {
+      .shop-title {font-size: 1.12rem; margin-top: 71px;}
+      main { padding: 12px 2vw 14vw 2vw; max-width: 100vw; font-size: 0.98rem;}
+      .shop-category-title { font-size: 0.93rem; margin: 22px 0 8px 0;}
+      .shop-items { gap: 9px;}
+      .item-card { max-width: 95px; padding: 8px 7px 10px 7px; }
+      .item-card img { width:39px; height:39px;}
+      .item-card .item-name { font-size: 0.74rem; margin-bottom: 5px;}
+      .item-card .item-price { font-size: 0.78rem;}
+      .item-card .item-currency-icon { width: 10px; height: 10px;}
+      .item-card .buy-btn { font-size: 0.73rem; padding: 4px 9px; border-radius: 8px;}
+      #popup { padding: 14px 8vw 19px 8vw; min-width: 160px; max-width: 180px; font-size: 0.94rem;}
+      #popup img { width: 36px; height: 36px;}
+      #popup .popup-btn { padding: 5px 14px; font-size: 0.8rem;}
+      .wallet-bar { max-width: 100vw; }
+      .wallet-bar-separator { max-width: 100vw; }
+    }
+  </style>
+</head>
+<body>
+  <header id="mainHeader">
+    <div class="header-inner">
+      <div class="logo-container" tabindex="0" aria-label="Sharky Chat Logo">
+        <img src="https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/gc-logo.png?alt=media&token=ddfe6e46-7351-4a07-8140-ea702b1bd823" alt="Sharky Logo" />
+        <div class="logo-text">SHARKY CHAT</div>
+      </div>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle menu">
+        ☰
+        <span class="notif-badge" id="menuNotif" style="display:none;">0</span>
+      </button>
+    </div>
+    <nav class="menu-dropdown" role="menu" aria-label="Main Navigation">
+      <button class="close-btn" aria-label="Close menu" title="Close menu" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <a href="profile.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="12" r="7"/><ellipse cx="16" cy="23.5" rx="12" ry="6.5"/></svg>
+        </span>
+        Profile
+      </a>
+      <a href="chatrooms.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="8" width="28" height="16" rx="5"/><rect x="12" y="6" width="8" height="4" rx="2"/><circle cx="7" cy="12" r="2"/><circle cx="25" cy="12" r="2"/></svg>
+        </span>
+        Chat Rooms
+      </a>
+      <a href="friends.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="12" r="5"/><circle cx="22" cy="12" r="5"/><ellipse cx="16" cy="23" rx="12" ry="6"/></svg>
+        </span>
+        Friends
+        <span id="friends-notif" class="notif-badge" style="display:none;">0</span>
+      </a>
+      <a href="add-friends.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="13" r="7"/><rect x="23" y="19" width="9" height="3" rx="1.5"/><rect x="26" y="16" width="3" height="9" rx="1.5"/></svg>
+        </span>
+        Add Friend
+      </a>
+      <a href="inbox.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="8" width="24" height="16" rx="4"/><polyline points="4,8 16,18 28,8" fill="none" stroke="#60a5fa" stroke-width="2"/></svg>
+        </span>
+        Messages
+        <span id="messages-notif" class="notif-badge" style="display:none;">0</span>
+      </a>
+      <a href="wallet.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="10" width="24" height="12" rx="3"/><ellipse cx="24" cy="16" rx="2" ry="2"/><rect x="6" y="13" width="20" height="4" rx="2"/><circle cx="17" cy="16" r="2" fill="#fff"/></svg>
+        </span>
+        Wallet
+      </a>
+      <a href="shop.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="13" width="20" height="9" rx="3"/><rect x="12" y="7" width="8" height="6" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><circle cx="10" cy="26" r="2"/><circle cx="22" cy="26" r="2"/></svg>
+        </span>
+        Shop
+      </a>
+      <a href="inventory.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="10" width="18" height="12" rx="3"/><rect x="11" y="6" width="10" height="4" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><path d="M7 22h18"/><circle cx="16" cy="18" r="2"/></svg>
+        </span>
+        Inventory
+      </a>
+      <a href="news.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="7" width="22" height="18" rx="4"/><rect x="9" y="11" width="14" height="2" rx="1"/><rect x="9" y="16" width="8" height="2" rx="1"/><circle cx="10" cy="21" r="2"/><rect x="14" y="20" width="7" height="2" rx="1"/></svg>
+        </span>
+        News
+      </a>
+      <a href="level.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 5v17" stroke="#6699ff" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="26" r="5" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><rect x="11" y="13" width="10" height="4" rx="2" fill="#bae6fd" /><rect x="13" y="8" width="6" height="3" rx="1.5" fill="#60a5fa"/></svg>
+        </span>
+        Level
+      </a>
+      <a href="refer.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="13" fill="#5eead4" /><path d="M22.5,14h-8.7l3-3m-2.8,8a3,3,0,1,0-3,-3" stroke="#262626" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        Refer A Friend
+      </a>
+      <a href="verify-email.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="8" width="22" height="16" rx="5"/><polyline points="5,8 16,18 27,8" fill="none" stroke="#2dd4bf" stroke-width="2"/><circle cx="16" cy="19" r="2.5"/></svg>
+        </span>
+        Email Verification
+      </a>
+      <a href="help.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="12" fill="none" stroke="#fbbf24" stroke-width="2"/><text x="16" y="20" text-anchor="middle" fill="#fbbf24" font-size="8" font-family="Orbitron">?</text></svg>
+        </span>
+        Help
+      </a>
+      <a href="social-media.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="12" r="3"/><circle cx="24" cy="12" r="3"/><circle cx="16" cy="22" r="3"/><line x1="8" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/><line x1="24" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/></svg>
+        </span>
+        Social Media
+      </a>
+      <a href="#" id="themeSwitch" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="12"/><path d="M16 4v8"/><circle cx="16" cy="16" r="5" fill="#fff"/></svg>
+        </span>
+        Change Theme
+      </a>
+    </nav>
+  </header>
+  <div class="shop-title">SHARKY SHOP</div>
+  <div class="wallet-bar" id="walletBar">
+    <div class="wallet-currency">
+      <img class="wc-icon" src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" alt="Sharky Coin">
+      <span class="wc-type">Coins:</span>
+      <span class="wc-count" id="coinsCount">0</span>
+    </div>
+    <div class="wallet-currency">
+      <img class="wc-icon" src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/7b852f75-8330-4a86-8c7c-f528de84c4de.png" alt="Sharky Gold">
+      <span class="wc-type">Gold:</span>
+      <span class="wc-count" id="goldCount">0</span>
+    </div>
+  </div>
+  <div class="wallet-bar-separator"></div>
+  <main>
+    <div class="shop-section">
+      <div class="shop-category-title">Banner</div>
+      <div class="shop-items">
+        <div class="item-card" data-itemid="banner_stars_profile" data-category="banner">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94c0fcfa-2a7a-46f1-ad8d-9ae08a932228.png" alt="Stars Profile Banner" />
+          <div class="item-name">Stars Profile Banner</div>
+          <div class="price-row">
+            <span class="item-price">200</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="banner_cute_rabbit" data-category="banner">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c4c60231-2b74-427d-8037-98f1b33227f1.png" alt="Cute Rabbit Banner" />
+          <div class="item-name">Cute Rabbit Banner</div>
+          <div class="price-row">
+            <span class="item-price">10</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/7b852f75-8330-4a86-8c7c-f528de84c4de.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="banner_peaceful_house_3d" data-category="banner">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/3baf3830-1a64-425c-bd6f-905bacbc84ad.png" alt="3D Peaceful House Banner" />
+          <div class="item-name">3D Peaceful House Banner</div>
+          <div class="price-row">
+            <span class="item-price">15</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/7b852f75-8330-4a86-8c7c-f528de84c4de.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="banner_4d_illusion" data-category="banner">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/0704da65-dc4f-4ece-adbc-cd598182010c.png" alt="4D Illusion Banner" />
+          <div class="item-name">4D Illusion Banner</div>
+          <div class="price-row">
+            <span class="item-price">250</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="banner_3d_luxury" data-category="banner">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/5d228e0c-1e37-4101-90e4-28313586a6af.png" alt="3D Luxury Banner" />
+          <div class="item-name">3D Luxury Banner</div>
+          <div class="price-row">
+            <span class="item-price">20</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/7b852f75-8330-4a86-8c7c-f528de84c4de.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="banner_3d_moon" data-category="banner">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/d185a9a8-660f-4396-9925-b3760299e111.png" alt="3D Moon Banner" />
+          <div class="item-name">3D Moon Banner</div>
+          <div class="price-row">
+            <span class="item-price">220</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="banner_3d_gaming" data-category="banner">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/86b48c74-56b9-4e3d-b82c-4be753dd9234.png" alt="3D Gaming Banner" />
+          <div class="item-name">3D Gaming Banner</div>
+          <div class="price-row">
+            <span class="item-price">230</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="banner_cartoon_one_eyed_devil" data-category="banner">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c33cf83a-151b-4f56-ad81-5b2f2c4b9164.png" alt="Cartoon One Eyed Devil Banner" />
+          <div class="item-name">Cartoon One Eyed Devil Banner</div>
+          <div class="price-row">
+            <span class="item-price">11</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/7b852f75-8330-4a86-8c7c-f528de84c4de.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="banner_bmw_headlight_evil" data-category="banner">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/e3a07e8f-23af-42d5-9a5d-03f4f768ec76.png" alt="BMW Headlight Evil Banner" />
+          <div class="item-name">BMW Headlight Evil Banner</div>
+          <div class="price-row">
+            <span class="item-price">270</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="banner_cartoon_turtle" data-category="banner">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/73c882c5-e531-4b01-a356-75fdc5e4f822.png" alt="Cartoon Turtle Banner" />
+          <div class="item-name">Cartoon Turtle Banner</div>
+          <div class="price-row">
+            <span class="item-price">13</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/7b852f75-8330-4a86-8c7c-f528de84c4de.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="banner_3d_rain" data-category="banner">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/09250fbd-e0a9-4861-9251-8033325be157.png" alt="3D Rain Banner" />
+          <div class="item-name">3D Rain Banner</div>
+          <div class="price-row">
+            <span class="item-price">190</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+      </div>
+    </div>
+    <div class="shop-section">
+      <div class="shop-category-title">Badges</div>
+      <div class="shop-items">
+        <div class="item-card" data-itemid="badge_star_light" data-category="badge">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/cb7afe60-1c8e-4af6-8780-01856f63b51d.png" alt="Star Light Badge" />
+          <div class="item-name">Star Light Badge</div>
+          <div class="price-row">
+            <span class="item-price">15</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/7b852f75-8330-4a86-8c7c-f528de84c4de.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="badge_moon_dark" data-category="badge">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/60a43f65-1ab7-4923-8788-758778130a22.png" alt="Moon Dark Badge" />
+          <div class="item-name">Moon Dark Badge</div>
+          <div class="price-row">
+            <span class="item-price">150</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="badge_rising_star" data-category="badge">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/43fb251c-b5e8-4541-a786-d91e060eb7f0.png" alt="Rising Star Badge" />
+          <div class="item-name">Rising Star Badge</div>
+          <div class="price-row">
+            <span class="item-price">150</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="badge_luxury" data-category="badge">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/23b9ac5c-faaf-4d14-ad52-65aab320e878.png" alt="Luxury Badge" />
+          <div class="item-name">Luxury Badge</div>
+          <div class="price-row">
+            <span class="item-price">200</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="badge_legendary" data-category="badge">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/85b7077f-5e80-42e1-890f-ec78df6afd0e.png" alt="Legendary Badge" />
+          <div class="item-name">Legendary Badge</div>
+          <div class="price-row">
+            <span class="item-price">17</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/7b852f75-8330-4a86-8c7c-f528de84c4de.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="badge_warrior" data-category="badge">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/8315ccb8-4f68-4dc9-b1c9-225b62ed2a87.png" alt="Warrior Badge" />
+          <div class="item-name">Warrior Badge</div>
+          <div class="price-row">
+            <span class="item-price">270</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="badge_wolf" data-category="badge">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94674004-81f1-4aa5-afe2-15c097b29a76.png" alt="Wolf Badge" />
+          <div class="item-name">Wolf Badge</div>
+          <div class="price-row">
+            <span class="item-price">20</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/7b852f75-8330-4a86-8c7c-f528de84c4de.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="badge_lion" data-category="badge">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/f026bd24-7f5b-44d8-9312-a190d6d30933.png" alt="Lion Badge" />
+          <div class="item-name">Lion Badge</div>
+          <div class="price-row">
+            <span class="item-price">11</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/7b852f75-8330-4a86-8c7c-f528de84c4de.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+        <div class="item-card" data-itemid="badge_king" data-category="badge">
+          <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/a07d8670-6f91-43b1-884e-79a347c3fda0.png" alt="King Badge" />
+          <div class="item-name">King Badge</div>
+          <div class="price-row">
+            <span class="item-price">280</span>
+            <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/2fcd666d-0c17-4861-bd36-3f7ff94e242c.png" class="item-currency-icon" />
+          </div>
+          <button class="buy-btn">Buy</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div id="popup"></div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+      measurementId: "G-HT9T3P9KST"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const menuNotif = document.getElementById("menuNotif");
+    const friendsNotif = document.getElementById("friends-notif");
+    const messagesNotif = document.getElementById("messages-notif");
+    let myUsername = "";
+    let myUID = "";
+    function bumpBadge(el, number) {
+      if (!el) return;
+      el.style.animation = "";
+      setTimeout(() => { el.style.animation = "notifpop .34s"; }, 25);
+    }
+    function bumpBadgeDropdown(el, number) {
+      if (!el) return;
+      el.style.animation = "";
+      setTimeout(() => { el.style.animation = "notifpop .33s"; }, 30);
+    }
+    function setupMenuNotifications(uid, username) {
+      onSnapshot(
+        query(collection(db, "friendRequests"), where("to", "==", uid), where("status", "==", "pending")),
+        (snap) => {
+          const frCount = snap.size;
+          menuNotif.dataset.fr = frCount;
+          friendsNotif.textContent = frCount > 99 ? "99+" : frCount;
+          friendsNotif.style.display = frCount > 0 ? "inline-flex" : "none";
+          bumpBadgeDropdown(friendsNotif, frCount);
+          updateMenuBadge();
+        }
+      );
+    }
+    async function setupMessageNotifications(uid, username) {
+      const friendsSnap = await getDocs(collection(db, "friends"));
+      let myFriends = [];
+      friendsSnap.forEach((doc) => {
+        if (doc.id === uid && doc.data()) myFriends = Object.keys(doc.data());
+      });
+      if (myFriends.length === 0) {
+        messagesNotif.style.display = "none";
+        updateMenuBadge();
+        return;
+      }
+      let unseenTracker = {};
+      let usernamesData = {};
+      let batchSize = 10;
+      for (let i = 0; i < myFriends.length; i += batchSize) {
+        let batch = myFriends.slice(i, i + batchSize);
+        const usersSnap = await getDocs(query(collection(db, "users"), where("__name__", "in", batch)));
+        usersSnap.forEach((doc) => { usernamesData[doc.id] = doc.data().username; });
+      }
+      for (const fid of myFriends) {
+        const friendUsername = usernamesData[fid];
+        if (!friendUsername || friendUsername === username) continue;
+        const chatId = [username, friendUsername].sort().join("_");
+        const msgRef = collection(db, "personalMessages", chatId, "messages");
+        onSnapshot(
+          query(msgRef, where("recipient", "==", username), where("seen", "==", false)),
+          (snap) => {
+            let unseen = 0;
+            snap.forEach((doc) => { if (doc.data().sender !== username) unseen++; });
+            unseenTracker[chatId] = unseen;
+            updateMessagesBadge();
+          }
+        );
+      }
+      function updateMessagesBadge() {
+        let totalUnseen = Object.values(unseenTracker).reduce((a, b) => a + b, 0);
+        messagesNotif.dataset.count = totalUnseen;
+        messagesNotif.textContent = totalUnseen > 99 ? "99+" : totalUnseen;
+        messagesNotif.style.display = totalUnseen > 0 ? "inline-flex" : "none";
+        bumpBadge(messagesNotif, totalUnseen);
+        updateMenuBadge();
+      }
+    }
+    function updateMenuBadge() {
+      const frCount = parseInt(menuNotif.dataset.fr) || 0;
+      const msgCount = parseInt(messagesNotif.dataset.count) || 0;
+      const total = frCount + msgCount;
+      if (total > 0) {
+        menuNotif.textContent = total > 99 ? "99+" : total;
+        menuNotif.style.display = "inline-flex";
+        bumpBadge(menuNotif, total);
+      } else {
+        menuNotif.style.display = "none";
+      }
+    }
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        alert("Please login first.");
+        window.location.href = "index.html";
+      } else {
+        myUID = user.uid;
+        let snap = await getDocs(query(collection(db, "users"), where("__name__", "==", myUID)));
+        snap.forEach((docSnap) => { myUsername = docSnap.data().username || ""; });
+        setupMenuNotifications(myUID, myUsername);
+        setupMessageNotifications(myUID, myUsername);
+      }
+    });
+    const mainHeader = document.getElementById("mainHeader");
+    const menuBtn = document.getElementById("menuBtn");
+    const closeBtn = document.querySelector(".menu-dropdown .close-btn");
+    menuBtn.addEventListener("click", (e) => {
+      mainHeader.classList.toggle("expanded"); e.stopPropagation();
+    });
+    closeBtn.addEventListener("click", (e) => {
+      mainHeader.classList.remove("expanded"); menuBtn.focus(); e.stopPropagation();
+    });
+    document.addEventListener("click", (e) => { if (!mainHeader.contains(e.target)) mainHeader.classList.remove("expanded"); });
+    document.querySelector(".menu-dropdown").addEventListener("click", (e) => {
+      if (e.target.tagName === "A") mainHeader.classList.remove("expanded");
+    });
+    const themeSwitch = document.getElementById("themeSwitch");
+    if (themeSwitch) {
+      themeSwitch.addEventListener("click", function () {
+        document.body.classList.toggle("light-theme");
+        const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
+        localStorage.setItem("theme", theme);
+        mainHeader.classList.remove("expanded");
+      });
+    }
+    let uid = '';
+    let wallet = {sharkyCoin:0, sharkyGold:0};
+    let inventory = {};
+    function updateWalletUI(){
+      document.getElementById("coinsCount").textContent = wallet.sharkyCoin || "0";
+      document.getElementById("goldCount").textContent = wallet.sharkyGold || "0";
+    }
+    function updateInventoryUI(){
+      document.querySelectorAll(".item-card").forEach(card=>{
+        let iid = card.dataset.itemid;
+        if(inventory && inventory[iid]){
+          card.querySelector(".buy-btn").textContent = "Owned";
+          card.querySelector(".buy-btn").disabled = true;
+        } else {
+          card.querySelector(".buy-btn").textContent = "Buy";
+          card.querySelector(".buy-btn").disabled = false;
+        }
+      });
+    }
+    function showPopup(itemId){
+      const popup = document.getElementById("popup");
+      let itemData = shopItemsMeta[itemId];
+      popup.innerHTML = `
+        <div class="popup-title">You purchased this item</div>
+        <img src="${itemData.img}" alt="${itemData.name}" />
+        <div class="popup-item-name">${itemData.name}</div>
+        <button class="popup-btn" id="popupOkBtn">Okay</button>
+      `;
+      popup.style.display = "block";
+      popup.style.animation = "popIn .43s";
+      document.getElementById("popupOkBtn").onclick = function(){ popup.style.display = "none"; }
+    }
+    const shopItemsMeta = {
+      "banner_stars_profile": {itemid:"banner_stars_profile", category:"banner", price:200, currency:"coin", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94c0fcfa-2a7a-46f1-ad8d-9ae08a932228.png", name:"Stars Profile Banner"},
+      "banner_cute_rabbit": {itemid:"banner_cute_rabbit", category:"banner", price:10, currency:"gold", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c4c60231-2b74-427d-8037-98f1b33227f1.png", name:"Cute Rabbit Banner"},
+      "banner_peaceful_house_3d": {itemid:"banner_peaceful_house_3d", category:"banner", price:15, currency:"gold", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/3baf3830-1a64-425c-bd6f-905bacbc84ad.png", name:"3D Peaceful House Banner"},
+      "banner_4d_illusion": {itemid:"banner_4d_illusion", category:"banner", price:250, currency:"coin", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/0704da65-dc4f-4ece-adbc-cd598182010c.png", name:"4D Illusion Banner"},
+      "banner_3d_luxury": {itemid:"banner_3d_luxury", category:"banner", price:20, currency:"gold", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/5d228e0c-1e37-4101-90e4-28313586a6af.png", name:"3D Luxury Banner"},
+      "banner_3d_moon": {itemid:"banner_3d_moon", category:"banner", price:220, currency:"coin", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/d185a9a8-660f-4396-9925-b3760299e111.png", name:"3D Moon Banner"},
+      "banner_3d_gaming": {itemid:"banner_3d_gaming", category:"banner", price:230, currency:"coin", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/86b48c74-56b9-4e3d-b82c-4be753dd9234.png", name:"3D Gaming Banner"},
+      "banner_cartoon_one_eyed_devil": {itemid:"banner_cartoon_one_eyed_devil", category:"banner", price:11, currency:"gold", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c33cf83a-151b-4f56-ad81-5b2f2c4b9164.png", name:"Cartoon One Eyed Devil Banner"},
+      "banner_bmw_headlight_evil": {itemid:"banner_bmw_headlight_evil", category:"banner", price:270, currency:"coin", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/e3a07e8f-23af-42d5-9a5d-03f4f768ec76.png", name:"BMW Headlight Evil Banner"},
+      "banner_cartoon_turtle": {itemid:"banner_cartoon_turtle", category:"banner", price:13, currency:"gold", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/73c882c5-e531-4b01-a356-75fdc5e4f822.png", name:"Cartoon Turtle Banner"},
+      "banner_3d_rain": {itemid:"banner_3d_rain", category:"banner", price:190, currency:"coin", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/09250fbd-e0a9-4861-9251-8033325be157.png", name:"3D Rain Banner"},
+      "badge_star_light": {itemid:"badge_star_light", category:"badge", price:15, currency:"gold", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/cb7afe60-1c8e-4af6-8780-01856f63b51d.png", name:"Star Light Badge"},
+      "badge_moon_dark": {itemid:"badge_moon_dark", category:"badge", price:150, currency:"coin", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/60a43f65-1ab7-4923-8788-758778130a22.png", name:"Moon Dark Badge"},
+      "badge_rising_star": {itemid:"badge_rising_star", category:"badge", price:150, currency:"coin", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/43fb251c-b5e8-4541-a786-d91e060eb7f0.png", name:"Rising Star Badge"},
+      "badge_luxury": {itemid:"badge_luxury", category:"badge", price:200, currency:"coin", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/23b9ac5c-faaf-4d14-ad52-65aab320e878.png", name:"Luxury Badge"},
+      "badge_legendary": {itemid:"badge_legendary", category:"badge", price:17, currency:"gold", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/85b7077f-5e80-42e1-890f-ec78df6afd0e.png", name:"Legendary Badge"},
+      "badge_warrior": {itemid:"badge_warrior", category:"badge", price:270, currency:"coin", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/8315ccb8-4f68-4dc9-b1c9-225b62ed2a87.png", name:"Warrior Badge"},
+      "badge_wolf": {itemid:"badge_wolf", category:"badge", price:20, currency:"gold", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94674004-81f1-4aa5-afe2-15c097b29a76.png", name:"Wolf Badge"},
+      "badge_lion": {itemid:"badge_lion", category:"badge", price:11, currency:"gold", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/f026bd24-7f5b-44d8-9312-a190d6d30933.png", name:"Lion Badge"},
+      "badge_king": {itemid:"badge_king", category:"badge", price:280, currency:"coin", img:"https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/a07d8670-6f91-43b1-884e-79a347c3fda0.png", name:"King Badge"}
+    };
+    onAuthStateChanged(auth, async user=>{
+      if(!user){ location.href="login.html"; return;}
+      uid = user.uid;
+      let walletRef = doc(db,"wallets",uid);
+      onSnapshot(walletRef, snap=>{
+        wallet = snap.exists() ? snap.data() : {sharkyCoin:0, sharkyGold:0};
+        updateWalletUI();
+      });
+      let invRef = doc(db,"inventories",uid);
+      onSnapshot(invRef, snap=>{
+        inventory = snap.exists() ? snap.data() : {};
+        updateInventoryUI();
+      });
+      document.querySelectorAll(".item-card").forEach(card=>{
+        const iid = card.dataset.itemid;
+        const meta = shopItemsMeta[iid];
+        card.querySelector(".buy-btn").onclick = function(){
+          buyItem(meta, iid);
+        };
+      });
+    });
+    async function buyItem(item, iid){
+      const {itemid, price, currency} = item;
+      let newWallet = {...wallet};
+      if(currency === "coin"){
+        if((wallet.sharkyCoin||0) < price){alert("Not enough coins!"); return;}
+        newWallet.sharkyCoin -= price;
+      } else {
+        if((wallet.sharkyGold||0) < price){alert("Not enough gold!"); return;}
+        newWallet.sharkyGold -= price;
+      }
+      await setDoc(doc(db,"wallets",uid), newWallet, {merge:true});
+      let invObj = {...inventory, [itemid]: true};
+      await setDoc(doc(db,"inventories",uid), invObj, {merge:true});
+      showPopup(iid);
+    }
+    window.logout = async function() { await signOut(auth); location.href = "login.html"; };
+  </script>
+</body>
+</html>
