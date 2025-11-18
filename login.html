@@ -4,20 +4,23 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sharky Chat | Login/Register</title>
-  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
   <style>
+    /* New Classy/Cyberpunk Theme */
     :root {
-      --primary-bg: linear-gradient(135deg, #222436 0%, #15151f 90%);
-      --accent: #8fbbff;
-      --header-accent: #405377;
-      --panel-bg: rgba(42, 46, 71, 0.90);
-      --card-radius: 22px;
-      --glow: 0 0 20px #8fbbff99, 0 0 42px #8fbbff88;
-      --transition-time: 0.4s;
-      --input-bg: #24263bcc;
-      --input-focus-bg: #354a67;
-      --input-shadow: inset 0 0 10px #1a2038cc;
-      --button-shadow: 0 0 24px #89a3ddaa;
+      --primary-bg: linear-gradient(145deg, #101224 0%, #05071a 100%);
+      --accent-color: #5d98ff; /* Brighter, modern blue */
+      --secondary-accent: #7a73ff; /* Purple glow */
+      --panel-bg: rgba(18, 20, 36, 0.95);
+      --card-radius: 18px;
+      --glow-light: 0 0 15px #5d98ff88, 0 0 35px #7a73ff55;
+      --transition-time: 0.35s;
+      --input-bg: #1e203c99;
+      --input-focus-bg: #2d3056;
+      --input-shadow: inset 0 0 8px #0d102a;
+      --button-shadow: 0 0 20px #5d98ffaa;
+      --text-color: #e3e6fa;
+      --error-color: #ff5566;
     }
     * {
       margin:0; padding:0; box-sizing:border-box;
@@ -25,9 +28,9 @@
     html, body {
       min-height: 100vh;
       height: 100%;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Inter', sans-serif;
       background: var(--primary-bg);
-      color: #e6e9f7;
+      color: var(--text-color);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -35,88 +38,83 @@
       overflow-x: hidden;
       user-select: none;
       scroll-behavior: smooth;
+      padding-bottom: 20px; /* Extra space at the bottom */
     }
     header {
-      margin-top: 38px;
-      font-family: 'MedievalSharp', cursive;
-      font-weight: 600;
-      font-size: 3.1rem;
-      color: var(--accent);
-      text-shadow: var(--glow);
-      letter-spacing: 0.12em;
+      margin-top: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 3rem; /* Title size reduced */
+      color: var(--accent-color);
+      text-shadow: var(--glow-light);
+      letter-spacing: 0.15em;
       user-select:none;
       text-align: center;
-      width: 100%;
-      max-width: 420px;
+      padding: 10px 20px;
       animation: fadeInDown 1s ease forwards;
-      border-radius: 28px;
-      background: linear-gradient(90deg, #23253b 77%, #35375c 100%);
-      border-bottom: 2.5px solid #46537033;
-      padding-bottom: 8px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #15172b 77%, #282a44 100%);
+      border-bottom: 2px solid #5d98ff33;
     }
     .login-register-card {
-      margin-top: 56px;
+      margin-top: 60px;
       width: 96vw;
-      max-width: 410px;
+      max-width: 440px; 
       background: var(--panel-bg);
       border-radius: var(--card-radius);
-      padding: 43px 36px 38px 36px;
-      box-shadow: 0 0 50px #8fbbff33, 0 0 10px #3a98ff22;
+      padding: 40px 30px;
+      box-shadow: 0 0 60px #5d98ff33, 0 0 15px #7a73ff44;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
       animation: fadeInUp 1s ease forwards;
-      border: 1.7px solid #6c7dba1f;
-      backdrop-filter: blur(3px);
+      border: 1.5px solid #5d98ff2a;
+      backdrop-filter: blur(5px);
     }
     .tabs {
       display: flex;
       width: 100%;
       margin-bottom: 30px;
-      gap: 10px;
+      gap: 15px;
       user-select:none;
     }
     .tab-btn {
       flex: 1;
-      padding: 14px 0;
-      font-family: 'Orbitron', sans-serif;
+      padding: 16px 0;
+      font-family: 'Inter', sans-serif;
       font-weight: 700;
-      font-size: 1.08rem;
-      letter-spacing: 0.09em;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
       border: none;
-      border-radius: 15px 15px 0 0;
+      border-radius: 12px;
       cursor: pointer;
-      background: #23253b;
-      color: #bfceffbe;
-      box-shadow: inset 0 0 10px #35375c77;
-      transition:
-        background var(--transition-time) ease,
-        color var(--transition-time) ease,
-        transform var(--transition-time) ease;
+      background: #181a30;
+      color: #9ea4c7;
+      box-shadow: inset 0 0 12px #20223d;
+      transition: background var(--transition-time) ease, color var(--transition-time) ease, transform 0.2s ease;
+      border: 1px solid #303358;
     }
     .tab-btn:hover:not(.active) {
-      color: #d0e1ff;
-      background: #2a2c49;
+      color: var(--accent-color);
+      background: #1f223f;
     }
     .tab-btn.active {
-      background: linear-gradient(90deg, #8fbbff 35%, #405377 110%);
-      color: #f2f4ff;
-      box-shadow:
-        0 0 32px #8fbbffbb,
-        inset 0 0 30px #40537788;
-      transform: scale(1.07) translateY(-3px);
+      background: linear-gradient(90deg, var(--accent-color) 0%, var(--secondary-accent) 120%);
+      color: #fff;
+      box-shadow: 0 0 20px var(--accent-color), inset 0 0 20px #34487c;
+      transform: scale(1.05);
       z-index: 5;
     }
     form {
       width: 100%;
       display: none;
       flex-direction: column;
-      gap: 18px;
+      gap: 20px;
       opacity: 0;
-      transform: translateY(18px);
+      transform: translateY(15px);
       transition: opacity var(--transition-time) ease, transform var(--transition-time) ease;
-      min-height: 295px;
+      min-height: 320px;
     }
     form.active {
       display: flex;
@@ -124,34 +122,33 @@
       transform: translateY(0);
     }
     input, select {
-      padding: 15px 17px;
-      font-size: 1.03rem;
-      border-radius: 13px;
-      border: none;
+      padding: 16px 20px;
+      font-size: 1.05rem;
+      border-radius: 10px;
+      border: 1px solid transparent;
       background: var(--input-bg);
       box-shadow: var(--input-shadow);
-      color: #ccd6ff;
-      transition: box-shadow 0.3s ease, background 0.3s ease;
-      width: 98%;
+      color: var(--text-color);
+      transition: box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+      width: 100%;
       font-weight: 500;
-      letter-spacing: 0.04em;
-      border-bottom: 2px solid #4245702c;
-      margin-bottom: 6px;
+      letter-spacing: 0.03em;
     }
     input:focus, select:focus {
       outline: none;
       background: var(--input-focus-bg);
-      box-shadow: 0 0 18px var(--accent);
+      box-shadow: 0 0 15px var(--accent-color), var(--input-shadow);
+      border-color: var(--accent-color);
       color: #fff;
     }
     ::placeholder {
-      color: #c9defa97;
+      color: #9ea4c790;
       font-weight: 400;
     }
     .show-hide {
       display: flex;
       align-items: center;
-      gap: 13px;
+      gap: 15px;
       width: 100%;
       color: #b9c7f7c7;
       font-size: 1rem;
@@ -162,161 +159,252 @@
     }
     .show-hide input[type=checkbox] {
       cursor: pointer;
-      accent-color: var(--accent);
-      width: 21px; height:21px;
-      margin-left: 6px;
-      filter: drop-shadow(0 0 1px #8fbbffb8);
+      accent-color: var(--accent-color);
+      width: 20px; height:20px;
+      margin-left: 5px;
+      filter: drop-shadow(0 0 2px var(--accent-color));
     }
     .submit-btn {
-      background: linear-gradient(90deg, #89a3dd 12%, #405377 94%);
+      background: linear-gradient(90deg, var(--accent-color) 12%, var(--secondary-accent) 94%);
       color: white;
       font-weight: 700;
       border: none;
-      border-radius: 16px;
-      padding: 17px 0;
-      letter-spacing: 0.09em;
-      font-size: 1.13em;
+      border-radius: 12px;
+      padding: 18px 0;
+      letter-spacing: 0.1em;
+      font-size: 1.15em;
       cursor: pointer;
       box-shadow: var(--button-shadow);
       transition: background 0.32s, box-shadow 0.32s, transform 0.2s;
     }
     .submit-btn:hover {
-      background: linear-gradient(90deg, #405377 17%, #89a3dd 89%);
-      box-shadow: 0 0 42px #728ad6cc;
-      transform: scale(1.07);
+      background: linear-gradient(90deg, var(--secondary-accent) 17%, var(--accent-color) 89%);
+      box-shadow: 0 0 40px #7a73ffcc;
+      transform: scale(1.03);
     }
     .forgot-pass {
-      font-size: 1.02rem;
-      color: #6d91da;
+      font-size: 1rem;
+      color: var(--accent-color);
       cursor: pointer;
       text-align: right;
       user-select:none;
-      margin-top: -3px;
-      margin-bottom: 0;
+      margin-top: -5px;
       transition: color 0.3s ease;
       width: 100%;
-      font-weight: 600;
+      font-weight: 500;
       letter-spacing: 0.03em;
     }
     .forgot-pass:hover {
-      color: #8fbbff;
+      color: var(--secondary-accent);
       text-decoration: underline;
     }
     .error-msg {
-      color: #fd6b6b;
-      font-size: 1em;
+      color: var(--error-color);
+      font-size: 0.95em;
       margin-bottom: 0px;
       text-align: left;
-      font-weight: 700;
-      min-height: 22px;
+      font-weight: 600;
+      min-height: 20px;
       letter-spacing:0.02em;
     }
-    .notif-card {
-      min-width: 200px;
-      max-width: 360px;
-      background: linear-gradient(115deg, #23253b 60%, #8fbbff26 100%);
-      color: #e0e7ffd0;
-      font-size: 1.03em;
-      border-radius: 19px;
-      padding: 16px 22px 14px 18px;
-      box-shadow: 0 0 32px #8fbbff88;
-      position: relative;
-      border: 2.2px solid #89a3dd29;
-      font-family: 'Roboto', sans-serif;
-      animation: notifIn 0.6s ease forwards;
-      font-weight: 700;
-      pointer-events: auto;
-      margin: 7px 0;
-      word-break: break-word;
-      user-select:none;
-    }
-    .notif-emoji {
-      font-size: 1.32rem;
-      padding-right: 11px;
-      user-select:none;
-    }
-    .notif-close {
-      position: absolute;
-      top: 7px;
-      right: 17px;
-      font-size: 1.25em;
-      color: #ecefffc9;
-      cursor: pointer;
-      border: none;
-      background: none;
-      font-weight: 700;
-      transition: color 0.3s, transform 0.2s;
-      user-select:none;
-    }
-    .notif-close:hover {
-      color: #8fbbff;
-      transform: scale(1.2);
-    }
-    @keyframes notifIn {
-      from {opacity: 0; filter: blur(3px);}
-      to {opacity: 1; filter: blur(0);}
-    }
-    .notif-close:focus {
-      outline: none;
-    }
     .google-btn {
-      margin-top: 15px;
-      padding: 13px 0;
-      background: #f5f5fa;
-      color: #405377;
-      font-weight: 700;
-      border-radius: 13px;
-      font-family: 'Roboto', sans-serif;
+      margin-top: 10px;
+      padding: 14px 0;
+      background: #f0f4f9;
+      color: #242945;
+      font-weight: 600;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
       letter-spacing: 0.04em;
       border: none;
-      transition: box-shadow 0.27s ease;
-      gap: 13px;
+      transition: box-shadow 0.3s ease, background 0.3s ease;
+      gap: 10px;
       width: 100%;
-      box-shadow: 0 0 17px #8fbbff55;
+      box-shadow: 0 0 15px #5d98ff55;
       user-select:none;
-      border-bottom: 2px solid #8fbbff33;
     }
     .google-btn:hover {
-      box-shadow: 0 0 38px #8fbbffbd;
-      background: #f1f8ff;
-      color: #89a3dd;
+      box-shadow: 0 0 30px #5d98ff99;
+      background: #fff;
     }
     .google-btn img {
-      height: 24px;
-      width: 24px;
+      height: 20px;
+      width: 20px;
     }
+    /* Notification Styles (Kept Simple and Effective) */
+    #notif-container {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .notif-card {
+      min-width: 200px; max-width: 320px;
+      background: linear-gradient(115deg, #242945 60%, #5d98ff20 100%);
+      color: var(--text-color);
+      font-size: 0.95em;
+      border-radius: 12px;
+      padding: 14px 45px 12px 18px;
+      box-shadow: 0 0 25px #5d98ff55;
+      position: relative;
+      border: 1.5px solid #5d98ff1f;
+      font-weight: 500;
+      pointer-events: auto;
+      margin: 8px 0;
+      word-break: break-word;
+      animation: notifIn 0.5s ease forwards;
+    }
+    .notif-card.hideMe {
+      opacity: 0;
+      transform: translateX(100%);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .notif-emoji { font-size: 1.2rem; padding-right: 10px; user-select:none; }
+    .notif-close {
+      position: absolute; top: 10px; right: 15px; font-size: 1.2em;
+      color: #cfd4ff; cursor: pointer; border: none; background: none;
+      font-weight: 700; transition: color 0.3s, transform 0.2s; user-select:none;
+    }
+    .notif-close:hover { color: var(--accent-color); transform: scale(1.1); }
+    @keyframes notifIn { from {opacity: 0; transform: translateX(100px);} to {opacity: 1; transform: translateX(0);} }
+    
+    /* Agreement Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .modal-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .agreement-modal {
+      background: var(--panel-bg);
+      padding: 30px;
+      border-radius: var(--card-radius);
+      width: 90vw;
+      max-width: 480px;
+      box-shadow: var(--glow-light);
+      border: 2px solid var(--accent-color);
+      transform: scale(0.9);
+      transition: transform 0.4s ease;
+    }
+    .modal-overlay.visible .agreement-modal {
+      transform: scale(1);
+    }
+    .agreement-modal h3 {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--accent-color);
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      text-align: center;
+      border-bottom: 2px solid #20223f;
+      padding-bottom: 10px;
+    }
+    .agreement-modal label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      color: #cdd5ff;
+      font-weight: 500;
+    }
+    .agreement-modal input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      margin-right: 15px;
+      accent-color: var(--accent-color);
+      filter: drop-shadow(0 0 1px var(--accent-color));
+      cursor: pointer;
+    }
+    .modal-btn {
+      width: 100%;
+      padding: 15px 0;
+      font-size: 1.1em;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 15px;
+    }
+    #acceptBtn {
+      background: linear-gradient(90deg, #3c78ff 10%, #7a73ff 90%);
+      color: white;
+      box-shadow: 0 0 20px #5d98ffaa;
+    }
+    #acceptBtn:disabled {
+      background: #283058;
+      color: #6c78a1;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    #acceptBtn:hover:not(:disabled) {
+      transform: scale(1.02);
+      box-shadow: 0 0 35px #7a73ffcc;
+    }
+    .modal-link {
+        color: var(--accent-color);
+        font-weight: 700;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    .modal-link:hover {
+        color: var(--secondary-accent);
+        text-decoration: underline;
+    }
+
+    /* Keyframe Animations */
     @keyframes fadeInDown {
-      0% {opacity: 0; transform: translateY(-26px);}
+      0% {opacity: 0; transform: translateY(-30px);}
       100% {opacity: 1; transform: translateY(0);}
     }
     @keyframes fadeInUp {
-      0% {opacity: 0; transform: translateY(26px);}
+      0% {opacity: 0; transform: translateY(30px);}
       100% {opacity: 1; transform: translateY(0);}
     }
-    @media (max-width: 460px) {
+    /* Responsive Adjustments */
+    @media (max-width: 500px) {
       header {
-        font-size: 2.1rem;
-        margin-top: 20px;
-        padding-bottom: 5px;
+        font-size: 2.2rem; /* Adjusted for small screens */
+        margin-top: 30px;
+        letter-spacing: 0.1em;
       }
       .login-register-card {
         max-width: 98vw;
-        padding: 26px 11px;
+        padding: 30px 15px;
+        margin-top: 40px;
       }
       .tab-btn {
-        font-size: 0.90rem;
-        border-radius: 10px 10px 0 0;
+        font-size: 1rem;
+        padding: 12px 0;
       }
       form {
-        min-height: 250px;
+        min-height: 280px;
       }
-      .notif-card {
-        font-size: 0.99em;
-        padding: 14px 10px 11px 11px;
+      .agreement-modal h3 {
+        font-size: 1.4rem;
+      }
+      .agreement-modal {
+        padding: 20px;
       }
     }
   </style>
@@ -324,43 +412,59 @@
 <body>
   <header>SHARKY CHAT</header>
 
+  <div id="agreementModal" class="modal-overlay">
+    <div class="agreement-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h3 id="modalTitle">Accept Terms to Continue</h3>
+      <label>
+        <input type="checkbox" id="privacyCheck">
+        I agree to Sharky Chat's <a href="privacy.html" class="modal-link" target="_blank">Privacy Policy</a>.
+      </label>
+      <label>
+        <input type="checkbox" id="termsCheck">
+        I agree to Sharky Chat's <a href="tou.html" class="modal-link" target="_blank">Terms of Use</a>.
+      </label>
+      <button class="modal-btn" id="acceptBtn" disabled>Accept & Proceed</button>
+    </div>
+  </div>
+  
   <div class="login-register-card" role="region" aria-label="Login and Register forms">
     <div id="notif-container" aria-live="polite" aria-atomic="true"></div>
     <div class="tabs" role="tablist" aria-label="Login and Register tabs">
-      <button class="tab-btn active" onclick="switchTab('login')" role="tab" aria-selected="true" aria-controls="loginForm" id="tab-login">Login</button>
-      <button class="tab-btn" onclick="switchTab('register')" role="tab" aria-selected="false" aria-controls="registerForm" id="tab-register">Register</button>
+      <button class="tab-btn active" onclick="switchTab('login')" role="tab" aria-selected="true" aria-controls="loginForm" id="tab-login">LOGIN</button>
+      <button class="tab-btn" onclick="switchTab('register')" role="tab" aria-selected="false" aria-controls="registerForm" id="tab-register">REGISTER</button>
     </div>
 
     <form id="loginForm" class="active" novalidate role="tabpanel" aria-labelledby="tab-login">
-      <input type="email" id="loginEmail" placeholder="Email" autocomplete="email" required aria-label="Email" />
+      <input type="email" id="loginEmail" placeholder="Email Address" autocomplete="email" required aria-label="Email Address" />
       <div class="show-hide">
         <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" required aria-label="Password" />
         <input type="checkbox" onclick="togglePassword('loginPassword')" aria-label="Show password"> Show
       </div>
       <div class="forgot-pass" role="link" tabindex="0" onclick="location.href='pass-reset.html'" onkeypress="if(event.key==='Enter'){location.href='pass-reset.html';}">Forgot Password?</div>
       <div class="error-msg" id="loginError" role="alert" aria-live="assertive"></div>
-      <button class="submit-btn" type="submit">Login</button>
+      <button class="submit-btn" type="submit">LOG IN SECURELY</button>
       <button type="button" class="google-btn" id="googleLogin" aria-label="Continue with Google">
         <img src="https://img.icons8.com/color/48/google-logo.png" alt="Google logo" /> Continue with Google
       </button>
     </form>
 
     <form id="registerForm" novalidate role="tabpanel" aria-labelledby="tab-register">
-      <input type="text" id="regUsername" placeholder="Username" autocomplete="username" required aria-label="Username" />
-      <input type="number" id="regAge" placeholder="Age (18+)" min="18" required aria-label="Age" />
+      <input type="text" id="regUsername" placeholder="Username (3+ chars)" autocomplete="username" required aria-label="Username" />
+      <input type="number" id="regAge" placeholder="Age (18+ Required)" min="18" required aria-label="Age" />
       <select id="regGender" required aria-label="Select Gender">
         <option value="" disabled selected>Select Gender</option>
         <option>Male</option>
         <option>Female</option>
         <option>Other</option>
+        <option>Prefer not to say</option>
       </select>
-      <input type="email" id="regEmail" placeholder="Email" autocomplete="email" required aria-label="Email" />
+      <input type="email" id="regEmail" placeholder="Email Address" autocomplete="email" required aria-label="Email Address" />
       <div class="show-hide">
-        <input type="password" id="regPassword" placeholder="Password" autocomplete="new-password" required aria-label="Password" />
+        <input type="password" id="regPassword" placeholder="Strong Password" autocomplete="new-password" required aria-label="Password" />
         <input type="checkbox" onclick="togglePassword('regPassword')" aria-label="Show password"> Show
       </div>
       <div class="error-msg" id="registerError" role="alert" aria-live="assertive"></div>
-      <button class="submit-btn" type="submit">Register</button>
+      <button class="submit-btn" type="submit">CREATE ACCOUNT</button>
       <button type="button" class="google-btn" id="googleSignup" aria-label="Sign up with Google">
         <img src="https://img.icons8.com/color/48/google-logo.png" alt="Google logo" /> Sign up with Google
       </button>
@@ -393,16 +497,26 @@
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
 
+    const BAD_WORDS = ['fuck', 'bitch', 'shit', 'asshole', 'bastard', 'cunt', 'dick', 'pussy', 'nigger', 'chutiya'];
+
+    function containsBadWords(text) {
+        const lowerText = text.toLowerCase();
+        return BAD_WORDS.some(word => lowerText.includes(word));
+    }
+
     function showNotif(msg, opts = {}) {
       const c = document.getElementById('notif-container');
       const div = document.createElement('div');
       let em = '';
-      if(msg.toLowerCase().includes("password")) em = '🔑';
-      if(msg.toLowerCase().includes("user")||msg.toLowerCase().includes("email")) em = '📧';
-      if(msg.toLowerCase().includes("try")||msg.toLowerCase().includes("too many")) em = "🕓";
-      if(msg.toLowerCase().includes("taken")) em = "⚠️";
-      if(msg.toLowerCase().includes("success")||msg.includes("✅")) em = "✅";
-      if(msg.toLowerCase().includes("18+")) em = "🚫";
+      if(msg.toLowerCase().includes("password") || msg.toLowerCase().includes("login failed")) em = '🔑';
+      else if(msg.toLowerCase().includes("email") && msg.toLowerCase().includes("registered")) em = '📧';
+      else if(msg.toLowerCase().includes("username") && msg.toLowerCase().includes("taken")) em = '⚠️';
+      else if(msg.toLowerCase().includes("try later") || msg.toLowerCase().includes("too many")) em = "🕓";
+      else if(msg.toLowerCase().includes("success")||msg.includes("✅")) em = "✅";
+      else if(msg.toLowerCase().includes("18+")) em = "🚫";
+      else if(msg.toLowerCase().includes("bad words")) em = "❌";
+      else if(msg.toLowerCase().includes("invalid username")) em = "⚙️";
+      else em = "ℹ️"; 
       div.className = 'notif-card';
       div.setAttribute("role", "alert");
       div.setAttribute("aria-live", "assertive");
@@ -411,14 +525,14 @@
       c.appendChild(div);
       div.querySelector('.notif-close').onclick = () => {
         div.classList.add('hideMe');
-        setTimeout(() => div.remove(), 340);
+        setTimeout(() => div.remove(), 350);
       };
       setTimeout(() => {
         if(div.parentNode) {
           div.classList.add('hideMe');
-          setTimeout(() => div.remove(), 340);
+          setTimeout(() => div.remove(), 350);
         }
-      }, opts.time || 4300 + Math.random()*650);
+      }, opts.time || 4500);
     }
 
     function generateUsernameSuggestions(base) {
@@ -454,34 +568,97 @@
       el.type = el.type === "password" ? "text" : "password";
     };
 
-    document.getElementById("registerForm").addEventListener("submit", async(e) => {
-      e.preventDefault();
+    const agreementModal = document.getElementById('agreementModal');
+    const privacyCheck = document.getElementById('privacyCheck');
+    const termsCheck = document.getElementById('termsCheck');
+    const acceptBtn = document.getElementById('acceptBtn');
+    let pendingAction = null; 
+
+    function checkAgreement() {
+      acceptBtn.disabled = !(privacyCheck.checked && termsCheck.checked);
+    }
+
+    privacyCheck.addEventListener('change', checkAgreement);
+    termsCheck.addEventListener('change', checkAgreement);
+    
+    acceptBtn.addEventListener('click', () => {
+        if (privacyCheck.checked && termsCheck.checked) {
+            agreementModal.classList.remove('visible');
+            localStorage.setItem('sharkyChatAgreed', 'true');
+            if (pendingAction) {
+                pendingAction();
+                pendingAction = null;
+            }
+        }
+    });
+
+    function promptForAgreement(actionFn) {
+        if (localStorage.getItem('sharkyChatAgreed') === 'true') {
+            actionFn();
+        } else {
+            pendingAction = actionFn;
+            agreementModal.classList.add('visible');
+            privacyCheck.checked = false;
+            termsCheck.checked = false;
+            checkAgreement();
+        }
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        promptForAgreement(handleRegister);
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        promptForAgreement(handleLogin);
+    });
+    
+    document.getElementById("googleLogin").addEventListener("click", () => {
+        promptForAgreement(handleGoogleLogin);
+    });
+
+    document.getElementById("googleSignup").addEventListener("click", () => {
+      promptForAgreement(handleGoogleLogin); 
+    });
+
+    async function handleRegister() {
       const age = parseInt(document.getElementById("regAge").value);
       if (age < 18) {
-        showNotif("18+ only allowed.", {strong:true});
+        showNotif("🚫 **Registration Failed:** You must be 18+ to create an account.", {strong:true});
         return;
       }
       const usernameRaw = document.getElementById("regUsername").value.trim();
       const usernameLower = usernameRaw.toLowerCase();
+      
+      if (containsBadWords(usernameLower)) {
+          showNotif("❌ **Invalid Username:** Username contains prohibited words.", {strong:true});
+          return;
+      }
+
       if (!usernameRaw.match(/^[a-zA-Z0-9_]{3,}$/)) {
-        showNotif("Username must be 3+ chars (letters/numbers/_).", {strong:true});
+        showNotif("⚙️ **Invalid Username:** Must be 3+ characters (letters, numbers, or underscore only).", {strong:true});
         return;
       }
-      const q = query(collection(db, "users"), where("username_lower", "==", usernameLower));
-      const snap = await getDocs(q);
-      if (!snap.empty) {
-        const sugg = generateUsernameSuggestions(usernameRaw);
-        showNotif(
-          `Username taken. Choose: <b>${sugg.join("</b>, <b>")}</b>`,
-          {strong:true,time:7000}
-        );
-        return;
-      }
-      const email = document.getElementById("regEmail").value;
-      const password = document.getElementById("regPassword").value;
-      const gender = document.getElementById("regGender").value;
+      
       try {
+        const q = query(collection(db, "users"), where("username_lower", "==", usernameLower));
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+          const sugg = generateUsernameSuggestions(usernameRaw);
+          showNotif(
+            `⚠️ **Username Taken:** The username *${usernameRaw}* is already in use. Try: <b>${sugg.slice(0, 3).join("</b>, <b>")}</b>`,
+            {strong:true,time:7000}
+          );
+          return;
+        }
+
+        const email = document.getElementById("regEmail").value;
+        const password = document.getElementById("regPassword").value;
+        const gender = document.getElementById("regGender").value;
+        
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
+
         await setDoc(doc(db, "users", userCred.user.uid), {
           uid: userCred.user.uid,
           username: usernameRaw,
@@ -491,62 +668,85 @@
           email,
           createdAt: new Date().toISOString()
         });
+
         logEvent(analytics, 'sign_up', {method: 'email'});
-        window.location.href = `profile.html`;
+        showNotif("✅ **Registration Successful!** Redirecting to your profile...", {strong:true, time: 2000});
+        setTimeout(() => { window.location.href = `profile.html`; }, 2000);
       } catch (err) {
         let msg = String(err.message);
-        if (msg.includes("already in use")) msg = "This email is already registered.";
+        if (msg.includes("already in use")) msg = "📧 **Email Already Used:** This email address is already registered.";
+        else if (msg.includes("weak-password")) msg = "🔑 **Password Error:** Choose a stronger password (min 6 characters).";
+        else msg = `Error: ${msg}`;
         showNotif(msg, {strong:true});
       }
-    });
+    }
 
-    document.getElementById("loginForm").addEventListener("submit", async(e) => {
-      e.preventDefault();
+    async function handleLogin() {
       try {
         const userCred = await signInWithEmailAndPassword(auth,
           document.getElementById("loginEmail").value,
           document.getElementById("loginPassword").value
         );
+
+        /* TODO: Log user's IP address on the server side */
+        
         logEvent(analytics, 'login', {method: 'email'});
-        window.location.href = `profile.html`;
+        showNotif("✅ **Login Successful!** Redirecting...", {strong:true, time: 2000});
+        setTimeout(() => { window.location.href = `profile.html`; }, 2000);
       } catch (err) {
         let msg = String(err.message);
-        if (msg.includes("user-not-found")) msg = "Wrong Email: No user found.";
-        else if (msg.includes("wrong-password")) msg = "Wrong Password.";
-        else if (msg.includes("too many requests")) msg = "Too many login attempts. Try later.";
+        if (msg.includes("user-not-found") || msg.includes("invalid-credential")) msg = "🔑 **Login Failed:** Invalid Email or Password.";
+        else if (msg.includes("wrong-password")) msg = "🔑 **Login Failed:** Invalid Email or Password.";
+        else if (msg.includes("too many requests")) msg = "🕓 **Rate Limit:** Too many failed attempts. Try again later.";
+        else msg = `Error: ${msg}`;
         showNotif(msg, {strong:true});
       }
-    });
+    }
 
-    document.getElementById("googleLogin").addEventListener("click", async () => {
+    async function handleGoogleLogin() {
       try {
         const res = await signInWithPopup(auth, provider);
         const user = res.user;
         const userDocRef = doc(db, "users", user.uid);
+        
+        /* TODO: Log user's IP address on the server side */
+        
         const userSnap = await getDocs(query(collection(db, "users"), where("uid", "==", user.uid)));
-        if (!userSnap.empty) {
-          window.location.href = "profile.html";
-        } else {
+        
+        if (userSnap.empty) {
           const usernameFromEmail = user.email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '').toLowerCase() || "sharkychatter";
-          await setDoc(userDocRef, {
-            uid: user.uid,
-            email: user.email,
-            username: usernameFromEmail,
-            username_lower: usernameFromEmail.toLowerCase(),
-            age: 18,
-            gender: "Other",
-            createdAt: new Date().toISOString()
-          });
-          window.location.href = "profile.html";
-        }
-      } catch (err) {
-        showNotif(err.message, {strong:true});
-      }
-    });
+          
+          if (containsBadWords(usernameFromEmail)) {
+             const safeUsername = "sharky_user_" + Math.floor(Math.random() * 9999);
+             showNotif(`❌ **Username Sanitized:** Google-suggested username had restricted words. Assigned: ${safeUsername}`, {strong:true, time: 5000});
+             
+             await setDoc(userDocRef, {
+                uid: user.uid, email: user.email, username: safeUsername, username_lower: safeUsername,
+                age: 18, gender: "Other", createdAt: new Date().toISOString()
+              });
 
-    document.getElementById("googleSignup").addEventListener("click", () => {
-      document.getElementById("googleLogin").click();
-    });
+          } else {
+             await setDoc(userDocRef, {
+                uid: user.uid, email: user.email, username: usernameFromEmail, username_lower: usernameFromEmail,
+                age: 18, gender: "Other", createdAt: new Date().toISOString()
+              });
+          }
+          logEvent(analytics, 'sign_up', {method: 'google'});
+
+        } else {
+            logEvent(analytics, 'login', {method: 'google'});
+        }
+        
+        showNotif("✅ **Google Sign-in Successful!** Redirecting...", {strong:true, time: 2000});
+        setTimeout(() => { window.location.href = "profile.html"; }, 2000);
+
+      } catch (err) {
+        let msg = String(err.message);
+        if (msg.includes("popup-closed-by-user")) msg = "Sign-in window closed. Please try again.";
+        else msg = `Error: ${msg}`;
+        showNotif(msg, {strong:true});
+      }
+    }
 
     (async () => {
       if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -562,12 +762,12 @@
           const result = await signInWithEmailLink(auth, email, window.location.href);
           window.localStorage.removeItem('emailForSignIn');
           logEvent(analytics, 'login', {method: 'emailLink'});
-          showNotif(`Welcome back, ${result.user.email}! Redirecting...`, {strong:true, time:3500});
+          showNotif(`✅ Welcome back, ${result.user.email}! Redirecting...`, {strong:true, time:3500});
           setTimeout(() => {
             window.location.href = "profile.html";
           }, 3500);
         } catch (err) {
-          showNotif(`Login link is invalid or expired. Please try again.`, {strong:true});
+          showNotif(`⚠️ Login link is invalid or expired. Please try again.`, {strong:true});
           window.localStorage.removeItem('emailForSignIn');
         }
       }
@@ -575,6 +775,7 @@
 
     window.onload = () => {
       document.getElementById("notif-container").style.display = "flex";
+      checkAgreement(); 
     };
   </script>
 </body>
