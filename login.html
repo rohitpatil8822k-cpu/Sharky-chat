@@ -6,7 +6,7 @@
   <title>Sharky Chat | Login/Register</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
   <style>
-    /* New Classy/Cyberpunk Theme */
+   
     :root {
       --primary-bg: linear-gradient(145deg, #101224 0%, #05071a 100%);
       --accent-color: #5d98ff; /* Brighter, modern blue */
@@ -21,7 +21,29 @@
       --button-shadow: 0 0 20px #5d98ffaa;
       --text-color: #e3e6fa;
       --error-color: #ff5566;
+      /* AD CONTAINER STYLE (ADDED FOR BANNER) */
+      --ad-container-margin: 30px 0 30px 0;
+      --ad-container-padding: 10px;
+      --ad-container-bg: #15172b;
+      --ad-container-shadow: 0 0 10px #5d98ff33;
     }
+    /* AD CONTAINER CSS */
+    .ad-container {
+        margin: var(--ad-container-margin);
+        padding: var(--ad-container-padding);
+        background: var(--ad-container-bg);
+        border-radius: 12px;
+        box-shadow: var(--ad-container-shadow);
+        border: 1px solid #5d98ff1a;
+        width: fit-content;
+        max-width: 95vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center; /* Ensures the ad content is centered */
+        overflow: hidden; /* Important for banner ads */
+    }
+    
     * {
       margin:0; padding:0; box-sizing:border-box;
     }
@@ -57,7 +79,7 @@
       border-bottom: 2px solid #5d98ff33;
     }
     .login-register-card {
-      margin-top: 60px;
+      /* margin-top: 60px; -> Removed 60px margin as it's now handled by ad-container margin */
       width: 96vw;
       max-width: 440px; 
       background: var(--panel-bg);
@@ -391,7 +413,7 @@
       .login-register-card {
         max-width: 98vw;
         padding: 30px 15px;
-        margin-top: 40px;
+        /* margin-top: 40px; -> Removed 40px margin */
       }
       .tab-btn {
         font-size: 1rem;
@@ -412,6 +434,18 @@
 <body>
   <header>SHARKY CHAT</header>
 
+  <div class="ad-container">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '4561913ae08f11e1821546dd4cace0c2',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/4561913ae08f11e1821546dd4cace0c2/invoke.js"></script>
+  </div>
   <div id="agreementModal" class="modal-overlay">
     <div class="agreement-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <h3 id="modalTitle">Accept Terms to Continue</h3>
@@ -688,8 +722,6 @@
           document.getElementById("loginPassword").value
         );
 
-        /* TODO: Log user's IP address on the server side */
-        
         logEvent(analytics, 'login', {method: 'email'});
         showNotif("✅ **Login Successful!** Redirecting...", {strong:true, time: 2000});
         setTimeout(() => { window.location.href = `profile.html`; }, 2000);
@@ -709,7 +741,6 @@
         const user = res.user;
         const userDocRef = doc(db, "users", user.uid);
         
-        /* TODO: Log user's IP address on the server side */
         
         const userSnap = await getDocs(query(collection(db, "users"), where("uid", "==", user.uid)));
         
