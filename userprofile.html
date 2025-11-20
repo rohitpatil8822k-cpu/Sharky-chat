@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>User Profile | Sharky Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no"/>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;500;700&family=Poppins:wght@600;700;800&family=Inter:wght@400;600;700&family=Segoe+UI&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined|Material+Icons+Round" rel="stylesheet"/>
+    <style>
+     :root {
+            --bg-dark: #1f2937; /* Slate-800 */
+            --bg-light: #374151; /* Slate-700 */
+            --card-color: #374151;
+            --text-color: #f3f4f6;
+            --accent-blue: #60a5fa;
+            --accent-yellow: #fbbf24;
+            --accent-green: #34d399;
+            --border-radius: 14px;
+            --shadow-subtle: rgba(0, 0, 0, 0.4);
+        }
+
+        html, body {
+            margin: 0; padding: 0;
+            padding-top: 50px; 
+            min-height: 100vh;
+            background: linear-gradient(135deg, #111827 30%, #4b5563 100%); /* Darker Slate Gradient */
+            color: var(--text-color);
+            font-family: 'Inter', 'Roboto', Arial, Helvetica, sans-serif;
+            width: 100%;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        
+        /* Animation for notif badges */
+        @keyframes notifpop {
+            0% { transform: scale(0.6); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 1.65rem;
+            color: var(--accent-blue);
+            text-align: center;
+            margin: 30px 0 19px;
+            font-weight: 800;
+            letter-spacing: 0.045em;
+            text-shadow: 0 2px 18px var(--accent-blue)1a;
+        }
+        .profile-main {
+            max-width: 450px; 
+            margin: 48px auto 60px auto;
+            padding: 0; 
+            background: var(--bg-light); 
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px var(--shadow-subtle);
+            border: 1px solid #4b5563;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            animation: popIn .5s;
+            overflow: hidden;
+        }
+        @keyframes popIn {
+            0% {opacity:0; transform: scale(.97) translateY(30px);}
+            100% {opacity:1; transform:none;}
+        }
+        .profile-header {
+            width: 100%;
+            position: relative;
+            background: #273142; 
+            height: 150px; 
+            margin-bottom: 60px; 
+        }
+        #profileBannerImg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            opacity: 0.75;
+        }
+        .profile-pic-area {
+            position: absolute;
+            bottom: -55px; 
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .profile-pic {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 5px solid var(--bg-light); 
+            background: #4b5563;
+            box-shadow: 0 4px 23px rgba(0,0,0,0.5);
+        }
+        .profile-content {
+            padding: 10px 24px 30px 24px;
+            width: 100%;
+            text-align: center;
+        }
+        .user-name {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 1.6rem;
+            color: var(--text-color);
+            letter-spacing: .05em;
+            font-weight: 700;
+            text-shadow: 0 0px 9px var(--accent-blue)20;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .profile-badge-img {
+            width: 26px;
+            height: 26px;
+            margin-left: 0px;
+            vertical-align: middle;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+        }
+        .role-and-country-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            margin-top: 8px;
+            justify-content: center;
+        }
+        .role-badge, .member-badge, .guest-badge {
+            display: inline-block;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.95rem;
+            padding: 3px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            letter-spacing: .02em;
+            vertical-align: middle;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .role-badge { background: linear-gradient(90deg,#d97706,#fde047 90%); color: #44403c;} 
+        .member-badge { background: linear-gradient(90deg,#3b82f6 65%,#93c5fd 100%); color: #fff; border: none;} 
+        .guest-badge { background: #64748b; color: #fafafa;}
+        .user-country {
+            font-weight: 500;
+            color: #d1d5db;
+            font-size: 0.95rem;
+            letter-spacing: .02em;
+            background: #4b556380;
+            border-radius: 6px;
+            padding: 3px 10px;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+        .online-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+            display: inline-block;
+            vertical-align: middle;
+            box-shadow: 0 0 6px #0009;
+        }
+        .dot-online { background: #22c55e; border: 2px solid #d1fae5;}
+        .dot-offline { background: #d0d12e; border: 2px solid #fdf6bc;}
+        .dot-inactive { background: #A0A0A0; border: 2px solid #ececec;}
+        .status-label {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #d1d5db;
+            letter-spacing: .021em;
+            vertical-align: middle;
+            opacity: 0.95;
+        }
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .data-card {
+            background: #4b5563; 
+            border-radius: 10px;
+            padding: 15px;
+            text-align: left;
+            box-shadow: 0 1px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            border-left: 3px solid var(--accent-blue);
+        }
+        .data-card:hover { transform: translateY(-2px); }
+        .data-card .card-label {
+            color: var(--accent-blue);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: 0.03em;
+            display: block;
+        }
+        .data-card .card-value {
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        .user-bio {
+            margin: 0 0 20px 0;
+            font-size: 1rem;
+            color: #e5e7eb;
+            background: #4b5563;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 32px;
+            box-shadow: 0 1px 10px rgba(0,0,0,0.2);
+            text-align: left;
+            border-left: 3px solid var(--accent-green);
+            font-family: 'Inter', Arial, sans-serif;
+        }
+        .rate-section {
+            margin: 25px 0 15px 0;
+            width: 100%;
+            text-align: center;
+        }
+        .rate-label {
+            color: #f87171;
+            font-size: 1rem;
+            font-family: 'Poppins', Arial, sans-serif;
+            margin-bottom: 10px;
+            letter-spacing: .037em;
+            display: block;
+        }
+        .stars {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.3rem;
+            margin-bottom: 7px;
+            user-select: none;
+        }
+        .star {
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: color .13s, filter .11s;
+            filter: drop-shadow(0 1.1px 7px #60a5fa30);
+            font-size: 2.1rem;
+        }
+        .star.selected,
+        .star.filled {
+            color: var(--accent-yellow);
+            filter: drop-shadow(0 1.2px 8px #fbbf2491);
+        }
+        .stars[disabled] .star {
+            cursor: default;
+            opacity: 0.6;
+        }
+        .avg-rating {
+            color: var(--accent-yellow);
+            font-size: 1.05rem;
+            font-family: 'Poppins',sans-serif;
+            padding-top: 5px;
+            font-weight:700;
+            text-shadow:0 1px 6px #fbbf2420;
+            letter-spacing: .035em;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .submit-rating-btn {
+            margin: 0 auto 2px auto;
+            display: block;
+            background: linear-gradient(90deg, #10b981 60%, #34d399 100%);
+            border: none;
+            border-radius: 8px;
+            color: #1f2937;
+            font-weight: 800;
+            font-family: 'Poppins',sans-serif;
+            padding: 8px 35px;
+            font-size: 1.03rem;
+            margin-top: 5px;
+            box-shadow: 0 2px 10px #10b98144;
+            cursor: pointer;
+            letter-spacing: .025em;
+            transition: background .15s,box-shadow 0.13s;
+        }
+        .submit-rating-btn:hover,
+        .submit-rating-btn:focus {
+            background: linear-gradient(90deg, #34d399, #10b981);
+            color: #134059;
+            box-shadow: 0 4px 22px #fbbf242a;
+        }
+        .profile-actions {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin-top: 11px;
+            margin-bottom: 5px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        .action-btn {
+            background: linear-gradient(90deg,#3b82f6,#60a5fa 90%);
+            color: #fff;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-weight: 700;
+            border: none;
+            border-radius: 9px;
+            padding: 10px 25px;
+            font-size: 1.08rem;
+            cursor: pointer;
+            box-shadow: 0 2px 12px #3b82f621;
+            transition: background 0.18s, box-shadow 0.18s;
+            outline: none;
+            letter-spacing: .022em;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-btn:disabled { opacity: 0.7; cursor: not-allowed;}
+        .action-btn:hover,
+        .action-btn:focus {
+            background: linear-gradient(90deg,#60a5fa 65%,#3b82f6 100%);
+            box-shadow: 0 2px 18px #60a5fa2c;
+            color: #f9fafb;
+            filter: brightness(1.05);
+        }
+        .danger-btn {
+            background: linear-gradient(87deg,#ef4444 73%,#f87171 110%);
+            color: #fff;
+        }
+        .danger-btn:hover,
+        .danger-btn:focus {
+            background: linear-gradient(90deg,#f87171,#ef4444);
+        }
+        .icon {
+            font-family: "Material Icons Outlined";
+            font-size: 1.3em;
+            vertical-align: bottom;
+            line-height: 0 !important;
+            margin-right: 2px;
+            font-style: normal;
+            display: inline-block;
+        }
+        .no-user-result {
+            margin: 100px auto 0 auto;
+            font-size: 1.19rem;
+            color: #f87171;
+            background: #1e293be9;
+            max-width: 420px;
+            padding: 42px 18px 38px 18px;
+            text-align: center;
+            border-radius: 19px;
+            box-shadow: 0 7px 32px #33415534;
+            font-family: 'Inter',sans-serif;
+            letter-spacing: .01em;
+            border: 1.5px solid #2563eb48;
+            animation: popIn2 .32s;
+        }
+        @keyframes popIn2 {
+            from{opacity:0; transform:translateY(28px);}
+            to{opacity:1;transform:none;}
+        }
+        .popup-msg {
+            position: fixed;
+            top: 65px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #16a34a;
+            color: #fff;
+            padding: 14px 36px;
+            border-radius: 14px;
+            box-shadow: 0 3px 22px #16a34a44;
+            font-size: 1.13rem;
+            z-index: 2002;
+            display: none;
+            font-weight: 700;
+            font-family: 'Inter',sans-serif;
+            animation: popfade .45s;
+        }
+        @keyframes popfade {
+            0% { opacity: 0; transform: scale(0.92) translateY(-18px);}
+            100% { opacity: 1; transform: translateY(0) translateX(-50%);}
+        }
+        .popup-msg.error { background: #ef4444; }
+        #loader {
+            z-index: 2004;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            left: 0; right: 0;
+            top: 0; bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(18,30,54,0.84);
+            transition: opacity .25s;
+        }
+        .loader-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 6px solid #27315737;
+            border-top: 6px solid #60a5fa;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 17px;
+        }
+        #loader .loader-label {
+            color: #7dd3fc;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 1.11rem;
+            text-align: center;
+            margin-top: 7px;
+            letter-spacing: .04em;
+            text-shadow: 0 2px 10px #60a5fa2a;
+        }
+        @keyframes spin { to { transform: rotate(360deg);} }
+
+        /* Media Queries (Original Profile) */
+        @media (max-width: 550px) {
+            .profile-main { border-radius:0; padding:0; margin: 0 auto 0 auto; box-shadow:none; border:none; min-height: 100vh;}
+            .profile-header { height: 120px; margin-bottom: 50px;}
+            .profile-pic { width: 90px; height: 90px; }
+            .profile-content { padding: 5px 15px 20px 15px;}
+            .user-name { font-size: 1.3rem; }
+            .data-grid { grid-template-columns: 1fr; gap: 10px; }
+            h1 { margin: 20px 0 15px; }
+            body { padding-top: 50px; }
+        }
+
+        /* ------------------------------------------------ */
+        /* HEADER CSS */
+        /* ------------------------------------------------ */
+        header {
+            background: #555555; /* full grey */
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 2000;
+            width: 100vw;
+            box-shadow: 0 2px 17px #22222290;
+            min-height: auto;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            border-radius: 0;
+            transition: box-shadow 0.23s;
+            color: #d1d1d1;
+            font-family: "Poppins", Arial, sans-serif;
+            font-size: 1rem;
+        }
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            min-height: 50px;
+            position: relative;
+            z-index: 1;
+            cursor: default;
+            color: inherit;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .logo-container img {
+            height: 30px;
+            animation: float 3.3s ease-in-out infinite;
+            user-select: none;
+            pointer-events: none;
+            filter: none;
+            image-rendering: crisp-edges;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .logo-text {
+            font-family: "Orbitron", Arial, Helvetica, sans-serif;
+            font-size: 1.1rem;
+            color: #bbbbbb;
+            text-shadow: 0 0 5px #88888888;
+            font-weight: 800;
+            letter-spacing: 0.055em;
+            margin-left: 2px;
+            user-select: none;
+            white-space: nowrap;
+        }
+        .menu-btn {
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            min-width: 38px;
+            height: 36px;
+            color: #d0d0d0;
+            outline: none;
+            border: none;
+            background: none;
+            border-radius: 9px;
+            position: relative;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.16s, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            gap: 6px;
+        }
+        .menu-btn:active {
+            background: #444444;
+            transform: scale(0.93);
+        }
+        .menu-btn .notif-badge {
+            background: linear-gradient(105deg, #f87171 65%, #fb923c 110%);
+            color: white;
+            font-weight: 700;
+            font-family: "Orbitron", sans-serif;
+            min-width: 14px;
+            height: 14px;
+            padding: 0 6px;
+            font-size: 12px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            border: 1px solid #555555;
+            box-shadow: 0 2px 6px #ef444488;
+            pointer-events: none;
+            z-index: 10;
+            user-select: none;
+        }
+        .menu-dropdown {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            height: 100vh;
+            width: 220px;
+            background: rgba(85, 85, 85, 0.97);
+            box-shadow: -4px 0 26px rgba(0, 0, 0, 0.77);
+            padding-top: 54px;
+            padding-bottom: 22px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            font-family: "Poppins", Arial, sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            overflow-y: auto;
+            transition: right 0.31s cubic-bezier(0.65, 0.01, 0.32, 1.03);
+            z-index: 2500;
+            user-select: none;
+            color: #d1d1d1;
+        }
+        header.expanded .menu-dropdown {
+            right: 0;
+        }
+        .menu-dropdown .close-btn {
+            position: absolute;
+            left: 11px;
+            top: 13px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            outline: none;
+            z-index: 2600;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+            color: #bbbbbb;
+            user-select: none;
+        }
+        .menu-dropdown .close-btn:hover,
+        .menu-dropdown .close-btn:focus {
+            color: #e0e0e0;
+            transform: scale(1.22);
+        }
+        .menu-dropdown .close-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            user-select: none;
+        }
+        .menu-dropdown a {
+            color: #bbbbbb;
+            padding: 13px 17px 13px 46px;
+            text-decoration: none;
+            border-bottom: 2px solid #444444;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: none;
+            transition: background 0.13s, color 0.13s, padding-left 0.11s, transform 0.16s;
+            letter-spacing: 0.02em;
+            user-select: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            will-change: transform;
+            position: relative;
+        }
+        .menu-dropdown a:hover,
+        .menu-dropdown a:focus {
+            background: #666666;
+            color: #ffffff;
+            padding-left: 51px;
+            outline: none;
+            transform: scale(1.05) translateX(-2px);
+        }
+        .menu-dropdown a:active {
+            background: #444444;
+            color: #fbbf24;
+            transform: scale(0.97);
+        }
+        .menu-dropdown .notif-badge {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: none;
+            border: none;
+            font-weight: 700;
+            font-size: 13px;
+            min-width: 22px;
+            height: 18px;
+            background: linear-gradient(120deg, #fae024 70%, #f87171 100%);
+            color: #222b3a;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Orbitron", sans-serif;
+            border-radius: 7px;
+            user-select: none;
+            padding: 0 6px;
+            line-height: 18px;
+            white-space: nowrap;
+        }
+        .menu-dropdown a .icon {
+            display: inline-flex;
+            width: 22px;
+            height: 22px;
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            fill: #bbbbbb;
+            filter: drop-shadow(0 1px 6px #bbbbbb66);
+            transition: fill 0.13s, filter 0.11s;
+            user-select: none;
+        }
+        .menu-dropdown a:hover .icon,
+        .menu-dropdown a:focus .icon {
+            fill: #fff;
+            filter: drop-shadow(0 2px 8px #fff4);
+        }
+    </style>
+</head>
+<body>
+    <header id="mainHeader">
+        <div class="header-inner">
+            <div class="logo-container" tabindex="0" aria-label="Sharky Chat Logo">
+                <img src="https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/gc-logo.png?alt=media&token=ddfe6e46-7351-4a07-8140-ea702b1bd823" alt="Sharky Logo" />
+                <div class="logo-text">SHARKY CHAT</div>
+            </div>
+            <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle menu">
+                ☰
+                <span class="notif-badge" id="menuNotif" style="display:none;">0</span>
+            </button>
+        </div>
+        <nav class="menu-dropdown" role="menu" aria-label="Main Navigation">
+            <button class="close-btn" aria-label="Close menu" title="Close menu" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+            <a href="profile.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="12" r="7"/><ellipse cx="16" cy="23.5" rx="12" ry="6.5"/></svg>
+                </span>
+                Profile
+            </a>
+            <a href="chatrooms.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="8" width="28" height="16" rx="5"/><rect x="12" y="6" width="8" height="4" rx="2"/><circle cx="7" cy="12" r="2"/><circle cx="25" cy="12" r="2"/></svg>
+                </span>
+                Chat Rooms
+            </a>
+            <a href="friends.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="12" r="5"/><circle cx="22" cy="12" r="5"/><ellipse cx="16" cy="23" rx="12" ry="6"/></svg>
+                </span>
+                Friends
+                <span id="friends-notif" class="notif-badge" style="display:none;">0</span>
+            </a>
+            <a href="add-friends.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="13" r="7"/><rect x="23" y="19" width="9" height="3" rx="1.5"/><rect x="26" y="16" width="3" height="9" rx="1.5"/></svg>
+                </span>
+                Add Friend
+            </a>
+            <a href="inbox.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="8" width="24" height="16" rx="4"/><polyline points="4,8 16,18 28,8" fill="none" stroke="#60a5fa" stroke-width="2"/></svg>
+                </span>
+                Messages
+                <span id="messages-notif" class="notif-badge" style="display:none;">0</span>
+            </a>
+            <a href="wallet.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="10" width="24" height="12" rx="3"/><ellipse cx="24" cy="16" rx="2" ry="2"/><rect x="6" y="13" width="20" height="4" rx="2"/><circle cx="17" cy="16" r="2" fill="#fff"/></svg>
+                </span>
+                Wallet
+            </a>
+            <a href="shop.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="13" width="20" height="9" rx="3"/><rect x="12" y="7" width="8" height="6" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><circle cx="10" cy="26" r="2"/><circle cx="22" cy="26" r="2"/></svg>
+                </span>
+                Shop
+            </a>
+            <a href="inventory.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="10" width="18" height="12" rx="3"/><rect x="11" y="6" width="10" height="4" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><path d="M7 22h18"/><circle cx="16" cy="18" r="2"/></svg>
+                </span>
+                Inventory
+            </a>
+            <a href="news.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="7" width="22" height="18" rx="4"/><rect x="9" y="11" width="14" height="2" rx="1"/><rect x="9" y="16" width="8" height="2" rx="1"/><circle cx="10" cy="21" r="2"/><rect x="14" y="20" width="7" height="2" rx="1"/></svg>
+                </span>
+                News
+            </a>
+            <a href="level.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 5v17" stroke="#6699ff" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="26" r="5" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><rect x="11" y="13" width="10" height="4" rx="2" fill="#bae6fd" /><rect x="13" y="8" width="6" height="3" rx="1.5" fill="#60a5fa"/></svg>
+                </span>
+                Level
+            </a>
+            <a href="refer.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="13" fill="#5eead4" /><path d="M22.5,14h-8.7l3-3m-2.8,8a3,3,0,1,0-3,-3" stroke="#262626" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                Refer A Friend
+            </a>
+            <a href="verify-email.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="8" width="22" height="16" rx="5"/><polyline points="5,8 16,18 27,8" fill="none" stroke="#2dd4bf" stroke-width="2"/><circle cx="16" cy="19" r="2.5"/></svg>
+                </span>
+                Email Verification
+            </a>
+            <a href="help.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="12" fill="none" stroke="#fbbf24" stroke-width="2"/><text x="16" y="20" text-anchor="middle" fill="#fbbf24" font-size="8" font-family="Orbitron">?</text></svg>
+                </span>
+                Help
+            </a>
+            <a href="social-media.html" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="12" r="3"/><circle cx="24" cy="12" r="3"/><circle cx="16" cy="22" r="3"/><line x1="8" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/><line x1="24" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/></svg>
+                </span>
+                Social Media
+            </a>
+            <a href="#" id="themeSwitch" role="menuitem" tabindex="0">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="12"/><path d="M16 4v8"/><circle cx="16" cy="16" r="5" fill="#fff"/></svg>
+                </span>
+                Change Theme
+            </a>
+        </nav>
+    </header>
+    <h1>User Profile</h1>
+    <div id="popupMsg" class="popup-msg"></div>
+    <div id="loader">
+        <div class="loader-inner">
+            <div class="spinner"></div>
+            <div class="loader-label">Loading profile...</div>
+        </div>
+    </div>
+    <div id="content"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, getDocs, getDoc, doc, setDoc, updateDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+            authDomain: "sharky-chat-007.firebaseapp.com",
+            projectId: "sharky-chat-007",
+            storageBucket: "sharky-chat-007.appspot.com",
+            messagingSenderId: "637104796242",
+            appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+            measurementId: "G-HT9T3P9KST",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // --- HEADER NOTIFICATION LOGIC ---
+        const menuNotif = document.getElementById("menuNotif");
+        const friendsNotif = document.getElementById("friends-notif");
+        const messagesNotif = document.getElementById("messages-notif");
+
+        let myUsername = "";
+        let myUID = "";
+
+        function bumpBadge(el, number) {
+            if (!el) return;
+            el.style.animation = "";
+            setTimeout(() => {
+                el.style.animation = "notifpop .34s";
+            }, 25);
+        }
+        function bumpBadgeDropdown(el, number) {
+            if (!el) return;
+            el.style.animation = "";
+            setTimeout(() => {
+                el.style.animation = "notifpop .33s";
+            }, 30);
+        }
+
+        function setupMenuNotifications(uid, username) {
+            onSnapshot(
+                query(collection(db, "friendRequests"), where("to", "==", uid), where("status", "==", "pending")),
+                (snap) => {
+                    const frCount = snap.size;
+                    menuNotif.dataset.fr = frCount;
+                    friendsNotif.textContent = frCount > 99 ? "99+" : frCount;
+                    friendsNotif.style.display = frCount > 0 ? "inline-flex" : "none";
+                    bumpBadgeDropdown(friendsNotif, frCount);
+                    updateMenuBadge();
+                }
+            );
+        }
+
+        async function setupMessageNotifications(uid, username) {
+            const friendsSnap = await getDocs(collection(db, "friends"));
+            let myFriends = [];
+            friendsSnap.forEach((doc) => {
+                if (doc.id === uid && doc.data()) myFriends = Object.keys(doc.data());
+            });
+            if (myFriends.length === 0) {
+                messagesNotif.style.display = "none";
+                updateMenuBadge();
+                return;
+            }
+            let unseenTracker = {};
+            let usernamesData = {};
+            
+            // Load usernames of friends batch wise (max 10 per query)
+            let batchSize = 10;
+            for (let i = 0; i < myFriends.length; i += batchSize) {
+                let batch = myFriends.slice(i, i + batchSize);
+                const usersSnap = await getDocs(query(collection(db, "users"), where("__name__", "in", batch)));
+                usersSnap.forEach((doc) => {
+                    usernamesData[doc.id] = doc.data().username;
+                });
+            }
+
+            for (const fid of myFriends) {
+                const friendUsername = usernamesData[fid];
+                if (!friendUsername || friendUsername === username) continue;
+                const chatId = [username, friendUsername].sort().join("_");
+                const msgRef = collection(db, "personalMessages", chatId, "messages");
+                onSnapshot(
+                    query(msgRef, where("recipient", "==", username), where("seen", "==", false)),
+                    (snap) => {
+                        let unseen = 0;
+                        snap.forEach((doc) => {
+                            if (doc.data().sender !== username) unseen++;
+                        });
+                        unseenTracker[chatId] = unseen;
+                        updateMessagesBadge();
+                    }
+                );
+            }
+
+            function updateMessagesBadge() {
+                let totalUnseen = Object.values(unseenTracker).reduce((a, b) => a + b, 0);
+                messagesNotif.dataset.count = totalUnseen;
+                messagesNotif.textContent = totalUnseen > 99 ? "99+" : totalUnseen;
+                messagesNotif.style.display = totalUnseen > 0 ? "inline-flex" : "none";
+                bumpBadge(messagesNotif, totalUnseen);
+                updateMenuBadge();
+            }
+        }
+
+        function updateMenuBadge() {
+            const frCount = parseInt(menuNotif.dataset.fr) || 0;
+            const msgCount = parseInt(messagesNotif.dataset.count) || 0;
+            const total = frCount + msgCount;
+            if (total > 0) {
+                menuNotif.textContent = total > 99 ? "99+" : total;
+                menuNotif.style.display = "inline-flex";
+                bumpBadge(menuNotif, total);
+            } else {
+                menuNotif.style.display = "none";
+            }
+        }
+        
+        // Menu toggle logic
+        const mainHeader = document.getElementById("mainHeader");
+        const menuBtn = document.getElementById("menuBtn");
+        const closeBtn = document.querySelector(".menu-dropdown .close-btn");
+
+        menuBtn.addEventListener("click", (e) => {
+            mainHeader.classList.toggle("expanded");
+            e.stopPropagation();
+        });
+
+        closeBtn.addEventListener("click", (e) => {
+            mainHeader.classList.remove("expanded");
+            menuBtn.focus();
+            e.stopPropagation();
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!mainHeader.contains(e.target)) mainHeader.classList.remove("expanded");
+        });
+
+        document.querySelector(".menu-dropdown").addEventListener("click", (e) => {
+            if (e.target.tagName === "A") mainHeader.classList.remove("expanded");
+        });
+
+        // Theme switch handling (optional)
+        const themeSwitch = document.getElementById("themeSwitch");
+        if (themeSwitch) {
+            themeSwitch.addEventListener("click", function () {
+                document.body.classList.toggle("light-theme");
+                const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
+                localStorage.setItem("theme", theme);
+                mainHeader.classList.remove("expanded");
+            });
+        }
+        
+        // --- END HEADER NOTIFICATION LOGIC ---
+
+
+        // --- Metadata for Equipped Items (Copied from your profile.js) ---
+        const itemsMeta = {
+            banner: {
+                "banner_stars_profile": { id: "banner_stars_profile", name: "Stars Profile Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94c0fcfa-2a7a-46f1-ad8d-9ae08a932228.png" },
+                "banner_cute_rabbit": { id: "banner_cute_rabbit", name: "Cute Rabbit Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c4c60231-2b74-427d-8037-98f1b33227f1.png" },
+                "banner_peaceful_house_3d": { id: "banner_peaceful_house_3d", name: "3D Peaceful House Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/3baf3830-1a64-425c-bd6f-905bacbc84ad.png" },
+                "banner_4d_illusion": { id: "banner_4d_illusion", name: "4D Illusion Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/0704da65-dc4f-4ece-adbc-cd598182010c.png" },
+                "banner_3d_luxury": { id: "banner_3d_luxury", name: "3D Luxury Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/5d228e0c-1e37-4101-90e4-28313586a6af.png" },
+                "banner_3d_moon": { id: "banner_3d_moon", name: "3D Moon Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/d185a9a8-660f-4396-9925-b3760299e111.png" },
+                "banner_3d_gaming": { id: "banner_3d_gaming", name: "3D Gaming Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/86b48c74-56b9-4e3d-b82c-4be753dd9234.png" },
+                "banner_cartoon_one_eyed_devil": { id: "banner_cartoon_one_eyed_devil", name: "Cartoon One Eyed Devil Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c33cf83a-151b-4f56-ad81-5b2f2c4b9164.png" },
+                "banner_bmw_headlight_evil": { id: "banner_bmw_headlight_evil", name: "BMW Headlight Evil Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/e3a07e8f-23af-42d5-9a5d-03f4f768ec76.png" },
+                "banner_cartoon_turtle": { id: "banner_cartoon_turtle", name: "Cartoon Turtle Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/73c882c5-e531-4b01-a356-75fdc5e4f822.png" },
+                "banner_3d_rain": { id: "banner_3d_rain", name: "3D Rain Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/09250fbd-e0a9-4861-9251-8033325be157.png" }
+            },
+            badge: {
+                "badge_star_light": { id: 'badge_star_light', name: 'Star Light Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/cb7afe60-1c8e-4af6-8780-01856f63b51d.png' },
+                "badge_moon_dark": { id: 'badge_moon_dark', name: 'Moon Dark Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/60a43f65-1ab7-4923-8788-758778130a22.png' },
+                "badge_rising_star": { id: 'badge_rising_star', name: 'Rising Star Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/43fb251c-b5e8-4541-a786-d91e060eb7f0.png' },
+                "badge_luxury": { id: 'badge_luxury', name: 'Luxury Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/23b9ac5c-faaf-4d14-ad52-65aab320e878.png' },
+                "badge_legendary": { id: "badge_legendary", name: "Legendary Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/85b7077f-5e80-42e1-890f-ec78df6afd0e.png" },
+                "badge_warrior": { id: "badge_warrior", name: "Warrior Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/8315ccb8-4f68-4dc9-b1c9-225b62ed2a87.png" },
+                "badge_wolf": { id: "badge_wolf", name: "Wolf Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94674004-81f1-4aa5-afe2-15c097b29a76.png" },
+                "badge_lion": { id: "badge_lion", name: "Lion Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/f026bd24-7f5b-44d8-9312-a190d6d30933.png" },
+                "badge_king": { id: "badge_king", name: "King Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/a07d8670-6f91-43b1-884e-79a347c3fda0.png" }
+            }
+        };
+
+        const content = document.getElementById("content");
+        const loader = document.getElementById("loader");
+
+        function showLoader() { loader.style.display = "flex"; }
+        function hideLoader() { loader.style.display = "none"; }
+        function showPopup(msg, type="") {
+            const popup = document.getElementById("popupMsg");
+            popup.textContent = msg;
+            popup.className = "popup-msg";
+            if(type==="error") popup.classList.add("error");
+            popup.style.display = "block";
+            setTimeout(() => popup.style.display = "none", 2000);
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const username = params.get('username');
+        let currentUser = null, currentUid = null, pageUser = null, pageUserUid = null;
+        let myRating = 0, avgRating = 0, ratingList = [], ratingSubmitted = false, ratingPeople = 0;
+        let allUserActivity = {};
+
+        async function getRatingData(uid) {
+            const ratingsSnap = await getDocs(collection(db,"users",uid,"ratings"));
+            if (ratingsSnap.empty) return { avg: 0, list: [], my: 0, count: 0 };
+            let list = [], total = 0, my = 0, count = 0;
+            ratingsSnap.forEach(snap=>{
+                let val = snap.data().stars || 0;
+                if (snap.id === currentUid) my = val;
+                if (val > 0) { list.push(val); total += val; count++; }
+            });
+            let avg = (count>0)? total/count : 0;
+            return { avg, list, my, count };
+        }
+        async function setUserRating(uid, stars) {
+            if (!currentUid || currentUid === uid) return;
+            await setDoc(doc(db,"users",uid,"ratings",currentUid), { stars }, { merge: true });
+        }
+        function createRatingStarsHTML(avg, my, count, disabled = false, alreadySubmitted = false) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                let fill = ((alreadySubmitted || !disabled) && my >= i) || (disabled && Math.round(avg) >= i) ? "filled" : "";
+                stars += `<span class="star ${fill}" data-star="${i}">&#9733;</span>`;
+            }
+            let btn = "";
+            if (!disabled && !alreadySubmitted) {
+                btn = `<button class="submit-rating-btn" id="submitRatingBtn" type="button" ${my < 1 ? "disabled" : ""}>Submit</button>`;
+            }
+            let peopleText = count > 0 ? `<span style="color:#94a3b8;font-size:.99em;">(${count})</span>` : '';
+            return `<div class="stars" ${disabled||alreadySubmitted ? "disabled" : ""}>${stars}</div>
+                    ${btn}
+                    <span class="avg-rating">Avg: ${avg > 0 ? avg.toFixed(1) : "--"}/5 ${peopleText}</span>`;
+        }
+        function getLastActiveInfo(user) {
+            let userActivity = (allUserActivity && allUserActivity[user.uid]) ? allUserActivity[user.uid] : user;
+            const now = Date.now();
+            let last = (userActivity && userActivity.lastActive) || user.lastActive;
+            let active = !!(userActivity && userActivity.active);
+            if (last && last.seconds) last = last.seconds * 1000;
+            if (last && typeof last === "object" && last instanceof Date) last = last.getTime();
+            let online = !!(active && last && (now - last < 130*1000));
+            if (online) return `<span class="status-dot dot-online"></span><span class="status-label">Active now</span>`;
+            if (!last) return `<span class="status-dot dot-inactive"></span><span class="status-label">Inactive</span>`;
+            let diff = Math.floor((now-last)/1000);
+            if (diff<60) return `<span class="status-dot dot-offline"></span><span class="status-label">Last active just now</span>`;
+            if (diff<3600) return `<span class="status-dot dot-offline"></span><span class="status-label">Last active ${Math.floor(diff/60)} min ago</span>`;
+            if (diff<86400) return `<span class="status-dot dot-offline"></span><span class="status-label">Last active ${Math.floor(diff/3600)} h ago</span>`;
+            let d = new Date(last);
+            return `<span class="status-dot dot-inactive"></span><span class="status-label">Last active ${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span>`;
+        }
+        function setupAllUserActivityRealtime() {
+            const uq = query(collection(db, "users"));
+            onSnapshot(uq, snap => {
+                snap.forEach(docSnap => {
+                    const d = docSnap.data();
+                    allUserActivity[d.uid] = {
+                        active: d.active,
+                        lastActive: d.lastActive
+                    };
+                });
+                if (content.querySelector('.profile-main')) {
+                    const onlineRow = content.querySelector('.online-row');
+                    if (onlineRow && pageUser) onlineRow.innerHTML = getLastActiveInfo(pageUser);
+                }
+            });
+        }
+        
+        async function loadEquippedItems(uid) {
+            const eqRef = doc(db, "equipped", uid);
+            const snapEq = await getDoc(eqRef);
+            return snapEq.exists() ? snapEq.data() : {};
+        }
+
+        // Auth state change listener for profile logic (combined with header auth state)
+        onAuthStateChanged(auth, async user => {
+            if (!user) {
+                // If the user is not logged in, redirect them to login.html (from header logic)
+                alert("Please login first.");
+                window.location.href = "login.html";
+                return;
+            }
+            
+            currentUid = user.uid;
+            let snap = await getDocs(query(collection(db, "users"), where("uid", "==", currentUid)));
+            if (!snap.empty) {
+                currentUser = snap.docs[0].data();
+                myUsername = currentUser.username;
+            } else {
+                 // Handle case where user exists in auth but not in users collection (shouldn't happen)
+                 showPopup("Profile data missing!", "error");
+            }
+            
+            // Setup header notifications
+            setupMenuNotifications(currentUid, myUsername);
+            setupMessageNotifications(currentUid, myUsername);
+            
+            // Setup profile activity
+            setupAllUserActivityRealtime();
+            await loadUserProfile();
+        });
+
+        async function sendFriendRequest() {
+            if (!currentUser || !pageUser || !pageUserUid) return;
+            if (currentUser.username === pageUser.username) { showPopup("Cannot add yourself!", "error"); return; }
+            let isAlreadyFriend = false;
+            try { const youFriendDoc = await getDoc(doc(db, 'friends', currentUid)); isAlreadyFriend = youFriendDoc.exists() && youFriendDoc.data() && youFriendDoc.data()[pageUserUid]; } catch {}
+            const q = query(collection(db, "friendRequests"), where("from", "==", currentUid), where("to", "==", pageUserUid));
+            const existing = await getDocs(q);
+            if (isAlreadyFriend) { showPopup("Already friends!"); return; }
+            if (!existing.empty) { showPopup("Already sent!"); return; }
+            await addDoc(collection(db, "friendRequests"), { from: currentUid, fromName: currentUser.username, to: pageUserUid, toName: pageUser.username, status: "pending", requestedAt: new Date().toISOString() });
+            showPopup("Request sent!");
+        }
+        async function reportUser() {
+            if (!currentUser || !pageUser || !pageUserUid) return;
+            if (currentUser.username === pageUser.username) { showPopup("Why report yourself? 🙃", "error");return; }
+            const reason = prompt(`Why are you reporting "${pageUser.username}"?`);
+            if (!reason || reason.trim() === "") return;
+            await addDoc(collection(db, "reported-users"), { reportedBy: currentUser.username, reportedByUid: currentUid, target: pageUser.username, targetUid: pageUserUid, reason: reason.trim(), reportedAt: new Date().toISOString() });
+            showPopup("Reported!");
+        }
+
+
+        async function loadUserProfile() {
+            showLoader();
+            if (!username) { content.innerHTML = `<div class="no-user-result">No username provided.</div>`; hideLoader(); return; }
+            
+            const uq = query(collection(db, "users"), where("username_lower", "==", username.toLowerCase()));
+            const unsub = onSnapshot(uq, async snap => {
+                if (snap.empty) { 
+                    content.innerHTML = `<div class="no-user-result">No user found with username "<b>${username}</b>"</div>`; 
+                    hideLoader(); 
+                    return; 
+                }
+                
+                pageUser = snap.docs[0].data();
+                pageUserUid = pageUser.uid;
+
+                // Load Equipped Items Data
+                const equippedItems = await loadEquippedItems(pageUserUid);
+                const bannerMeta = equippedItems.banner ? itemsMeta.banner[equippedItems.banner] : null;
+                const badgeMeta = equippedItems.badge ? itemsMeta.badge[equippedItems.badge] : null;
+
+                logEvent(analytics, "user_profile_view", { profile_username: pageUser.username });
+                
+                let rating = { avg: 0, list: [], my: 0, count: 0 };
+                if (pageUser && pageUserUid && currentUid) rating = await getRatingData(pageUserUid);
+                avgRating = rating.avg; myRating = rating.my; ratingList = rating.list; ratingPeople = rating.count;
+                ratingSubmitted = !!myRating;
+
+                let roleHtml = '';
+                if (pageUser.role === "admin") roleHtml = `<span class="role-badge">Admin</span>`;
+                else if (pageUser.role === "member") roleHtml = `<span class="member-badge">Member</span>`;
+                else if (pageUser.guest) roleHtml = `<span class="guest-badge">Guest</span>`;
+                
+                // Helper to format location
+                const locationText = [pageUser.city, pageUser.state, pageUser.country].filter(Boolean).join(", ");
+                
+                content.innerHTML = `
+                    <div class="profile-main">
+                        <div class="profile-header">
+                            <img id="profileBannerImg" 
+                                src="${bannerMeta ? bannerMeta.image : ''}" 
+                                style="${bannerMeta ? 'display:block;' : 'display:none; background:#273142;'}" 
+                                alt="${bannerMeta ? bannerMeta.name : 'Default Banner'}"/>
+                            <div class="profile-pic-area">
+                                <img src="${pageUser.profilePic || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}"
+                                    class="profile-pic" alt="User avatar"/>
+                            </div>
+                        </div>
+
+                        <div class="profile-content">
+                            <div class="user-name" style="color:${pageUser.usernameColor || '#60a5fa'}">
+                                ${pageUser.username}
+                                ${badgeMeta ? `<img src="${badgeMeta.image}" class="profile-badge-img" title="${badgeMeta.name}" alt="Badge"/>` : ''}
+                            </div>
+                            
+                            <div class="role-and-country-row">
+                                ${roleHtml}
+                                ${pageUser.country ? `<div class="user-country">🌐 ${pageUser.country}</div>` : ""}
+                            </div>
+                            
+                            <div class="online-row">${getLastActiveInfo(pageUser)}</div>
+
+                            <div class="user-bio">
+                                <span class="card-label" style="border:none; color:var(--accent-green); padding:0; margin-bottom:5px;">BIO</span>
+                                ${pageUser.bio ? pageUser.bio : "<i>(No bio given)</i>"}
+                            </div>
+
+                            <div class="data-grid">
+                                <div class="data-card">
+                                    <span class="card-label">Age</span>
+                                    <span class="card-value">${pageUser.age || "N/A"}</span>
+                                </div>
+                                <div class="data-card">
+                                    <span class="card-label">Gender</span>
+                                    <span class="card-value">${pageUser.gender || "N/A"}</span>
+                                </div>
+                                <div class="data-card">
+                                    <span class="card-label">Profession</span>
+                                    <span class="card-value">${pageUser.profession || "N/A"}</span>
+                                </div>
+                                <div class="data-card">
+                                    <span class="card-label">Location</span>
+                                    <span class="card-value">${locationText || "N/A"}</span>
+                                </div>
+                                <div class="data-card">
+                                    <span class="card-label">Height</span>
+                                    <span class="card-value">${pageUser.height ? `${pageUser.height} cm` : "N/A"}</span>
+                                </div>
+                                <div class="data-card">
+                                    <span class="card-label">Weight</span>
+                                    <span class="card-value">${pageUser.weight ? `${pageUser.weight} kg` : "N/A"}</span>
+                                </div>
+                                <div class="data-card" style="grid-column: 1 / -1;">
+                                    <span class="card-label">Hobbies</span>
+                                    <span class="card-value">${pageUser.hobbies || "N/A"}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="rate-section">
+                                <span class="rate-label">Rate this user:</span>
+                                <div id="rateStars">${createRatingStarsHTML(avgRating, myRating, ratingPeople, (currentUid === pageUserUid), ratingSubmitted && (currentUid !== pageUserUid))}</div>
+                            </div>
+
+                            <div class="profile-actions">
+                                <button class="action-btn" ${(!currentUser || pageUser.username === currentUser?.username) ? 'disabled' : ''}
+                                    onclick="window.location.href='inbox.html?user=${encodeURIComponent(pageUser.username)}'"><span class="icon material-icons-outlined" aria-hidden="true">mail_outline</span>Message</button>
+                                <button class="action-btn" ${(!currentUser || pageUser.username === currentUser?.username) ? 'disabled' : ''} onclick="sendFriendRequest()"><span class="icon material-icons-outlined" aria-hidden="true">person_add_alt</span>Add Friend</button>
+                                <button class="action-btn danger-btn" ${(!currentUser || pageUser.username === currentUser?.username) ? 'disabled' : ''} onclick="reportUser()"><span class="icon material-icons-outlined" aria-hidden="true">flag</span>Report</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                window.sendFriendRequest = sendFriendRequest;
+                window.reportUser = reportUser;
+                if (currentUid && pageUserUid && currentUid !== pageUserUid && !ratingSubmitted) {
+                    let starArea = document.getElementById('rateStars');
+                    let selectedRating = myRating;
+                    let submitting = false;
+                    if (starArea) {
+                        starArea.addEventListener('click', function (e) {
+                            const el = e.target.closest('.star');
+                            if (!el) return;
+                            if (submitting) return;
+                            const val = Number(el.dataset.star);
+                            if (val < 1 || val > 5) return;
+                            selectedRating = val;
+                            [...starArea.querySelectorAll('.star')].forEach(st => st.classList.remove('filled'));
+                            for (let i = 1; i <= selectedRating; i++) {
+                                let st = starArea.querySelector(`.star[data-star="${i}"]`);
+                                if (st) st.classList.add('filled');
+                            }
+                            const btn = document.getElementById('submitRatingBtn'); if (btn) btn.disabled = false;
+                        });
+                        starArea.addEventListener('mouseover', function(e){
+                            const el = e.target.closest('.star');
+                            if (!el) return;
+                            let num = Number(el.dataset.star);
+                            [...starArea.querySelectorAll('.star')].forEach(st=>st.classList.remove('selected'));
+                            for(let i=1;i<=num;i++) {
+                                let st = starArea.querySelector(`.star[data-star="${i}"]`);
+                                if(st) st.classList.add('selected');
+                            }
+                        });
+                        starArea.addEventListener('mouseleave', function(){
+                            [...starArea.querySelectorAll('.star')].forEach(st=>st.classList.remove('selected'));
+                        });
+                    }
+                    let submitBtn = document.getElementById("submitRatingBtn");
+                    if (submitBtn) submitBtn.onclick = async function () {
+                        if (submitting || !selectedRating || selectedRating < 1 || selectedRating > 5) return;
+                        submitting = true; submitBtn.disabled = true;
+                        await setUserRating(pageUserUid, selectedRating);
+                        showPopup(`Rated ${selectedRating} star${selectedRating > 1 ? 's' : ''}!`);
+                        const refreshed = await getRatingData(pageUserUid);
+                        avgRating = refreshed.avg; myRating = refreshed.my; ratingPeople = refreshed.count;
+                        ratingSubmitted = true;
+                        document.getElementById('rateStars').innerHTML = createRatingStarsHTML(avgRating, myRating, ratingPeople, false, true);
+                    };
+                }
+                hideLoader();
+            });
+        }
+    </script>
+</body>
+</html>

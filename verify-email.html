@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Email Verification — Sharky Chat</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Poppins:wght@400;500;600&family=Montserrat:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Classy Grey Base Theme */
+    body {
+      background: #f0f0f0;
+      color: #333;
+      font-family: 'Poppins', sans-serif;
+      padding: 40px 20px 50px;
+      max-width: 600px; /* Increased max-width */
+      margin: 0 auto;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Go Back Button Style */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 15px;
+      margin-bottom: 30px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #4b5563;
+      background-color: #e5e7eb;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .back-btn:hover {
+      background-color: #d1d5db;
+      color: #1f2937;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .back-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+    
+    /* Verification Box and Title adjustments for Classy Grey */
+    h1 {
+      text-align: center;
+      font-size: 2.4rem;
+      margin-bottom: 30px;
+      color: #3b82f6; /* Subtle Blue accent */
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      user-select: none;
+      text-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+    }
+    .verify-box {
+      background: #ffffff; /* White/Light background */
+      border-radius: 16px;
+      padding: 35px 30px 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      max-width: 480px;
+      margin: 0 auto 80px;
+      box-sizing: border-box;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .verify-box:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+    .icon-box {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .icon-box svg {
+      width: 80px;
+      height: 80px;
+      filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6));
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    .verify-box:hover .icon-box svg {
+      filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.8));
+      transform: scale(1.05);
+    }
+    .icon-box ellipse { fill: #3b82f6; }
+    .info {
+      color: #4b5563; /* Darker text */
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.5;
+    }
+    .user-email {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      color: #f59e0b; /* Accent yellow/gold */
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      text-align: center;
+      margin-bottom: 25px;
+      user-select: text;
+      word-break: break-word;
+    }
+    
+    /* Button Styles */
+    .verify-btn {
+      background: linear-gradient(90deg, #3b82f6, #2563eb 75%, #4f46e5 120%);
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 0;
+      min-width: 160px;
+      margin: 0 auto 10px auto;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
+      display: block;
+      user-select: none;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+    }
+    .verify-btn:hover {
+      background: linear-gradient(90deg, #2563eb, #4f46e5 85%, #f472b6 130%);
+      box-shadow: 0 6px 22px rgba(59, 130, 246, 0.5);
+      transform: scale(1.03);
+    }
+    .resend-link {
+      background: none;
+      border: none;
+      color: #60a5fa;
+      font-weight: 600;
+      text-decoration: underline;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      margin-top: 14px;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      display: block;
+      width: 100%;
+      text-align: center;
+      user-select: none;
+    }
+    .resend-link:hover {
+      color: #f59e0b;
+    }
+
+    /* Status Message */
+    .status-message {
+      min-height: 36px;
+      font-size: 0.95rem;
+      text-align: center;
+      margin: 20px 0 0 0;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 10px 16px;
+      user-select: none;
+      font-family: 'Poppins', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .status-success {
+      background-color: #10b98122;
+      color: #059669;
+    }
+    .status-error {
+      background-color: #ef444422;
+      color: #b91c1c;
+    }
+    
+    /* Reward Box */
+    .reward-box {
+      background: #f8f8f8;
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 30px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      user-select: none;
+      border: 1px solid #e5e7eb;
+    }
+    .reward-badge {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+    .reward-name {
+      font-family: 'Montserrat', sans-serif;
+      color: #3b82f6;
+      font-weight: 700;
+      font-size: 1.0rem;
+      letter-spacing: 0.03em;
+      margin-top: 6px;
+      text-align: center;
+      user-select: none;
+      text-shadow: 0 0 5px rgba(59, 130, 246, 0.1);
+    }
+    .reward-banner {
+      width: 200px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      flex-grow: 1;
+      min-width: 140px;
+      transition: transform 0.3s;
+    }
+    .claim-btn {
+      flex-shrink: 0;
+      background: linear-gradient(90deg, #10b981, #059669 85%);
+      color: #e1f8e7;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      padding: 14px 0;
+      border: none;
+      border-radius: 16px;
+      min-width: 150px;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.5);
+      transition: all 0.3s ease;
+      opacity: 1;
+      user-select: none;
+      filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5));
+    }
+    .claim-btn:hover:not(.disabled) {
+      transform: scale(1.03);
+      box-shadow: 0 8px 25px rgba(5, 150, 105, 0.6);
+    }
+    .claim-btn.disabled {
+      opacity: 0.45;
+      background: #e5e7eb;
+      color: #9ca3af;
+      box-shadow: none;
+      cursor: default;
+      pointer-events: none;
+      filter: none;
+    }
+    
+    @media (max-width: 500px) {
+      .verify-box {
+        padding: 30px 20px 25px;
+      }
+      .reward-box {
+        flex-direction: column;
+        gap: 15px;
+        padding: 18px 15px;
+      }
+      .reward-badge {
+        width: 60px;
+        height: 60px;
+      }
+      .reward-banner {
+        width: 100%;
+        min-width: unset;
+      }
+      .claim-btn {
+        min-width: 100%;
+        font-size: 1rem;
+        padding: 12px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="back-btn" onclick="history.back()" type="button">
+    <svg viewBox="0 0 24 24">
+      <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+    </svg>
+    Go Back
+  </button>
+  
+  <h1>Email Verification</h1>
+  <div class="verify-box" role="main" aria-label="Email verification section">
+    <div class="icon-box" aria-hidden="true">
+      <svg viewBox="0 0 92 92" role="img" aria-label="Email verification icon"><ellipse rx="44" ry="44" cx="46" cy="46" fill="#3b82f6"/><path d="M27 46l15 15 23-24" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </div>
+    <div class="info">Verify your email to secure your account in <strong>Sharky Chat</strong>.</div>
+    <div class="user-email" id="userEmail">Loading...</div>
+
+    <button class="verify-btn" id="sendLink" aria-live="polite" aria-label="Send verification email button">Send Verification Email</button>
+    <button class="resend-link" id="resendBtn" style="display:none;" aria-live="polite">Resend Email</button>
+
+    <div class="status-message" id="statusMsg" role="alert" aria-live="assertive"></div>
+
+    <div class="reward-box" aria-live="polite" aria-label="Email verification reward section">
+      <div>
+        <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/f03edc77-9d2e-45e2-a3ef-a1ae6ea0483b.png" alt="Email Verified Badge" class="reward-badge" />
+        <div class="reward-name">Verified Email Badge</div>
+      </div>
+      <div>
+        <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/6aa80a52-fd37-4979-ad7a-8eeb994a8f46.png" alt="Congratulations Banner" class="reward-banner" />
+        <div class="reward-name" style="text-align:center;">Verified Email Banner</div>
+      </div>
+      <button class="claim-btn disabled" id="claimRewardBtn" aria-live="polite" aria-label="Claim reward button" disabled>Claim Reward</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, applyActionCode, sendEmailVerification, reload } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const userEmailSpan = document.getElementById("userEmail");
+    const sendLinkBtn = document.getElementById("sendLink");
+    const resendBtn = document.getElementById("resendBtn");
+    const statusMsg = document.getElementById("statusMsg");
+    const claimRewardBtn = document.getElementById("claimRewardBtn");
+
+    let user = null;
+    let email = null;
+
+    function showStatus(msg, type = "") {
+      statusMsg.textContent = msg;
+      statusMsg.className = "status-message";
+      if(type) statusMsg.classList.add(type);
+    }
+
+    async function tryApplyActionCode(oobCode) {
+      try {
+        await applyActionCode(auth, oobCode);
+        await auth.currentUser.reload();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function canSendVerification(userId){
+      const limitDocRef = doc(db,"emailVerificationLimits",userId);
+      const limitSnap = await getDoc(limitDocRef);
+      const now = Date.now();
+      if(!limitSnap.exists()) return true;
+
+      let data = limitSnap.data();
+      if(now - data.timestamp > 24*60*60*1000){
+        await setDoc(limitDocRef, {count: 0, timestamp: now});
+        return true;
+      }
+      return data.count < 2;
+    }
+
+    async function incrementSendCount(userId){
+      const limitDocRef = doc(db,"emailVerificationLimits",userId);
+      const limitSnap = await getDoc(limitDocRef);
+      const now = Date.now();
+      if(!limitSnap.exists()){
+        await setDoc(limitDocRef, {count: 1, timestamp: now});
+      } else {
+        let data = limitSnap.data();
+        if(now - data.timestamp > 24*60*60*1000){
+          await setDoc(limitDocRef, {count: 1, timestamp: now});
+        } else {
+          await updateDoc(limitDocRef, {count: data.count + 1});
+        }
+      }
+    }
+
+    function updateClaimButton(isClaimed){
+      if(isClaimed){
+        claimRewardBtn.classList.add("disabled");
+        claimRewardBtn.disabled = true;
+      } else {
+        claimRewardBtn.classList.remove("disabled");
+        claimRewardBtn.disabled = false;
+      }
+    }
+
+    onAuthStateChanged(auth, async (_user) => {
+      user = _user;
+      if(!user){
+        location.href = "login.html";
+        return;
+      }
+      email = user.email;
+      userEmailSpan.textContent = email || "Email not found";
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const oobCode = urlParams.get('oobCode');
+      const mode = urlParams.get('mode');
+
+      if(mode === 'verifyEmail' && oobCode){
+        showStatus("Processing email verification...", "");
+        const success = await tryApplyActionCode(oobCode);
+        if(success){
+          showStatus("Your email is verified! You can now claim your badge and banner.", "status-success");
+          window.history.replaceState({}, document.title, window.location.pathname);
+          updateClaimButton(false);
+          sendLinkBtn.style.display = "none";
+          resendBtn.style.display = "none";
+          return;
+        } else {
+          showStatus("Verification link is invalid or expired.", "status-error");
+          updateClaimButton(true);
+        }
+      }
+
+      const rewardsRef = doc(db, "rewards", user.uid);
+      const rewardsSnap = await getDoc(rewardsRef);
+      const rewardsData = rewardsSnap.exists() ? rewardsSnap.data() : { emailVerifiedRewardClaimed: false };
+
+      if(user.emailVerified){
+        showStatus("Email is already verified. Thanks!", "status-success");
+        if(rewardsData.emailVerifiedRewardClaimed){
+          updateClaimButton(true);
+        } else {
+          updateClaimButton(false);
+        }
+        sendLinkBtn.style.display = "none";
+        resendBtn.style.display = "none";
+      } else {
+        updateClaimButton(true);
+        sendLinkBtn.style.display = "";
+        resendBtn.style.display = "none";
+      }
+    });
+
+    async function sendVerification(){
+      if(!user || !email) return;
+
+      const allowed = await canSendVerification(user.uid);
+      if(!allowed){
+        showStatus("Verification email limit reached. Try again after 24 hours.", "status-error");
+        return;
+      }
+
+      sendLinkBtn.disabled = true;
+      resendBtn.disabled = true;
+      showStatus("Sending verification email...");
+      try{
+        await sendEmailVerification(user, {
+          url: window.location.origin + '/verify-email.html?mode=verifyEmail'
+        });
+        await incrementSendCount(user.uid);
+        showStatus("Verification link sent! Please check your inbox and spam folder.", "status-success");
+        resendBtn.style.display = "";
+        setTimeout(()=>{
+          sendLinkBtn.disabled = false;
+          resendBtn.disabled = false;
+        }, 4000);
+      } catch (e){
+        showStatus("Failed to send verification email. Check network or try later.", "status-error");
+        sendLinkBtn.disabled = false;
+        resendBtn.disabled = false;
+      }
+    }
+
+    claimRewardBtn.addEventListener("click", async () => {
+      if(claimRewardBtn.disabled) return;
+      claimRewardBtn.disabled = true;
+      claimRewardBtn.classList.add("disabled");
+
+      showStatus("Congratulations! Reward claimed ✔️ Enjoy your badge and banner 🎉", "status-success");
+
+      const rewardsRef = doc(db, "rewards", user.uid);
+      await setDoc(rewardsRef, { emailVerifiedRewardClaimed: true }, { merge: true });
+
+      const invRef = doc(db, "inventories", user.uid);
+      const invSnap = await getDoc(invRef);
+
+      let invData = invSnap.exists() ? invSnap.data() : {};
+
+      if(!invData["badge_email_verified"]){
+        invData["badge_email_verified"] = true;
+      }
+      if(!invData["banner_verified_reward"]){
+        invData["banner_verified_reward"] = true;
+      }
+      await setDoc(invRef, invData, { merge: true });
+    });
+
+    sendLinkBtn.addEventListener("click", sendVerification);
+    resendBtn.addEventListener("click", sendVerification);
+  </script>
+</body>
+</html>

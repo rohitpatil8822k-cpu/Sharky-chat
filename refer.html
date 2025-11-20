@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sharky Chat - Your Referral Code & Rewards</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    html, body {
+      background: #f9f9f9;
+      color: #333;
+      min-height: 100vh;
+      width: 100vw;
+      font-family: 'Poppins', 'Inter', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background 0.3s, color 0.3s;
+      user-select: none;
+    }
+    
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 15px;
+      margin: 30px 0 30px 20px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #4b5563;
+      background-color: #e5e7eb;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .back-btn:hover {
+      background-color: #d1d5db;
+      color: #1f2937;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .back-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .page-title {
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #3b82f6;
+      text-align: center;
+      padding: 0 0 20px 0;
+      letter-spacing: 0.07em;
+      text-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+    }
+
+    main {
+      padding: 0 20px 30px;
+      max-width: 460px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      font-size: 1.05rem;
+    }
+
+    .ref-container {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      border: 1px solid #e5e7eb;
+    }
+
+    h2 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      color: #3b82f6;
+      text-align: center;
+      margin-bottom: 0;
+      font-size: 1.5rem;
+    }
+
+    p.description {
+      font-size: 0.9rem;
+      color: #6b7280;
+      text-align: center;
+      margin: 0 0 5px;
+      line-height: 1.4;
+    }
+
+    .your-code-box {
+      background: #e0f2fe;
+      border-radius: 10px;
+      padding: 14px 20px;
+      text-align: center;
+      font-family: 'Orbitron';
+      color: #1e40af;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.12em;
+      user-select: all;
+      cursor: pointer;
+      max-width: 320px;
+      margin: 0 auto 10px;
+      border: 2px solid #3b82f6;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+      transition: background 0.2s;
+    }
+    .your-code-box:hover {
+        background: #bae6fd;
+    }
+
+    input#inputReferralCode {
+      width: 100%;
+      padding: 14px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      color: #1f2937;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+      font-family: 'Inter', sans-serif;
+      user-select: text;
+    }
+    input#inputReferralCode:focus {
+        border-color: #3b82f6;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    button#applyCodeBtn {
+      padding: 10px 16px;
+      font-size: 1.05rem;
+      font-family: 'Orbitron';
+      font-weight: 700;
+      color: #ffffff;
+      background: #10b981;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+      transition: 0.2s;
+      user-select: none;
+      max-width: 200px;
+      margin: 0 auto;
+      display: block;
+    }
+    button#applyCodeBtn:hover {
+        background: #059669;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
+    }
+    button#applyCodeBtn:disabled {
+        background: #9ca3af;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
+    button.claim-btn {
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-family: 'Poppins';
+      font-weight: 600;
+      color: #ffffff;
+      background: #f59e0b;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+      transition: 0.2s;
+      user-select: none;
+      max-width: 100px;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    button.claim-btn:hover:not(:disabled) {
+        background: #d97706;
+    }
+    button.claim-btn[disabled] {
+      background: #d1d5db;
+      color: #6b7280;
+      cursor: not-allowed;
+      box-shadow: none;
+      max-width: 100px;
+    }
+
+    .status-msg {
+      font-weight: 600;
+      font-family: 'Inter';
+      text-align: center;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      min-height: 22px;
+    }
+    .copied-msg {
+      color: #10b981;
+    }
+    .error-msg {
+      color: #ef4444;
+    }
+
+    .referrals-list {
+      margin-top: 18px;
+      max-height: 280px;
+      overflow-y: auto;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      background: #fcfcfc;
+      padding: 10px;
+      font-size: 0.9rem;
+      color: #6b7280;
+      box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.03);
+    }
+
+    .referral-item {
+      padding: 10px 8px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .referral-item:last-child {
+        border-bottom: none;
+    }
+
+    .referral-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 60%;
+      overflow: hidden;
+    }
+
+    .profile-pic-small {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #3b82f6;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+      flex-shrink: 0;
+    }
+
+    .username-small {
+      font-family: 'Poppins';
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1f2937;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .coin-status {
+        font-family: 'Orbitron';
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #10b981;
+        flex-shrink: 0;
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <button class="back-btn" onclick="history.back()" type="button">
+    <svg viewBox="0 0 24 24">
+      <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+    </svg>
+    Go Back
+  </button>
+  <div class="page-title">REFER A FRIEND</div>
+  <main>
+    <section class="ref-container">
+      <h2>Your Referral Code</h2>
+      <div class="your-code-box" id="yourReferralCode" onclick="copyCode()">LOADING...</div>
+      <div id="copyStatusMsg" class="status-msg copied-msg"></div>
+
+      <h2>Enter Referral Code</h2>
+      <p class="description">Enter a referral code to get referred. The referrer will earn 20 Sharky Coins!</p>
+      <input id="inputReferralCode" type="text" placeholder="Enter referral code here" autocomplete="off" />
+      <button id="applyCodeBtn">Apply Code</button>
+      <div id="codeStatusMsg" class="status-msg error-msg"></div>
+      
+      <h3 style="color:#3b82f6; margin-top:30px; text-align:center; font-family:'Poppins', sans-serif; font-size:1.3rem; font-weight:700;">Your Referrals</h3>
+      <div id="referralsList" class="referrals-list">Loading referrals...</div>
+    </section>
+  </main>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+      measurementId: "G-HT9T3P9KST"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let uid = "";
+    let referralCode = "";
+
+    const yourReferralCodeDiv = document.getElementById("yourReferralCode");
+    const referralsList = document.getElementById("referralsList");
+    const inputReferralCode = document.getElementById("inputReferralCode");
+    const codeStatusMsg = document.getElementById("codeStatusMsg");
+    const applyCodeBtn = document.getElementById("applyCodeBtn");
+    const copyStatusMsg = document.getElementById("copyStatusMsg");
+    let copyTimeout;
+
+    function copyCode() {
+        if (!referralCode || referralCode === "LOADING...") return;
+        navigator.clipboard.writeText(referralCode).then(() => {
+            copyStatusMsg.textContent = "Code Copied!";
+            clearTimeout(copyTimeout);
+            copyTimeout = setTimeout(() => {
+                copyStatusMsg.textContent = "";
+            }, 1500);
+        }).catch(err => {
+            copyStatusMsg.textContent = "Failed to copy.";
+        });
+    }
+
+    function renderReferrals(referrals) {
+      referralsList.innerHTML = "";
+      if (!referrals.length) {
+        referralsList.innerHTML = `<i style="display:block; text-align:center; padding:10px 0;">No referrals yet. Share your code!</i>`;
+        return;
+      }
+
+      referrals.forEach(ref => {
+        const div = document.createElement("div");
+        div.className = "referral-item";
+
+        const userDiv = document.createElement("div");
+        userDiv.className = "referral-user";
+
+        const img = document.createElement("img");
+        img.className = "profile-pic-small";
+        img.src = ref.profilePic || "https://via.placeholder.com/38?text=SC";
+        img.onerror = function() { this.src = "https://via.placeholder.com/38?text=SC"; };
+
+        const uname = document.createElement("span");
+        uname.className = "username-small";
+        uname.textContent = ref.name || "Unknown User";
+
+        userDiv.appendChild(img);
+        userDiv.appendChild(uname);
+
+        const coinSpan = document.createElement("span");
+        coinSpan.className = "coin-status";
+        coinSpan.textContent = ref.claimed ? "Claimed" : "20 Coins";
+        coinSpan.style.color = ref.claimed ? '#6b7280' : '#10b981';
+
+        const btn = document.createElement("button");
+        btn.className = "claim-btn";
+        btn.textContent = ref.claimed ? "Claimed" : "Claim";
+        btn.disabled = ref.claimed;
+
+        btn.onclick = async () => {
+          btn.disabled = true;
+          try {
+            await claimReferralReward(uid, ref.referralDocId, ref.name);
+            btn.textContent = "Claimed";
+            btn.disabled = true;
+            coinSpan.textContent = "Claimed";
+            coinSpan.style.color = '#6b7280';
+            codeStatusMsg.textContent = `Reward claimed for ${ref.name || "Referral"}! +20 Coins.`;
+            codeStatusMsg.style.color = "#10b981";
+          } catch (e) {
+            btn.disabled = ref.claimed;
+            codeStatusMsg.textContent = "Error claiming reward: " + e.message;
+            codeStatusMsg.style.color = "#ef4444";
+          }
+        };
+
+        div.appendChild(userDiv);
+        div.appendChild(coinSpan);
+        div.appendChild(btn);
+        referralsList.appendChild(div);
+      });
+    }
+
+    async function claimReferralReward(currentUserId, referralDocId, refName) {
+      const referralRef = db.collection("referrals").doc(currentUserId).collection("userRefs").doc(referralDocId);
+      const userWalletRef = db.collection("wallets").doc(currentUserId);
+      const rewardAmount = 20;
+
+      await db.runTransaction(async txn => {
+        const referralDoc = await txn.get(referralRef);
+        if (!referralDoc.exists) throw new Error("Referral record not found.");
+        if (referralDoc.data().claimed) throw new Error("Reward already claimed.");
+
+        txn.update(referralRef, { claimed: true, claimedAt: firebase.firestore.FieldValue.serverTimestamp() });
+        
+        const walletSnap = await txn.get(userWalletRef);
+        let currentCoins = walletSnap.exists && walletSnap.data().sharkyCoin ? walletSnap.data().sharkyCoin : 0;
+        txn.set(userWalletRef, { sharkyCoin: currentCoins + rewardAmount }, { merge: true });
+      });
+
+      await db.collection("notifications").add({
+        to: currentUserId,
+        type: "referral-reward",
+        message: `Claimed ${rewardAmount} Coins from ${refName || "Referral"}!`,
+        coins: rewardAmount,
+        seen: false,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    async function checkIfAppliedCode(userId) {
+      const doc = await db.collection("referralApplications").doc(userId).get();
+      return doc.exists ? doc.data().appliedCode : null;
+    }
+
+    async function applyReferralCode(userId, code, referrerId) {
+      await db.collection("referralApplications").doc(userId).set({
+        appliedCode: code,
+        appliedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        referrerId: referrerId || null
+      });
+
+      const refUserDoc = await db.collection("users").doc(userId).get();
+      const refData = refUserDoc.exists ? refUserDoc.data() : {};
+      const name = refData.username || "New User";
+      const pic = refData.profilePic || null;
+
+      await db.collection("referrals").doc(referrerId).collection("userRefs").doc(userId).set({
+        name,
+        profilePic: pic,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        claimed: false,
+        referralDocId: userId
+      });
+    }
+
+    auth.onAuthStateChanged(async user => {
+      if (!user) {
+        location.href = "login.html";
+        return;
+      }
+      uid = user.uid;
+      referralCode = uid.slice(0, 8).toUpperCase();
+      yourReferralCodeDiv.textContent = referralCode;
+      
+      db.collection("referrals").doc(uid).collection("userRefs").orderBy("timestamp", "desc")
+        .onSnapshot(snapshot => {
+          const refs = [];
+          snapshot.forEach(doc => refs.push({ ...doc.data(), referralDocId: doc.id }));
+          renderReferrals(refs);
+        }, error => {
+             referralsList.innerHTML = `<i style="display:block; text-align:center; padding:10px 0; color:#ef4444;">Error loading referrals.</i>`;
+        });
+
+      const applied = await checkIfAppliedCode(uid);
+      if (applied) {
+        inputReferralCode.value = applied;
+        inputReferralCode.disabled = true;
+        applyCodeBtn.disabled = true;
+        codeStatusMsg.textContent = `You have already applied code: ${applied}.`;
+        codeStatusMsg.style.color = "#10b981";
+      } else {
+        inputReferralCode.disabled = false;
+        applyCodeBtn.disabled = false;
+        codeStatusMsg.textContent = "";
+      }
+    });
+
+    applyCodeBtn.addEventListener("click", async () => {
+      codeStatusMsg.textContent = "";
+      applyCodeBtn.disabled = true;
+      const entered = inputReferralCode.value.trim().toUpperCase();
+
+      if (!entered) {
+        codeStatusMsg.textContent = "Please enter a referral code.";
+        codeStatusMsg.style.color = "#ef4444";
+        applyCodeBtn.disabled = false;
+        return;
+      }
+
+      if (entered === referralCode) {
+        codeStatusMsg.textContent = "You cannot apply your own code.";
+        codeStatusMsg.style.color = "#ef4444";
+        applyCodeBtn.disabled = false;
+        return;
+      }
+
+      const prev = await checkIfAppliedCode(uid);
+      if (prev) {
+        codeStatusMsg.textContent = "You already applied a code.";
+        codeStatusMsg.style.color = "#ef4444";
+        applyCodeBtn.disabled = true;
+        return;
+      }
+
+      try {
+        const refDoc = await db.collection("referralCodes").doc(entered).get();
+        if (!refDoc.exists) {
+          codeStatusMsg.textContent = "Invalid referral code.";
+          codeStatusMsg.style.color = "#ef4444";
+          applyCodeBtn.disabled = false;
+          return;
+        }
+        const referrerId = refDoc.data().uid;
+        if (referrerId === uid) {
+          codeStatusMsg.textContent = "You cannot use your own code.";
+          codeStatusMsg.style.color = "#ef4444";
+          applyCodeBtn.disabled = false;
+          return;
+        }
+
+        await applyReferralCode(uid, entered, referrerId);
+        codeStatusMsg.textContent = "Referral code applied successfully! Referrer will earn 20 Sharky Coins.";
+        codeStatusMsg.style.color = "#10b981";
+        inputReferralCode.disabled = true;
+        applyCodeBtn.disabled = true;
+      } catch (err) {
+        codeStatusMsg.textContent = "Error applying code.";
+        codeStatusMsg.style.color = "#ef4444";
+        applyCodeBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

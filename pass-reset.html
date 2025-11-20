@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Password Reset Request — Sharky Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Raleway:wght@600;700&family=Montserrat:wght@500;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: #0f172a;
+      color: #e0f2fe;
+      font-family: 'Montserrat', sans-serif;
+      padding: 80px 20px 40px;
+      max-width: 460px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.4rem;
+      margin-bottom: 2rem;
+      color: #38bdf8;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 0.05em;
+    }
+    .instructions {
+      font-size: 0.97rem;
+      color: #cbd5e1;
+      text-align: center;
+      margin: -10px auto 28px;
+      line-height: 1.55rem;
+    }
+    .reset-box {
+      background: #182338;
+      border-radius: 24px;
+      padding: 36px 32px 32px 32px;
+      box-shadow: 0 6px 28px #38bdf840;
+      transition: background 0.3s ease;
+    }
+    .reset-box:hover {
+      background: #1f2f57;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #bae6fd;
+      font-size: 1.05rem;
+      font-family: 'Raleway', sans-serif;
+    }
+    input[type="email"] {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: #23304b;
+      color: #60a5fa;
+      font-family: 'Montserrat', monospace;
+      box-sizing: border-box;
+      transition: background 0.3s ease;
+    }
+    input[type="email"]:focus {
+      background: #2e406d;
+      box-shadow: 0 0 12px #38bdf8aa;
+    }
+    button {
+      background: linear-gradient(90deg, #38bdf8, #0ea5e9 70%, #a78bfa 110%);
+      color: #fff;
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 0;
+      min-width: 160px;
+      margin: 26px auto 8px auto;
+      cursor: pointer;
+      box-shadow: 0 3px 12px #0ea5e927;
+      transition: background 0.25s, box-shadow 0.24s, transform 0.13s;
+      display: block;
+      user-select: none;
+      letter-spacing: 0.05em;
+    }
+    button:hover,
+    button:focus {
+      background: linear-gradient(90deg, #0ea5e9, #a78bfa 85%, #f472b6 130%);
+      box-shadow: 0 5px 22px #0ea5e929;
+      transform: scale(1.07);
+      outline: none;
+    }
+    .secondary-btn {
+      background: #23304b;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 14px;
+      padding: 14px 0;
+      transition: background 0.25s, transform 0.12s;
+      border-radius: 16px;
+      min-width: 160px;
+      cursor: pointer;
+      box-shadow: 0 3px 8px #0ea5e920;
+      user-select: none;
+      letter-spacing: 0.04em;
+      display: block;
+    }
+    .secondary-btn:hover {
+      background: #2f3f63;
+      transform: scale(1.05);
+      outline: none;
+    }
+    .status-message {
+      min-height: 32px;
+      font-size: 1rem;
+      text-align: center;
+      margin: 18px 0 0 0;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 10px 14px;
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      word-break: break-word;
+    }
+    .status-success {
+      background-color: #16a34a22;
+      color: #34d399;
+    }
+    .status-error {
+      background-color: #dc262622;
+      color: #f87171;
+    }
+    @media (max-width: 460px) {
+      body { padding: 70px 16px 40px; }
+      h1 { font-size: 2rem; }
+      button { font-size: 1.05rem; padding: 14px 0; min-width: auto; }
+      .secondary-btn { min-width: auto; padding: 14px 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Password Reset</h1>
+  <p class="instructions" id="instructionText" aria-live="polite">
+    We will send you a direct login link. Simply click it to securely auto-login.<br>
+    Please note: You can request a reset link only <strong>twice within 24 hours</strong>.
+  </p>
+  <div class="reset-box" role="main" aria-live="polite">
+    <form id="resetForm" novalidate>
+      <label for="emailInput">Enter your registered email</label>
+      <input type="email" id="emailInput" name="email" autocomplete="email" required aria-describedby="emailHelp" placeholder="you@example.com" aria-label="Registered email input" />
+      <button type="submit" id="submitBtn" aria-live="polite">Send Login Link 🔑</button>
+      <button type="button" class="secondary-btn" aria-label="Go back to login" onclick="window.location.href='login.html';">← Go Back to Login</button>
+    </form>
+    <div class="status-message" id="statusMsg" role="alert" aria-live="assertive"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, sendSignInLinkToEmail } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const resetForm = document.getElementById('resetForm');
+    const emailInput = document.getElementById('emailInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusMsg = document.getElementById('statusMsg');
+    const instructionText = document.getElementById('instructionText');
+
+    function showStatus(msg, type = '') {
+      statusMsg.textContent = msg;
+      statusMsg.className = 'status-message';
+      if(type) statusMsg.classList.add(type);
+    }
+
+    function getRequestLog() {
+      try {
+        const log = JSON.parse(localStorage.getItem('resetReqLog') || '[]');
+        return log.filter(ts => Date.now() - ts < 24*60*60*1000);
+      } catch {
+        return [];
+      }
+    }
+
+    function addRequestLog() {
+      const log = getRequestLog();
+      log.push(Date.now());
+      localStorage.setItem('resetReqLog', JSON.stringify(log));
+    }
+
+    resetForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      if(!email) {
+        showStatus('Please enter a valid email address.', 'status-error');
+        return;
+      }
+      const log = getRequestLog();
+      if(log.length >= 2) {
+        showStatus('Link send limit exceeded. Please try again after 24 hours.', 'status-error');
+        return;
+      }
+      submitBtn.disabled = true;
+      showStatus('Sending secure login link...');
+      instructionText.style.display = "none";
+      try {
+        await sendSignInLinkToEmail(auth, email, {
+          url: window.location.origin + '/login.html',
+          handleCodeInApp: true
+        });
+        addRequestLog();
+        window.localStorage.setItem('emailForSignIn', email);
+        showStatus('Login link sent! Please check your inbox and spam folder.', 'status-success');
+      } catch (error) {
+        let msg = 'Failed to send login link.';
+        if(error.code === 'auth/user-not-found') msg = 'No user found with this email.';
+        else if (error.code === 'auth/invalid-email') msg = 'Invalid email address.';
+        else msg = error.message;
+        showStatus(msg, 'status-error');
+        instructionText.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

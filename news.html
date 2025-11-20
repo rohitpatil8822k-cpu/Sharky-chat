@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sharky News</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: #0f172a;
+      color: #e0f2fe;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 60px 16px;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      color: #60a5fa;
+      font-size: 2.3rem;
+      margin-bottom: 25px;
+      text-shadow: 0 0 12px #4fa5fa88;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .post-list {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      margin-bottom: 100px;
+      min-height: 200px;
+    }
+
+    .post {
+      background: #182338;
+      border-radius: 14px;
+      padding: 18px 22px;
+      box-shadow: 0 3px 12px rgba(96, 165, 250, 0.2);
+      word-break: break-word;
+    }
+
+    .post h3 {
+      margin-bottom: 8px;
+      color: #60a5fa;
+      font-size: 1.18rem;
+    }
+
+    .post p {
+      font-size: 1rem;
+      white-space: pre-wrap;
+    }
+
+    .post .date {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #475569;
+      font-size: 0.9rem;
+      margin-top: 40px;
+    }
+
+    .admin-box {
+      background: #213967;
+      padding: 14px 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .admin-box input,
+    .admin-box textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #60a5fa;
+      background: #0f172a;
+      color: #e0f2fe;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .admin-box button {
+      background: #60a5fa;
+      color: #0f172a;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 1rem;
+    }
+
+    .admin-box button:hover {
+      background: #38bdf8;
+    }
+
+    /* Notification Bell Styles */
+    #notificationBell {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      filter: drop-shadow(0 0 2px #60a5fa);
+      z-index: 9999;
+    }
+
+    #notificationCount {
+      position: fixed;
+      top: 12px;
+      right: 10px;
+      background: #ef4444;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 7px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      user-select: none;
+      z-index: 10000;
+      display: none;
+      text-align: center;
+      line-height: 1;
+      min-width: 20px;
+    }
+
+    /* Notifications Popup */
+    #notificationsPopup {
+      position: fixed;
+      top: 60px;
+      right: 16px;
+      width: 320px;
+      max-height: 400px;
+      overflow-y: auto;
+      background: #16203a;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      color: #60a5fa;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      display: none;
+      z-index: 10001;
+    }
+
+    .notif-item {
+      background: #20325b;
+      margin-bottom: 10px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px #0a1f45;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 0.9rem;
+      color: #bae6fd;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    .notif-item:hover {
+      background: #60a5fa;
+      color: #0f172a;
+    }
+
+    .notif-type {
+      font-weight: 700;
+      color: #38bdf8;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    .notif-date {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 6px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>📰 Sharky News</h1>
+
+  <!-- Admin panel (only show if user is admin) -->
+  <div class="admin-box" id="adminPanel" style="display:none;">
+    <h3 style="color:#60a5fa">➕ Add News Post</h3>
+    <input type="text" id="newsTitle" placeholder="News title" maxlength="100" />
+    <textarea id="newsMessage" rows="3" placeholder="Write message..." maxlength="500"></textarea>
+    <button id="addPostBtn">Post Update</button>
+  </div>
+
+  <div class="post-list" id="postList">Loading news...</div>
+
+  <footer>&copy; 2025 Sharky Chat. All rights reserved.</footer>
+
+  <!-- Notifications Icon -->
+  <img
+    id="notificationBell"
+    src="https://img.icons8.com/ios-filled/50/60a5fa/bell.png"
+    alt="Notifications"
+    title="Notifications"
+  />
+  <div id="notificationCount">0</div>
+
+  <!-- Notifications Popup -->
+  <div id="notificationsPopup"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+    authDomain: "sharky-chat-007.firebaseapp.com",
+    projectId: "sharky-chat-007",
+    storageBucket: "sharky-chat-007.appspot.com",
+    messagingSenderId: "637104796242",
+    appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+    measurementId: "G-HT9T3P9KST",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  const postList = document.getElementById("postList");
+  const adminPanel = document.getElementById("adminPanel");
+  const addBtn = document.getElementById("addPostBtn");
+
+  const notifBell = document.getElementById("notificationBell");
+  const notifCount = document.getElementById("notificationCount");
+  const notifPopup = document.getElementById("notificationsPopup");
+
+  let currentUser = null;
+  let notifications = [];
+
+  function escapeHtml(text) {
+    const p = document.createElement("p");
+    p.textContent = text;
+    return p.innerHTML;
+  }
+
+  function renderPost(doc) {
+    const d = doc.data();
+    const div = document.createElement("div");
+    div.className = "post";
+    const dateStr = d.date && d.date.toDate ? d.date.toDate().toLocaleString() : new Date().toLocaleString();
+    div.innerHTML = `<h3>${escapeHtml(d.title)} ${d.emoji || ""}</h3><p>${escapeHtml(d.message)}</p><div class="date">📅 ${dateStr}</div>`;
+    postList.prepend(div);
+  }
+
+  function renderNotifications() {
+    notifPopup.innerHTML = "";
+
+    if (notifications.length === 0) {
+      notifPopup.innerHTML = '<div style="padding:10px; text-align:center; color:#94a3b8;">No new notifications</div>';
+      notifCount.style.display = "none";
+      notifCount.textContent = "";
+      return;
+    } else {
+      notifCount.style.display = "block";
+      notifCount.textContent = notifications.length > 99 ? "99+" : notifications.length;
+    }
+
+    notifications.forEach((notif) => {
+      const div = document.createElement("div");
+      div.className = "notif-item";
+
+      let title = "";
+      let message = "";
+      switch (notif.type) {
+        case "news":
+          title = `📰 News Update`;
+          message = `${notif.title}: ${notif.message}`;
+          break;
+        case "level-up":
+          title = `🎉 Level Up!`;
+          message = `Congrats! You're now level ${notif.level}. Reward: +${notif.coins ?? 0} Sharky Coins.`;
+          break;
+        case "mission":
+          title = `🏆 Mission Reward`;
+          message = `You claimed reward for day ${notif.day}`;
+          break;
+        default:
+          title = notif.type;
+          message = notif.message || "";
+      }
+
+      div.innerHTML = `
+        <div class="notif-type">${escapeHtml(title)}</div>
+        <div>${escapeHtml(message)}</div>
+        <div class="notif-date">${new Date(notif.createdAt.seconds * 1000).toLocaleString()}</div>
+      `;
+
+      div.onclick = async () => {
+        try {
+          await db.collection("notifications").doc(notif.id).update({ seen: true });
+          // Hide notification on click after marking seen
+          div.style.display = "none";
+          // Refresh the count and popup content
+          notifications = notifications.filter(n => n.id !== notif.id);
+          renderNotifications();
+        } catch (err) {
+          console.error("Error marking notification seen", err);
+        }
+      };
+
+      notifPopup.appendChild(div);
+    });
+  }
+
+  notifBell.addEventListener("click", () => {
+    notifPopup.style.display = notifPopup.style.display === "block" ? "none" : "block";
+  });
+
+  // Auth state listener
+  auth.onAuthStateChanged(async (user) => {
+    if (!user) {
+      location.href = "login.html";
+      return;
+    }
+    currentUser = user;
+
+    // Show or hide admin panel
+    const userDoc = await db.collection("users").doc(user.uid).get();
+    if (userDoc.exists && userDoc.data()?.role === "admin") {
+      adminPanel.style.display = "block";
+    } else {
+      adminPanel.style.display = "none";
+    }
+
+    // Load news posts realtime
+    db.collection("updates").orderBy("date", "desc").onSnapshot((snap) => {
+      postList.innerHTML = "";
+      snap.forEach((doc) => {
+        renderPost(doc);
+      });
+    });
+
+    // Load unseen notifications realtime
+    db.collection("notifications")
+      .where("to", "==", user.uid)
+      .where("seen", "==", false)
+      .orderBy("createdAt", "desc")
+      .onSnapshot((snapshot) => {
+        notifications = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          data.id = doc.id;
+          notifications.push(data);
+        });
+        renderNotifications();
+      });
+  });
+
+  // Admin post submission and notifications batch send
+  addBtn.onclick = async () => {
+    const title = document.getElementById("newsTitle").value.trim();
+    const message = document.getElementById("newsMessage").value.trim();
+
+    if (!title || !message) {
+      alert("Please enter both title and message!");
+      return;
+    }
+
+    try {
+      // Add news update
+      await db.collection("updates").add({
+        title,
+        message,
+        emoji: "📰",
+        date: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+      // Send notifications batch to all users
+      const usersSnapshot = await db.collection("users").get();
+      const batch = db.batch();
+
+      usersSnapshot.forEach((uDoc) => {
+        const notifRef = db.collection("notifications").doc();
+        batch.set(notifRef, {
+          to: uDoc.id,
+          type: "news",
+          title,
+          message,
+          seen: false,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+      });
+
+      await batch.commit();
+
+      alert("News Posted and Notifications Sent!");
+      document.getElementById("newsTitle").value = "";
+      document.getElementById("newsMessage").value = "";
+    } catch (e) {
+      alert("Error posting news: " + e.message);
+      console.error(e);
+    }
+  };
+</script>
+
+</body>
+</html>

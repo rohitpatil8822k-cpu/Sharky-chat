@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sharky Chat — Contact Us</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+    body {
+      margin: 0;
+      background-color: #f0f0f0;
+      color: #333;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      padding: 40px 20px;
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+      user-select: text;
+      transition: background 0.3s, color 0.3s;
+    }
+    @media (max-width: 768px) {
+      body {
+        padding: 30px 16px;
+        max-width: 95vw;
+      }
+    }
+    
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 15px;
+      margin-bottom: 30px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #4b5563;
+      background-color: #e5e7eb;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .back-btn:hover {
+      background-color: #d1d5db;
+      color: #1f2937;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .back-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      color: #1f2937;
+      text-align: center;
+      font-size: 2.4rem;
+      margin-top: 0;
+      margin-bottom: 40px;
+    }
+    
+    form {
+      background: #ffffff;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #374151;
+      font-family: 'Inter', sans-serif;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      background: #f9fafb;
+      color: #1f2937;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+      resize: vertical;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #4b5563;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(75, 85, 99, 0.1);
+    }
+    
+    button.send-btn {
+      margin-top: 35px;
+      background: #4b5563;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+    button.send-btn:hover,
+    button.send-btn:focus {
+      background: #374151;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 15px rgba(75, 85, 99, 0.4);
+      outline: none;
+    }
+    button.send-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+    }
+    
+    .status-message {
+      margin-top: 25px;
+      font-size: 0.95rem;
+      min-height: 20px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .status-success {
+      color: #10b981;
+    }
+    .status-error {
+      color: #ef4444;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.85rem;
+      color: #9ca3af;
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body>
+  
+  <button class="back-btn" onclick="history.back()" type="button">
+    <svg viewBox="0 0 24 24">
+      <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+    </svg>
+    Go Back
+  </button>
+
+  <main>
+    <h1>Contact Us</h1>
+    <form id="contactForm" aria-label="Contact Sharky Chat form" novalidate>
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" required autocomplete="name" placeholder="Loading User..." />
+
+      <label for="email">Your Email</label>
+      <input type="email" id="email" name="email" required autocomplete="email" placeholder="Loading Email..." />
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="6" required placeholder="Write your message here..."></textarea>
+
+      <button type="submit" class="send-btn">Send Message</button>
+      <div class="status-message" id="statusMessage" role="alert" aria-live="polite"></div>
+    </form>
+  </main>
+  
+  <footer>
+    &copy; 2025 Sharky Chat. All rights reserved.
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getAuth, onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+      measurementId: "G-HT9T3P9KST"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let uid = "";
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const contactForm = document.getElementById("contactForm");
+    const statusMessage = document.getElementById("statusMessage");
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        nameInput.value = "Guest";
+        emailInput.value = "Please log in";
+        nameInput.placeholder = "Enter your name";
+        emailInput.placeholder = "Enter your email";
+        nameInput.removeAttribute("readonly");
+        emailInput.removeAttribute("readonly");
+        return;
+      }
+      uid = user.uid;
+      nameInput.placeholder = "Loading...";
+      emailInput.placeholder = "Loading...";
+      nameInput.setAttribute("readonly", true);
+      emailInput.setAttribute("readonly", true);
+
+      const userDoc = await getDoc(doc(db, "users", uid));
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        nameInput.value = data.username || user.displayName || "";
+      } else {
+        nameInput.value = user.displayName || "";
+      }
+      emailInput.value = user.email || "";
+    });
+
+    contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      statusMessage.textContent = "";
+      statusMessage.className = "status-message";
+      
+      const user = auth.currentUser;
+      const message = contactForm.message.value.trim();
+
+      if (!message) {
+        statusMessage.textContent = "Please enter your message.";
+        statusMessage.classList.add("status-error");
+        return;
+      }
+      
+      const sendButton = contactForm.querySelector('.send-btn');
+      sendButton.disabled = true;
+
+      try {
+        statusMessage.textContent = "Sending your message...";
+        statusMessage.classList.remove("status-error");
+        statusMessage.classList.remove("status-success");
+        
+        await new Promise(r => setTimeout(r, 1500)); 
+
+        statusMessage.textContent = "Thank you for contacting us! We will get back to you shortly.";
+        statusMessage.classList.add("status-success");
+        contactForm.message.value = "";
+      } catch (err) {
+        statusMessage.textContent = "Failed to send your message. Please try again later.";
+        statusMessage.classList.add("status-error");
+      } finally {
+        sendButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

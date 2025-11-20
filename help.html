@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sharky Chat - Advanced Bot</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4fbfd; }
+    #chat { width: 410px; margin: 40px auto; background: #fff; padding: 22px; border-radius: 12px; min-height: 410px; box-shadow: 0 3px 25px #e1e8ed; }
+    .msg { margin: 8px 0; padding:8px 13px; border-radius:9px; max-width:85%; word-break:break-word; display:inline-block;}
+    .user { color: #3178c6; text-align: right; background:#e3f7fc; float:right; }
+    .bot { color: #f78104; text-align: left; background:#fff0da; float:left;}
+    #typing { font-style: italic; color: #888; margin-top:10px; clear:both;}
+    input { width: 70%; padding: 8px; border-radius: 7px; border:1px solid #ddd; font-size:1rem;}
+    button { padding: 8px 12px; border-radius: 7px; background: #3178c6; color:#fff; border: none; font-size:1rem;}
+    #msgForm { margin-top:13px;}
+    #messages::after { content:""; display:block; clear:both; }
+    .emoji { font-size:1.2em; }
+  </style>
+</head>
+<body>
+  <div id="chat">
+    <div id="messages"></div>
+    <div id="typing" style="display:none;">Bot is typing...</div>
+    <form id="msgForm" autocomplete="off">
+      <input type="text" id="msgInput" placeholder="Type message..." required />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.8/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.8/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+      measurementId: "G-HT9T3P9KST",
+      databaseURL: "https://sharky-chat-007-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const messagesDiv = document.getElementById("messages");
+    const typingDiv = document.getElementById("typing");
+    const msgInput = document.getElementById("msgInput");
+    const msgForm = document.getElementById("msgForm");
+
+    // Show chat messages with emoji formatting
+    db.ref("messages").on("child_added", (snap) => {
+      const msg = snap.val();
+      const div = document.createElement("div");
+      div.className = "msg " + msg.sender;
+      div.innerHTML = 
+        (msg.sender === "user" ? '<span class="emoji">🧑</span> You:' : '<span class="emoji">🤖</span> Bot:') + " " + formatEmojis(msg.text);
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+
+    // Emoji text shortcuts
+    function formatEmojis(text) {
+      return text.replace(/:smile:/g, "😄")
+                 .replace(/:shark:/g, "🦈")
+                 .replace(/:wave:/g, "👋")
+                 .replace(/:laugh:/g, "😂")
+                 .replace(/:cool:/g, "😎")
+                 .replace(/:name:/g, "👤")
+                 .replace(/:pray:/g, "🙏");
+    }
+
+    // Typing indicator
+    db.ref("typing").on("value", (snap) => {
+      const typing = snap.val();
+      typingDiv.style.display = typing && typing.bot ? "block" : "none";
+    });
+
+    // Sending message
+    msgForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = msgInput.value.trim();
+      if (!text) return;
+      db.ref("messages").push({
+        text: text,
+        sender: "user",
+      });
+      msgInput.value = "";
+    });
+  </script>
+</body>
+</html>
