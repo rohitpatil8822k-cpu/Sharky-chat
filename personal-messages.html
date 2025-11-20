@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Personal Chat - Sharky Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Orbitron:wght@700&family=Poppins:wght@600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ----------------------------------
+     * BASE & BODY STYLES (Classy Grey)
+     * ---------------------------------- */
+    html,body{
+      width:100vw;height:100vh;padding:0;margin:0;
+      min-height:100svh;min-width:100vw;
+      overscroll-behavior:contain;
+      /* Deep Grey/Charcoal Gradient */
+      background: linear-gradient(135deg, #0e0e11 0%, #1a1a20 100%);
+      box-sizing:border-box;
+      overflow-x: hidden; 
+    }
+    body{
+      min-height:100svh; min-width:100vw;
+      width:100vw; height:100svh;
+      display:flex; justify-content:center; align-items:flex-start;
+      /* Padding-top added for the new fixed main header */
+      padding-top: 50px; 
+    }
+    
+    /* ----------------------------------
+     * NEW COMMON HEADER STYLES (Copied)
+     * NOTE: It's fixed to the very top.
+     * ---------------------------------- */
+    header {
+      background: #555555; /* full grey */
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 2000;
+      width: 100vw;
+      box-shadow: 0 2px 17px #22222290;
+      min-height: 50px;
+      height: 50px; /* Fixed height for calculations */
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      border-radius: 0;
+      transition: box-shadow 0.23s;
+      color: #d1d1d1;
+      font-family: "Poppins", Arial, sans-serif;
+      font-size: 1rem;
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      min-height: 50px;
+      height: 50px;
+      position: relative;
+      z-index: 1;
+      cursor: default;
+      color: inherit;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .logo-container img {
+      height: 30px;
+      animation: float 3.3s ease-in-out infinite;
+      user-select: none;
+      pointer-events: none;
+      filter: none;
+      image-rendering: crisp-edges;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    .logo-text {
+      font-family: "Orbitron", Arial, Helvetica, sans-serif;
+      font-size: 1.1rem;
+      color: #bbbbbb;
+      text-shadow: 0 0 5px #88888888;
+      font-weight: 800;
+      letter-spacing: 0.055em;
+      margin-left: 2px;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .menu-btn {
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      min-width: 38px;
+      height: 36px;
+      color: #d0d0d0;
+      outline: none;
+      border: none;
+      background: none;
+      border-radius: 9px;
+      position: relative;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.16s, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      gap: 6px;
+    }
+    .menu-btn:active {
+      background: #444444;
+      transform: scale(0.93);
+    }
+    .menu-btn .notif-badge {
+      background: linear-gradient(105deg, #f87171 65%, #fb923c 110%);
+      color: white;
+      font-weight: 700;
+      font-family: "Orbitron", sans-serif;
+      min-width: 14px;
+      height: 14px;
+      padding: 0 6px;
+      font-size: 12px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      border: 1px solid #555555;
+      box-shadow: 0 2px 6px #ef444488;
+      pointer-events: none;
+      z-index: 10;
+      user-select: none;
+    }
+    .menu-dropdown {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      height: 100vh;
+      width: 220px;
+      background: rgba(85, 85, 85, 0.97);
+      box-shadow: -4px 0 26px rgba(0, 0, 0, 0.77);
+      padding-top: 54px;
+      padding-bottom: 22px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      font-family: "Poppins", Arial, sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      overflow-y: auto;
+      transition: right 0.31s cubic-bezier(0.65, 0.01, 0.32, 1.03);
+      z-index: 2500;
+      user-select: none;
+      color: #d1d1d1;
+    }
+    header.expanded .menu-dropdown {
+      right: 0;
+    }
+    .menu-dropdown .close-btn {
+      position: absolute;
+      left: 11px;
+      top: 13px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      outline: none;
+      z-index: 2600;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+      color: #bbbbbb;
+      user-select: none;
+    }
+    .menu-dropdown .close-btn:hover,
+    .menu-dropdown .close-btn:focus {
+      color: #e0e0e0;
+      transform: scale(1.22);
+    }
+    .menu-dropdown .close-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      user-select: none;
+    }
+    .menu-dropdown a {
+      color: #bbbbbb;
+      padding: 13px 17px 13px 46px;
+      text-decoration: none;
+      border-bottom: 2px solid #444444;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: none;
+      transition: background 0.13s, color 0.13s, padding-left 0.11s, transform 0.16s;
+      letter-spacing: 0.02em;
+      user-select: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      will-change: transform;
+      position: relative;
+    }
+    .menu-dropdown a:hover,
+    .menu-dropdown a:focus {
+      background: #666666;
+      color: #ffffff;
+      padding-left: 51px;
+      outline: none;
+      transform: scale(1.05) translateX(-2px);
+    }
+    .menu-dropdown a:active {
+      background: #444444;
+      color: #fbbf24;
+      transform: scale(0.97);
+    }
+    .menu-dropdown .notif-badge {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      box-shadow: none;
+      border: none;
+      font-weight: 700;
+      font-size: 13px;
+      min-width: 22px;
+      height: 18px;
+      background: linear-gradient(120deg, #fae024 70%, #f87171 100%);
+      color: #222b3a;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Orbitron", sans-serif;
+      border-radius: 7px;
+      user-select: none;
+      padding: 0 6px;
+      line-height: 18px;
+      white-space: nowrap;
+    }
+    .menu-dropdown a .icon {
+      display: inline-flex;
+      width: 22px;
+      height: 22px;
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      fill: #bbbbbb;
+      filter: drop-shadow(0 1px 6px #bbbbbb66);
+      transition: fill 0.13s, filter 0.11s;
+      user-select: none;
+    }
+    .menu-dropdown a:hover .icon,
+    .menu-dropdown a:focus .icon {
+      fill: #fff;
+      filter: drop-shadow(0 2px 8px #fff4);
+    }
+    @keyframes notifpop {
+      0%{transform: scale(1);} 50%{transform: scale(1.3);} 100%{transform: scale(1);}
+    }
+    /* End of New Header Styles */
+
+    /* ----------------------------------
+     * CHAT WRAPPER STYLES 
+     * ---------------------------------- */
+    .main-wrap {
+      width:100vw;max-width:380px;min-width:290px;
+      height:calc(100svh - 50px); /* Height reduced by new header height */
+      max-height:calc(100svh - 50px);
+      min-height:350px;
+      background:rgba(18, 18, 22, 0.98);
+      margin:0 auto;
+      box-shadow:0 0 40px rgba(0, 0, 0, 0.45);
+      border-radius:18px;
+      display:flex;flex-direction:column;
+      position:relative;
+      overflow:hidden; 
+      justify-content:flex-start;
+      margin-top: -50px; /* Pull it up to sit right under the new header */
+    }
+
+    /* ----------------------------------
+     * CHAT HEADER STYLES (Adjusted Top Position)
+     * FIX: Top is now 50px (New Header Height)
+     * ---------------------------------- */
+    .chat-header-sticky {
+      flex-shrink:0;display:flex;align-items:center;gap:12px;
+      padding:0 12px 0 4px;
+      border-bottom:1px solid #282830;
+      background:#1d1d23;
+      height:60px;
+      min-height:60px;
+      z-index:101;
+      margin:0;
+      
+      /* FIX: Fixed Position and Width Calculation */
+      position: fixed;
+      top: 50px; /* Adjusted: Below the new 50px header */
+      left: 50%; /* Center the element */
+      transform: translateX(-50%); /* Pull back half its width */
+      width: 100%;
+      max-width: 380px; /* Same as main-wrap */
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      border-top-left-radius: 0; /* Corner already covered by main header */
+      border-top-right-radius: 0;
+    }
+    @media (max-width:480px){ 
+        .chat-header-sticky { 
+            top: 50px; /* Adjusted for mobile view */
+            height: 55px; min-height: 55px; max-width: 100vw; border-radius: 0; 
+        } 
+    }
+    
+    .back-btn {background:none;border:none;cursor:pointer;padding:8px;display:flex;align-items:center;border-radius:12px;margin-right:6px;transition:background .15s;font-size:1.04rem; color: #a0a0a8;}
+    .back-btn:focus,.back-btn:hover {background:#2e2e34;}
+    .back-icon {width:22px;height:22px;}
+    .back-icon path{stroke: #bfbfcc;}
+
+    .chat-part-pic {
+      width:38px; height:38px; min-width:38px; min-height:38px; border-radius:50%;
+      border:2px solid #60a5fa;
+      object-fit:cover; background:#212128;
+      box-shadow:0 0 0 1px #60a5fa20; 
+      transition: none; aspect-ratio:1/1; display:block;
+    }
+    .user-name-status-wrap {display:flex;flex-direction:column;align-items:flex-start;margin-right:15px;}
+    .chat-part-name{
+      font-family:'Inter',sans-serif;
+      color:#e0e0e8;
+      font-size:1.08rem;
+      font-weight:700;
+      max-width:44vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+    .user-status{
+      font-size:.85rem;
+      font-family:'Roboto',sans-serif;
+      margin-top:2px;
+      line-height: 1.2;
+    }
+    .user-status.green{color:#34d399;font-weight:500;}
+    .user-status.gray{color:#9ca3af;font-weight:400;}
+
+    .header-action-btn{
+      background:#374151;
+      color:#f3f4f6;border:none;border-radius:10px;
+      padding:6px 10px;font-weight:600;cursor:pointer;
+      font-size:.77rem;margin-right:2px;
+      min-width:30px; margin-left:5px;
+      transition: background .2s, transform .1s;
+    }
+    .header-action-btn:hover{background:#4b5563; transform: translateY(-1px);}
+    .block-btn{background:#ef4444!important;color:white!important;}
+    .block-btn:hover{background:#dc2626!important;}
+    .chat-header-sticky > .header-action-btn,
+    .chat-header-sticky > .block-btn {margin-left:auto;}
+    .chat-header-sticky > .block-btn {margin-left:5px;}
+
+    /* ----------------------------------
+     * CHAT BOX & MESSAGE STYLES (Adjusted Top Margin)
+     * FIX: Margin-top = New Header (50px) + Chat Header (60px) = 110px
+     * ---------------------------------- */
+    .chat-box{
+      flex:1 1 auto; /* Fill remaining space */
+      overflow-y:auto; /* Only the chat area scrolls */
+      display:flex;flex-direction:column;gap:10px;
+      padding:15px 12px;
+      width:100%;background:none;scroll-behavior:smooth;margin:0;
+      /* FIX: Added top margin for two fixed headers */
+      margin-top: 110px; /* New Header (50px) + Chat Header (60px) */
+      /* FIX: Added bottom margin for fixed input bar + footer */
+      margin-bottom: 95px; /* Input Bar (~55px) + Footer (30px) + Gap (~10px) */
+    }
+    .message-row{display:flex;align-items:flex-end;width:100%;margin-bottom:0;z-index:1;}
+    .message-row.own{justify-content:flex-end;}
+    .message-bubble{
+      font-family:'Roboto',Arial,sans-serif;
+      background:#374151;
+      color:#e5e7eb;
+      padding:11px 16px;
+      border-radius:16px;
+      max-width:calc(75% - 20px);
+      word-break:break-word;position:relative;font-size:1rem;font-weight:400;
+      box-shadow:0 1px 4px rgba(0, 0, 0, 0.1);
+      border:none;
+      min-width:27px;letter-spacing:.01em;
+      transition:transform .15s, background .15s, box-shadow .15s;
+      animation:bubbleUp .22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor:pointer;z-index:10;display:flex;flex-direction:column;
+    }
+    .message-bubble:hover { box-shadow:0 2px 8px rgba(0, 0, 0, 0.2); }
+    .message-row.own .message-bubble{
+      background:#3b82f6;
+      color:#fff;
+      box-shadow:0 1px 4px rgba(59, 130, 246, 0.4);
+      align-self:flex-end;
+    }
+    .message-row.own .message-bubble:hover{ box-shadow:0 2px 8px rgba(59, 130, 246, 0.6); }
+    
+    .bubble-menu-btn{
+      background:none;border:none;outline:none;position:absolute;
+      top:4px;right:4px;font-size:1.16rem;color:#d1d5db;opacity:0.8;
+      cursor:pointer;border-radius:50%;width:28px;height:28px;
+      display:flex;align-items:center;justify-content:center;z-index:12;
+      transition:background .13s;
+    }
+    .bubble-menu-btn:hover, .bubble-menu-btn:focus{background:rgba(0, 0, 0, 0.2); color:#fff;}
+
+    .bubble-menu-pop{
+      position:absolute;top:4px;right:34px;
+      z-index:200;background:#1f2937;
+      border-radius:10px;
+      box-shadow:0 6px 20px rgba(0, 0, 0, 0.3);
+      border:1px solid #374151;
+      min-width:38px;display:flex;flex-direction:row;opacity:0;pointer-events:none;transform:translateX(0);transition:opacity 0.18s, transform 0.22s;
+      will-change:transform,opacity;
+    }
+    .bubble-menu-pop.menu-open {
+      opacity:1; pointer-events:auto; transform:translateX(-10px);
+    }
+    .bubble-menu-pop button{
+      background:none;border:none;color:#e5e7eb;padding:10px 14px;cursor:pointer;
+      font-size:1.1rem; border:none;transition:background .11s;
+    }
+    .bubble-menu-pop button:hover{background:#374151;}
+
+    .bubble-edit-input{
+        font-size:1rem;border-radius:8px;border:1px solid #3b82f6;
+        padding:7px 12px;background:#1f2937;color:#e4eaf0;
+        width:98%;margin-bottom:4px;font-family:inherit;font-weight:400;
+        outline: none;
+    }
+
+    .msg-meta-line {
+      display:flex; align-items:center; gap:6px; margin-top:4px;
+      align-self: flex-end;
+    }
+    .msg-timestamp {
+      font-size:.75rem;
+      color:#a0a0a8;
+      font-family:'Inter',sans-serif;
+      user-select:text;
+      opacity:.97;
+      order: 1;
+    }
+    .message-row.own .msg-timestamp { color: #d1e5ff; }
+    
+    .tick-ic{margin-left:7px;vertical-align:middle;width:14px;height:14px;display:inline-block;opacity:.9;}
+    .tick-ic svg{width:100%;height:100%;}
+    /* Single Tick (Sent) - light grey */
+    .tick-ic.gray svg{
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><path d="M6 12.6L9.4 16L16 8.6" fill="none" stroke="%239CA3AF" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>') center no-repeat;
+        background-size: cover;
+    }
+    /* Double Tick (Seen) - clean blue */
+    .tick-ic.blue svg{
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><path d="M4 13.8L7.6 17L13.9 9.6" fill="none" stroke="%2360A5FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.6 17.2L17.6 8.5" fill="none" stroke="%2360A5FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>') center no-repeat;
+        background-size: cover;
+    }
+
+    /* ----------------------------------
+     * INPUT BAR & TOAST STYLES
+     * ---------------------------------- */
+    .input-bar-gap{display: none;} /* Not needed now */
+    .input-bar{
+      /* FIX: Fixed Position and Width Calculation */
+      position: fixed; 
+      bottom: 30px; /* Above the footer */
+      left: 50%; /* Center the element */
+      transform: translateX(-50%); /* Pull back half its width */
+      width: 100%;
+      max-width:380px; /* Same as main-wrap */
+      display:flex;
+      padding:10px 12px;
+      background:#1d1d23;
+      gap:8px;align-items:center;z-index:111;
+      box-shadow:0 -4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .input-bar input[type="text"]{
+        flex:1;padding:12px 16px;border-radius:10px;border:none;
+        background:#282830;
+        color:#e5eef7;
+        font-size:1rem;
+        font-family: 'Roboto', sans-serif;
+        outline: none;
+        transition: box-shadow .2s;
+    }
+    .input-bar input[type="text"]:focus{
+        box-shadow: 0 0 0 2px #3b82f640;
+    }
+    .input-bar button{
+      background:#3b82f6;
+      color:#fff;
+      padding:12px 18px;
+      border:none;border-radius:10px;
+      font-weight:600;cursor:pointer;
+      font-size:1rem;
+      transition: background .2s, transform .1s;
+    }
+    .input-bar button:hover{background:#2563eb; transform: translateY(-1px);}
+    .input-bar-blocked{
+        flex:1;padding:12px 16px;border-radius:10px;border:none;
+        background:#282830;
+        color:#f87171;font-size:1rem;text-align:center;
+        pointer-events:none;font-weight:500;
+    }
+    .toast{position:fixed;bottom:105px;left:50%;transform:translateX(-50%);background:#10b981;color:white;padding:10px 20px;border-radius:8px;font-weight:600;display:none;z-index:110;box-shadow:0 4px 12px rgba(0, 0, 0, 0.2);}
+    .toast.err{background:#ef4444;}
+
+    /* ----------------------------------
+     * SHARKY CHAT FOOTER
+     * ---------------------------------- */
+    .sharky-footer {
+        /* FIX: Fixed Position and Width Calculation */
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 380px; /* Same as main-wrap */
+        height: 30px;
+        min-height: 30px;
+        background: #1d1d23; 
+        border-top: 1px solid #282830;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 120;
+        border-bottom-left-radius: 18px;
+        border-bottom-right-radius: 18px;
+    }
+    .sharky-footer span {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6b7280; 
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+    
+    /* ----------------------------------
+     * MEDIA QUERIES & ANIMATIONS
+     * ---------------------------------- */
+    @media (max-width:480px){
+      body { padding-top: 50px; }
+      .main-wrap{max-width:100vw; margin-top:0; border-radius: 0; height:100svh;}
+      .chat-box{padding:10px 8px; 
+        margin-top: 105px; /* New Header (50px) + Chat Header (55px) */
+        margin-bottom: 85px;
+      }
+      .input-bar{max-width:100vw; padding: 8px 10px;}
+      .sharky-footer{max-width:100vw; border-radius: 0;}
+      .chat-header-sticky { max-width: 100vw; }
+    }
+    @keyframes bubbleUp{
+        from{opacity:0;transform:translateY(10px) scale(0.95);}
+        to{opacity:1;transform:none;}
+    }
+  </style>
+</head>
+<body>
+  <header id="mainHeader">
+    <div class="header-inner">
+      <div class="logo-container" tabindex="0" aria-label="Sharky Chat Logo">
+        <img src="https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/gc-logo.png?alt=media&token=ddfe6e46-7351-4a07-8140-ea702b1bd823" alt="Sharky Logo" />
+        <div class="logo-text">SHARKY CHAT</div>
+      </div>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle menu">
+        ☰
+        <span class="notif-badge" id="menuNotif" style="display:none;">0</span>
+      </button>
+    </div>
+    <nav class="menu-dropdown" role="menu" aria-label="Main Navigation">
+      <button class="close-btn" aria-label="Close menu" title="Close menu" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <a href="profile.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="12" r="7"/><ellipse cx="16" cy="23.5" rx="12" ry="6.5"/></svg>
+        </span>
+        Profile
+      </a>
+      <a href="chatrooms.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="8" width="28" height="16" rx="5"/><rect x="12" y="6" width="8" height="4" rx="2"/><circle cx="7" cy="12" r="2"/><circle cx="25" cy="12" r="2"/></svg>
+        </span>
+        Chat Rooms
+      </a>
+      <a href="friends.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="12" r="5"/><circle cx="22" cy="12" r="5"/><ellipse cx="16" cy="23" rx="12" ry="6"/></svg>
+        </span>
+        Friends
+        <span id="friends-notif" class="notif-badge" style="display:none;">0</span>
+      </a>
+      <a href="add-friends.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="13" r="7"/><rect x="23" y="19" width="9" height="3" rx="1.5"/><rect x="26" y="16" width="3" height="9" rx="1.5"/></svg>
+        </span>
+        Add Friend
+      </a>
+      <a href="inbox.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="8" width="24" height="16" rx="4"/><polyline points="4,8 16,18 28,8" fill="none" stroke="#60a5fa" stroke-width="2"/></svg>
+        </span>
+        Messages
+        <span id="messages-notif" class="notif-badge" style="display:none;">0</span>
+      </a>
+      <a href="wallet.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="10" width="24" height="12" rx="3"/><ellipse cx="24" cy="16" rx="2" ry="2"/><rect x="6" y="13" width="20" height="4" rx="2"/><circle cx="17" cy="16" r="2" fill="#fff"/></svg>
+        </span>
+        Wallet
+      </a>
+      <a href="shop.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="13" width="20" height="9" rx="3"/><rect x="12" y="7" width="8" height="6" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><circle cx="10" cy="26" r="2"/><circle cx="22" cy="26" r="2"/></svg>
+        </span>
+        Shop
+      </a>
+      <a href="inventory.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="10" width="18" height="12" rx="3"/><rect x="11" y="6" width="10" height="4" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><path d="M7 22h18"/><circle cx="16" cy="18" r="2"/></svg>
+        </span>
+        Inventory
+      </a>
+      <a href="news.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="7" width="22" height="18" rx="4"/><rect x="9" y="11" width="14" height="2" rx="1"/><rect x="9" y="16" width="8" height="2" rx="1"/><circle cx="10" cy="21" r="2"/><rect x="14" y="20" width="7" height="2" rx="1"/></svg>
+        </span>
+        News
+      </a>
+      <a href="level.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 5v17" stroke="#6699ff" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="26" r="5" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><rect x="11" y="13" width="10" height="4" rx="2" fill="#bae6fd" /><rect x="13" y="8" width="6" height="3" rx="1.5" fill="#60a5fa"/></svg>
+        </span>
+        Level
+      </a>
+      <a href="refer.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="13" fill="#5eead4" /><path d="M22.5,14h-8.7l3-3m-2.8,8a3,3,0,1,0-3,-3" stroke="#262626" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        Refer A Friend
+      </a>
+      <a href="verify-email.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="8" width="22" height="16" rx="5"/><polyline points="5,8 16,18 27,8" fill="none" stroke="#2dd4bf" stroke-width="2"/><circle cx="16" cy="19" r="2.5"/></svg>
+        </span>
+        Email Verification
+      </a>
+      <a href="help.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="12" fill="none" stroke="#fbbf24" stroke-width="2"/><text x="16" y="20" text-anchor="middle" fill="#fbbf24" font-size="8" font-family="Orbitron">?</text></svg>
+        </span>
+        Help
+      </a>
+      <a href="social-media.html" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="12" r="3"/><circle cx="24" cy="12" r="3"/><circle cx="16" cy="22" r="3"/><line x1="8" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/><line x1="24" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/></svg>
+        </span>
+        Social Media
+      </a>
+      <a href="#" id="themeSwitch" role="menuitem" tabindex="0">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="12"/><path d="M16 4v8"/><circle cx="16" cy="16" r="5" fill="#fff"/></svg>
+        </span>
+        Change Theme
+      </a>
+    </nav>
+  </header>
+  
+  <div class="main-wrap">
+    <div class="chat-header-sticky">
+      <button class="back-btn" onclick="history.back()" title="Go back">
+        <svg class="back-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <img id="userPicSticky" class="chat-part-pic" src="" alt="user"/>
+      <div class="user-name-status-wrap">
+        <span class="chat-part-name" id="userNameSticky">Loading...</span>
+        <span id="userStatus" class="user-status gray">Checking...</span>
+      </div>
+      <button onclick="clearAllMessages()" class="header-action-btn" title="Clear all messages">🗑</button>
+      <button onclick="toggleBlock()" id="blockBtn" class="header-action-btn block-btn">Block</button>
+    </div>
+    
+    <div id="chatBox" class="chat-box"></div>
+    <div class="toast" id="toast"></div>
+
+    <div id="inputBar" class="input-bar">
+      <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off"/>
+      <button id="sendBtn" onclick="sendMessage()">Send</button>
+    </div>
+
+    <div class="sharky-footer">
+        <span>Sharky Chat</span>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, query, where, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Re-declare Firebase Config for module imports
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+      measurementId: "G-HT9T3P9KST",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const menuNotif = document.getElementById("menuNotif");
+    const friendsNotif = document.getElementById("friends-notif");
+    const messagesNotif = document.getElementById("messages-notif");
+
+    let myUsername = "";
+    let myUID = "";
+
+    function bumpBadge(el, number) {
+      if (!el) return;
+      el.style.animation = "";
+      setTimeout(() => {
+        el.style.animation = "notifpop .34s";
+      }, 25);
+    }
+    function bumpBadgeDropdown(el, number) {
+      if (!el) return;
+      el.style.animation = "";
+      setTimeout(() => {
+        el.style.animation = "notifpop .33s";
+      }, 30);
+    }
+
+    function setupMenuNotifications(uid, username) {
+      onSnapshot(
+        query(collection(db, "friendRequests"), where("to", "==", uid), where("status", "==", "pending")),
+        (snap) => {
+          const frCount = snap.size;
+          menuNotif.dataset.fr = frCount;
+          friendsNotif.textContent = frCount > 99 ? "99+" : frCount;
+          friendsNotif.style.display = frCount > 0 ? "inline-flex" : "none";
+          bumpBadgeDropdown(friendsNotif, frCount);
+          updateMenuBadge();
+        }
+      );
+    }
+
+    async function setupMessageNotifications(uid, username) {
+      // NOTE: Using getDocs initially for faster setup, then relying on onSnapshot for updates
+      const friendsSnap = await getDocs(query(collection(db, "friends"), where(uid, "!=", null)));
+      let myFriends = [];
+      friendsSnap.forEach((doc) => {
+        if (doc.id === uid && doc.data()) myFriends = Object.keys(doc.data());
+      });
+      
+      if (myFriends.length === 0) {
+        messagesNotif.style.display = "none";
+        updateMenuBadge();
+        return;
+      }
+      
+      let unseenTracker = {};
+      let usernamesData = {};
+      
+      let batchSize = 10;
+      for (let i = 0; i < myFriends.length; i += batchSize) {
+        let batch = myFriends.slice(i, i + batchSize);
+        const usersSnap = await getDocs(query(collection(db, "users"), where("__name__", "in", batch)));
+        usersSnap.forEach((doc) => {
+          usernamesData[doc.id] = doc.data().username;
+        });
+      }
+
+      for (const fid of myFriends) {
+        const friendUsername = usernamesData[fid];
+        if (!friendUsername || friendUsername === username) continue;
+        const chatId = [username, friendUsername].sort().join("_");
+        const msgRef = collection(db, "personalMessages", chatId, "messages");
+        
+        // Setup listener for unread messages from this specific friend
+        onSnapshot(
+          query(msgRef, where("recipient", "==", username), where("seen", "==", false)),
+          (snap) => {
+            let unseen = 0;
+            snap.forEach((doc) => {
+              if (doc.data().sender !== username) unseen++;
+            });
+            unseenTracker[chatId] = unseen;
+            updateMessagesBadge();
+          }
+        );
+      }
+
+      function updateMessagesBadge() {
+        let totalUnseen = Object.values(unseenTracker).reduce((a, b) => a + b, 0);
+        messagesNotif.dataset.count = totalUnseen;
+        messagesNotif.textContent = totalUnseen > 99 ? "99+" : totalUnseen;
+        messagesNotif.style.display = totalUnseen > 0 ? "inline-flex" : "none";
+        bumpBadge(messagesNotif, totalUnseen);
+        updateMenuBadge();
+      }
+    }
+
+    function updateMenuBadge() {
+      const frCount = parseInt(menuNotif.dataset.fr) || 0;
+      const msgCount = parseInt(messagesNotif.dataset.count) || 0;
+      const total = frCount + msgCount;
+      if (total > 0) {
+        menuNotif.textContent = total > 99 ? "99+" : total;
+        menuNotif.style.display = "inline-flex";
+        bumpBadge(menuNotif, total);
+      } else {
+        menuNotif.style.display = "none";
+      }
+    }
+    
+    // Menu toggle logic (Copied)
+    const mainHeader = document.getElementById("mainHeader");
+    const menuBtn = document.getElementById("menuBtn");
+    const closeBtn = document.querySelector(".menu-dropdown .close-btn");
+
+    menuBtn.addEventListener("click", (e) => {
+      mainHeader.classList.toggle("expanded");
+      e.stopPropagation();
+    });
+
+    closeBtn.addEventListener("click", (e) => {
+      mainHeader.classList.remove("expanded");
+      menuBtn.focus();
+      e.stopPropagation();
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!mainHeader.contains(e.target)) mainHeader.classList.remove("expanded");
+    });
+
+    document.querySelector(".menu-dropdown").addEventListener("click", (e) => {
+      if (e.target.tagName === "A") mainHeader.classList.remove("expanded");
+    });
+
+    const themeSwitch = document.getElementById("themeSwitch");
+    if (themeSwitch) {
+      themeSwitch.addEventListener("click", function () {
+        document.body.classList.toggle("light-theme");
+        const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
+        localStorage.setItem("theme", theme);
+        mainHeader.classList.remove("expanded");
+      });
+    }
+
+    // Auth state change listener for New Header Logic
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        // window.location.href = "login.html"; // Commented out to prevent redirect loop in static context
+        console.log("User not logged in. Notification listeners are skipped.");
+      } else {
+        myUID = user.uid;
+        // NOTE: Firestore `getDocs` uses `where('__name__', '==', myUID)` to fetch a single doc by UID,
+        // which is equivalent to `db.collection('users').doc(myUID).get()` in compat version.
+        try {
+          let snap = await getDocs(query(collection(db, "users"), where("__name__", "==", myUID)));
+          snap.forEach((docSnap) => {
+            myUsername = docSnap.data().username || "";
+          });
+          setupMenuNotifications(myUID, myUsername);
+          setupMessageNotifications(myUID, myUsername);
+        } catch (error) {
+           console.error("Error setting up new header notifications:", error);
+        }
+      }
+    });
+  </script>
+  
+  <script>
+    // ----------------------------------
+    // GENERAL UTILITIES
+    // ----------------------------------
+    function closeAllMsgMenus() {
+      document.querySelectorAll('.bubble-menu-pop').forEach(e=>{
+        e.style.opacity="0";
+        e.classList.remove("menu-open");
+        setTimeout(()=>{e.style.display="flex";}, 200); 
+      });
+    }
+    window.addEventListener('keydown', e=>{ if(e.key==="Escape") closeAllMsgMenus(); });
+    window.addEventListener('click', (e)=>{
+      if(!e.target.closest('.bubble-menu-pop') && !e.target.closest('.bubble-menu-btn')){
+        closeAllMsgMenus();
+      }
+    });
+    function showToast(msg, err) {
+      const t = document.getElementById("toast");
+      t.innerText = msg;
+      t.className = "toast" + (err ? " err" : "");
+      t.style.display = "block";
+      setTimeout(() => t.style.display = "none", 2100);
+    }
+
+    // ----------------------------------
+    // FIREBASE SETUP & INITIALIZATION (COMPAT VERSION)
+    // ----------------------------------
+    const firebaseConfigCompat = {
+      // NOTE: Replace this with your actual Firebase config
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+      measurementId: "G-HT9T3P9KST"
+    };
+    firebase.initializeApp(firebaseConfigCompat);
+
+    const authCompat = firebase.auth();
+    const dbCompat = firebase.firestore();
+    const otherUsername = new URLSearchParams(location.search).get("username");
+    let currentUsername = null, chatId = "", partnerPicUrl = "", partnerUID = "",
+        areFriends = false, partnerBlockedMe = false, iBlockedPartner = false;
+    const chatBox = document.getElementById("chatBox");
+    const stickyPic = document.getElementById("userPicSticky");
+    const stickyName = document.getElementById("userNameSticky");
+    const userStatus = document.getElementById("userStatus");
+    let blockBtn = document.getElementById("blockBtn");
+    let inputBar = document.getElementById("inputBar");
+    let partnerUIDLoaded = "";
+
+    // ----------------------------------
+    // 🔥 PRESENCE TRACKING FUNCTION (For use on ALL pages)
+    // ----------------------------------
+    function setupUserPresenceTracking(userUID) {
+        if (!userUID) return;
+        const userRef = dbCompat.collection("users").doc(userUID);
+        
+        const updatePresence = () => {
+             userRef.update({
+                active: true,
+                online: true,
+                lastActive: firebase.firestore.FieldValue.serverTimestamp(),
+                lastSeen: Date.now()
+            }).catch(e => console.error("Presence update failed:", e));
+        };
+        
+        updatePresence();
+
+        const presenceInterval = setInterval(updatePresence, 60000);
+
+        window.addEventListener('beforeunload', () => {
+            userRef.update({ active: false, online: false });
+        });
+        
+        authCompat.onAuthStateChanged(user => {
+            if (!user) clearInterval(presenceInterval);
+        });
+    }
+
+    function timeAgo(timestampMs) {
+        if (!timestampMs) return 'Unknown';
+        const now = Date.now();
+        const seconds = Math.floor((now - timestampMs) / 1000);
+
+        if (seconds < 60) return 'Active just now';
+        
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `Active ${minutes}m ago`;
+
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `Active ${hours}h ago`;
+
+        const days = Math.floor(hours / 24);
+        if (days < 7) return `Active ${days}d ago`;
+
+        const weeks = Math.floor(days / 7);
+        if (weeks < 4) return `Active ${weeks}w ago`;
+        
+        return 'Active long ago';
+    }
+
+    // ----------------------------------
+    // UI & FIREBASE LOGIC
+    // ----------------------------------
+    function updateInputBarState() {
+      if (partnerBlockedMe) {
+        inputBar.innerHTML = `<div class="input-bar-blocked">You are blocked and cannot message.</div>`;
+      } else if (iBlockedPartner) {
+        inputBar.innerHTML = `<div class="input-bar-blocked">You have blocked this user. Unblock to chat.</div>`;
+      } else if (!areFriends) {
+        inputBar.innerHTML = `<div class="input-bar-blocked">You can only chat with friends.</div>`;
+      } else {
+        inputBar.innerHTML = `
+          <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off"/>
+          <button id="sendBtn" onclick="sendMessage()">Send</button>
+        `;
+        document.getElementById("messageInput").addEventListener("keydown", function(e){
+          if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); sendMessage();}
+        });
+      }
+    }
+
+    async function checkBlockStates() {
+      if (!currentUsername || !otherUsername) return;
+      let myBlockSnap = await dbCompat.doc(`blocked/${currentUsername}/list/${otherUsername}`).get();
+      iBlockedPartner = myBlockSnap.exists;
+      let partnerBlockSnap = await dbCompat.doc(`blocked/${otherUsername}/list/${currentUsername}`).get();
+      partnerBlockedMe = partnerBlockSnap.exists;
+      blockBtn.innerText = iBlockedPartner ? "Unblock" : "Block";
+      updateInputBarState();
+    }
+
+    async function updateProfilePresenceSticky(uid) {
+      if (!uid) return;
+      let snap = await dbCompat.collection("users").doc(uid).get();
+      if(snap.exists) {
+        const data = snap.data();
+        const lastSeenMs = data.lastSeen;
+        const isActive = data.active;
+        
+        if (isActive) {
+            userStatus.className = "user-status green";
+            userStatus.textContent = "● Active Now";
+        } else if (lastSeenMs) {
+            userStatus.className = "user-status gray";
+            userStatus.textContent = timeAgo(lastSeenMs);
+        } else {
+            userStatus.className = "user-status gray";
+            userStatus.textContent = "Offline";
+        }
+      } else {
+        userStatus.className = "user-status gray";
+        userStatus.textContent = "Offline";
+      }
+    }
+
+    authCompat.onAuthStateChanged(async function(user) {
+      if (!user) return console.log("User not logged in in compat script. Chat logic skipped.");
+
+      setupUserPresenceTracking(user.uid);
+
+      const userDoc = await dbCompat.collection("users").doc(user.uid).get();
+      currentUsername = userDoc.data().username;
+
+      const otherQ = dbCompat.collection("users").where("username", "==", otherUsername);
+      const otherSnap = await otherQ.get();
+      if (otherSnap.empty) { showToast("User not found", 1); return; }
+      const partner = otherSnap.docs[0].data();
+      partnerPicUrl = partner.profilePic || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+      partnerUID = partner.uid;
+      partnerUIDLoaded = partner.uid;
+      stickyPic.src = partnerPicUrl;
+      stickyPic.onload = function(){ stickyPic.style.objectFit="cover";stickyPic.style.borderRadius="50%";};
+      stickyPic.onerror = function(){ stickyPic.src = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; };
+      stickyName.textContent = partner.username;
+
+      updateProfilePresenceSticky(partner.uid);
+      setInterval(()=>updateProfilePresenceSticky(partnerUIDLoaded), 12000);
+
+      const friendsDoc = await dbCompat.collection("friends").doc(user.uid).get();
+      areFriends = friendsDoc.exists && friendsDoc.data() && friendsDoc.data()[partnerUID];
+
+      chatId = [currentUsername, otherUsername].sort().join("_");
+      await checkBlockStates();
+      loadMessages();
+
+      dbCompat.doc(`blocked/${currentUsername}/list/${otherUsername}`).onSnapshot(()=>checkBlockStates());
+      dbCompat.doc(`blocked/${otherUsername}/list/${currentUsername}`).onSnapshot(()=>checkBlockStates());
+
+      const msgCol = dbCompat.collection("personalMessages").doc(chatId).collection("messages");
+      msgCol.orderBy("timestamp").limitToLast(40).onSnapshot(async snapshot => {
+        snapshot.docs.forEach(async docSnap => {
+          const m = docSnap.data();
+          if (m.recipient === currentUsername && !m.seen) {
+            await docSnap.ref.update({ seen: true });
+          }
+        });
+      });
+    });
+
+    // ----------------------------------
+    // MESSAGE RENDERING AND ACTIONS
+    // ----------------------------------
+    function formatDateTimeForMsg(ts) {
+      let d = ts.seconds ? new Date(ts.seconds*1000) : (typeof ts==="object"&&ts.toDate?ts.toDate():new Date(ts));
+      let h = d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+      return {h, dt: d.toLocaleDateString([], {year:"2-digit",month:"short",day:"numeric"})};
+    }
+
+    let sending = false;
+    window.sendMessage = async () => {
+      const input = document.getElementById("messageInput");
+      if (!input) { showToast('Input field not available.', 1); return; }
+      
+      if (partnerBlockedMe || iBlockedPartner || !areFriends) {
+         showToast(partnerBlockedMe ? 'You are blocked.' : iBlockedPartner ? 'Unblock to send messages.' : 'You can only message friends.', 1);
+         return;
+      }
+      
+      const text = input.value.trim();
+      if (!text || sending) return;
+      
+      sending = true;
+      input.value = "";
+      try {
+        const msgCol = dbCompat.collection(`personalMessages`).doc(chatId).collection('messages');
+        
+        const snap = await msgCol.orderBy("timestamp").get();
+        if (snap.size >= 40) {
+          let extra = snap.size - 39;
+          let dels = snap.docs.slice(0, extra);
+          const deleteBatch = dbCompat.batch();
+          dels.forEach(d => deleteBatch.delete(d.ref));
+          await deleteBatch.commit();
+        }
+        
+        await msgCol.add({
+          sender: currentUsername,
+          recipient: otherUsername,
+          type: "text",
+          text,
+          seen: false,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          edited: false
+        });
+      } catch (e) { showToast("❌ Send failed",1); }
+      sending = false;
+    };
+
+    let lastMsgStates = {};
+    function addMessageToUI(m, docRef, idx,lastIdx) {
+      const isOwn = m.sender === currentUsername;
+      const msgRow = document.createElement("div");
+      msgRow.className = "message-row" + (isOwn ? " own" : "");
+      const bubble = document.createElement("div");
+      bubble.className = "message-bubble";
+      
+      if (isOwn) {
+        const btn = document.createElement("button");
+        btn.className = "bubble-menu-btn";
+        btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
+        </svg>`;
+        const menuPopup = document.createElement("div");
+        menuPopup.className = "bubble-menu-pop";
+        const bEdit = document.createElement("button");
+        bEdit.innerHTML = '✏️';
+        bEdit.title = "Edit";
+        bEdit.onclick = function(e){ e.stopPropagation(); closeAllMsgMenus(); startEditMessage(docRef); };
+        const bDel = document.createElement("button");
+        bDel.innerHTML = '🗑️';
+        bDel.title = "Delete";
+        bDel.onclick = function(e){ e.stopPropagation(); closeAllMsgMenus(); deleteMessage(docRef); };
+        menuPopup.appendChild(bEdit); menuPopup.appendChild(bDel);
+        bubble.appendChild(btn); bubble.appendChild(menuPopup);
+
+        btn.addEventListener('click', function(e){
+          e.stopPropagation();
+          document.querySelectorAll('.bubble-menu-pop.menu-open').forEach(pp=>{
+            if(pp!==menuPopup){ pp.classList.remove('menu-open'); pp.style.opacity="0"; }
+          });
+          if(menuPopup.classList.contains('menu-open')){
+            menuPopup.classList.remove('menu-open');
+            menuPopup.style.opacity="0";
+          } else {
+            menuPopup.style.display = "flex";
+            setTimeout(()=>{ menuPopup.classList.add("menu-open"); menuPopup.style.opacity="1"; }, 1);
+          }
+        });
+      }
+      
+      if (isOwn && m.editing) {
+        const input = document.createElement("input");
+        input.className = "bubble-edit-input";
+        input.value = m.text;
+        input.onkeydown = function(e){
+          if(e.key==="Enter") confirmEditMessage(docRef, input.value);
+          if(e.key==="Escape") cancelEditMessage(docRef);
+        };
+        bubble.appendChild(input);
+        setTimeout(()=>input.focus(),30);
+      } else {
+        bubble.appendChild(document.createTextNode(m.text || ""));
+      }
+      
+      let metaRow = document.createElement("div");
+      metaRow.className = "msg-meta-line";
+      const ts = m.timestamp ? formatDateTimeForMsg(m.timestamp) : {h:"",dt:""};
+      const tspan = document.createElement("span");
+      tspan.className = "msg-timestamp";
+      tspan.textContent = ts.h;
+      metaRow.appendChild(tspan);
+      
+      if (isOwn) {
+        let tickSpan = document.createElement("span");
+        tickSpan.className = "tick-ic";
+        tickSpan.innerHTML = `<span><svg></svg></span>`; 
+        
+        if (m.seen) {
+          tickSpan.classList.add("blue");
+        } else {
+          tickSpan.classList.add("gray");
+        }
+
+        if (m.__justSeen) { tickSpan.classList.add("pop"); }
+
+        metaRow.appendChild(tickSpan);
+      }
+      
+      bubble.appendChild(metaRow);
+      msgRow.appendChild(bubble);
+      chatBox.appendChild(msgRow);
+      
+      // FIX: Scroll the chatBox itself
+      if(idx === lastIdx || isOwn) {
+          setTimeout(()=>chatBox.scrollTop = chatBox.scrollHeight, 40);
+      }
+    }
+
+    function loadMessages() {
+      if(!chatId) return;
+      const msgCol = dbCompat.collection(`personalMessages`).doc(chatId).collection("messages");
+      msgCol.orderBy("timestamp").limitToLast(40).onSnapshot(
+        function(snapshot) {
+          chatBox.innerHTML = "";
+          const docs = snapshot.docs;
+          docs.forEach((docSnap, idx) => {
+            const m = docSnap.data();
+            let msgId = docSnap.id;
+            let oldState = lastMsgStates[msgId];
+            let state = { seen: m.seen };
+            
+            if (m.seen && oldState && !oldState.seen) {
+              m.__justSeen = true;
+              setTimeout(()=>{ m.__justSeen = false; }, 400);
+            }
+            
+            addMessageToUI(m, docSnap.ref, idx, docs.length-1);
+            lastMsgStates[msgId] = state;
+          });
+        }
+      );
+    }
+    
+    function startEditMessage(ref) { ref.update({editing:true}); }
+    function cancelEditMessage(ref) { ref.update({editing:false}); }
+    function confirmEditMessage(ref, text) {
+      ref.update({text, editing:false, edited:true });
+      showToast("Message updated");
+    }
+    function deleteMessage(ref) {
+      ref.delete();
+      showToast("Deleted");
+    }
+    
+    window.toggleBlock = async () => {
+      if (!currentUsername || !otherUsername) return showToast("Cannot block/unblock yet, loading...", 1);
+      const blockRef = dbCompat.doc(`blocked/${currentUsername}/list/${otherUsername}`);
+      const snap = await blockRef.get();
+      if (snap.exists) {
+        await blockRef.delete();
+        showToast("User unblocked");
+      } else {
+        await blockRef.set({ user: otherUsername, timestamp:firebase.firestore.FieldValue.serverTimestamp() });
+        showToast("User blocked");
+      }
+    };
+    
+    window.clearAllMessages = async () => {
+      if (!chatId) return;
+      if (!confirm("Are you sure you want to delete all messages from this chat? This cannot be undone.")) return;
+
+      const msgCol = dbCompat.collection("personalMessages").doc(chatId).collection("messages");
+      const snapshot = await msgCol.get();
+      
+      const batch = dbCompat.batch();
+      snapshot.docs.forEach(docSnap => {
+        batch.delete(docSnap.ref);
+      });
+      await batch.commit();
+      
+      showToast("All messages cleared");
+    };
+  </script>
+</body>
+</html>
