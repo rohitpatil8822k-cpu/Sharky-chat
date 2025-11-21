@@ -4,42 +4,49 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
   
-  <title>Sharky Chat – Real-time Chat, Games & Friends | Dive In</title>
-  <meta name="description" content="Join Sharky Chat for fun real-time chatrooms, new friends, and live games. Safe, creative & secure conversation for everyone. Start chatting now on any device!" />
-  <meta name="keywords" content="chat, sharky, sharky chat, sharkychat, sharky chat.com, sharky world, team sharky, chatroom, real-time, games, friends, social, online, fun, safe" />
+  <title>Sharky Chat | Free Live Chat Rooms, Dating, & Talk to Strangers Online</title>
+  
+  <meta name="description" content="Dive into Sharky Chat: the #1 platform for live chat rooms, meeting strangers, dating, and making new friends worldwide. Secure, real-time, and fun conversation on all devices. Start chatting now!" />
+  
+  <meta name="keywords" content="Sharky chat, sharkychat, chat rooms, chatroom, live chat, strangers chat, talk to strangers, dating app, online dating, meet people, chat app, team sharky, social network, free chat, real-time chat, fun" />
+  
   <meta name="author" content="Sharky Chat Team" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://sharkychat.com/" />
 
-  <!-- Favicon links updated for GitHub upload -->
-  <link rel="icon" href="/logo.png" type="image/png" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="/logo.png" />
   <meta name="theme-color" content="#0d1a2a" />
   <link rel="manifest" href="/manifest.json" />
 
-  <meta property="og:title" content="Sharky Chat – Real-time Chat, Games & Friends" />
-  <meta property="og:description" content="Dive into Sharky Chat’s live chatrooms. Meet people, chat, enjoy multiplayer games, and make new friends. Fun & secure conversations on all devices!" />
+  <meta property="og:title" content="Sharky Chat | Live Chat Rooms, Dating, & Talk to Strangers" />
+  <meta property="og:description" content="Join Sharky Chat’s live chat rooms to meet strangers, find dates, and connect with people globally. Secure, fun, and easy to use on mobile and desktop." />
   <meta property="og:image" content="https://sharkychat.com/logo.png" />
   <meta property="og:url" content="https://sharkychat.com/" />
   <meta property="og:type" content="website" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Sharky Chat – Real-time Chat & Games" />
-  <meta name="twitter:description" content="Play, chat, and make new friends on Sharky Chat. Join open chatrooms and multiplayer games now!" />
+  <meta name="twitter:title" content="Sharky Chat | Talk to Strangers & Date Online" />
+  <meta name="twitter:description" content="The best place for real-time chat, meeting new friends, and discovering online dates. Dive into Sharky Chat now!" />
   <meta name="twitter:image" content="https://sharkychat.com/logo.png" />
 
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": "WebSite",
       "name": "Sharky Chat",
       "url": "https://sharkychat.com",
-      "logo": "https://sharkychat.com/logo.png",
-      "description": "Real-time chatrooms, games, and friends. Fun and secure chatting experience for everyone. Accessible on mobile and desktop.",
-      "sameAs": [
-        "https://sharkychat.com/"
-      ]
+      "description": "A real-time chatroom and social networking website for meeting strangers, dating, and engaging in fun online conversations.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://sharkychat.com/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      },
+      "logo": "https://sharkychat.com/logo.png"
     }
   </script>
 
@@ -183,10 +190,10 @@
   <nav aria-label="Main site navigation"></nav>
   <main class="container" role="main" aria-label="Welcome message and redirect notice">
     <h1>Welcome to Sharky Chat</h1>
-    <p class="tagline">Login and enjoy a world of fun conversations</p>
+    <p class="tagline">Dive into free live chat rooms, meet strangers, and find dates online.</p>
     <p id="redirectMsg" aria-live="polite">Redirecting to login page in 10s...</p>
     <section style="display:none;">
-      Sharky Chat is a secure real-time chatroom website that offers multiplayer games and open chatrooms for making new friends, social fun, and entertainment. Accessible on laptop, iOS, and Android.
+      Sharky Chat is a secure real-time chatroom website that offers multiplayer games, open chatrooms, and opportunities for dating, social fun, and entertainment by connecting you with strangers worldwide. Accessible on laptop, iOS, and Android.
     </section>
   </main>
   <footer style="display: none;">
@@ -204,14 +211,15 @@
       if(timeLeft >= 0){ msg.textContent = `Redirecting to login page in ${timeLeft}s...`; }
       if (timeLeft <= 0) {
         clearInterval(timer);
-        window.location.href = "/profile.html";
+     window.location.href = "profile.html"; 
       }
     }, 1000);
     const bubblesContainer = document.getElementById('clickBubbles');
     document.addEventListener('click', (e) => {
       const bubble = document.createElement('div');
       bubble.className = 'click-bubble';
-      bubble.style.left = (e.clientX - 14) + 'px';
+      bubble.style.left = (e.clientX - 14)
+ + 'px';
       bubble.style.top = (e.clientY - 14) + 'px';
       bubblesContainer.appendChild(bubble);
       bubble.addEventListener('animationend', () => { bubble.remove(); });
