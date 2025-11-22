@@ -477,6 +477,14 @@
         font-size: 0.75rem;
       }
     }
+    /* ADDED STYLES FOR AD CONTAINER */
+    .ad-banner-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      max-width: 960px;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -515,6 +523,19 @@
       <a href="#" id="themeSwitch" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12"/><path d="M16 4v8"/><circle cx="16" cy="16" r="5" fill="#fff"/></svg></span>Change Theme</a>
     </nav>
   </header>
+
+<div class="ad-banner-container">
+    <script type="text/javascript">
+        atOptions = {
+            'key' : '6e8f26946b72e000fd5de12a16765f8d',
+            'format' : 'iframe',
+            'height' : 90,
+            'width' : 728,
+            'params' : {}
+        };
+    </script>
+    <script type="text/javascript" src="//charmingpoliteinjunction.com/6e8f26946b72e000fd5de12a16765f8d/invoke.js"></script>
+</div>
 <main>
   <div class="search-box">
     <input
@@ -550,6 +571,10 @@
     getDocs,
     query,
     where,
+    doc,
+    updateDoc,
+    setDoc,
+    serverTimestamp,
   } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -687,6 +712,39 @@
     }
   }
 
+  // --- ACTIVE USER PRESENCE LOGIC START ---
+  const userRef = (uid) => doc(db, "users", uid);
+
+  async function updatePresence(uid, active) {
+    if (!uid) return;
+    const updateData = {
+        active: active,
+        lastActive: serverTimestamp() 
+    };
+    try {
+        await updateDoc(userRef(uid), updateData);
+    } catch (error) {
+        if (error.code === 'not-found') {
+            await setDoc(userRef(uid), updateData, { merge: true });
+        }
+        console.error("Error updating presence:", error.message);
+    }
+  }
+
+  function setupPresenceListeners(uid) {
+      if (!uid) return;
+      updatePresence(uid, true); 
+
+      const setInactive = () => updatePresence(uid, false);
+      
+      window.addEventListener('beforeunload', setInactive);
+      window.addEventListener('blur', () => updatePresence(uid, false));
+      window.addEventListener('focus', () => updatePresence(uid, true));
+      
+      setInterval(() => updatePresence(uid, true), 60000); 
+  }
+  // --- ACTIVE USER PRESENCE LOGIC END ---
+
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       alert("Please login first.");
@@ -700,6 +758,8 @@
       });
       setupMenuNotifications(user.uid, myUsername);
       setupMessageNotifications(user.uid, myUsername);
+      // CALL PRESENCE LISTENER
+      setupPresenceListeners(user.uid); 
     }
   });
 
@@ -829,5 +889,10 @@
 
   window.addEventListener("DOMContentLoaded", renderAllUsersGrid);
 </script>
+
+<script type='text/javascript' src='//charmingpoliteinjunction.com/8c/81/93/8c81935dba237bd524ee7b49d4d6398a.js'></script>
+
+<script type='text/javascript' src='//charmingpoliteinjunction.com/22/49/48/224948d8c4149a4d7c99d4253beac6ed.js'></script>
+
 </body>
 </html>
