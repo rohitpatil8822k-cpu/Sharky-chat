@@ -413,6 +413,54 @@
       opacity: 1;
       pointer-events: auto;
     }
+
+    /* Ad Popup Style */
+    #ad-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 300px;
+      padding: 20px;
+      background: #3a3a3a;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      text-align: center;
+      z-index: 5000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    #ad-popup.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    #ad-popup h3 {
+      font-family: 'Orbitron', sans-serif;
+      color: #fbbf24;
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+    #ad-popup p {
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+    #ad-popup button {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+    #ad-popup button:hover {
+      background: #4338ca;
+    }
+
+
     @media (max-width: 600px) {
       main { padding: 0 8px 18vw 8px; max-width: 100vw; font-size: 1rem; }
       .inv-items { gap: 12px; grid-template-columns: repeat(3, 1fr);}
@@ -430,7 +478,94 @@
       50% { transform: scale(1.3); }
       100% { transform: scale(1); }
     }
+
+    /* Light Theme CSS */
+    .light-theme {
+        background: #f4f4f4 !important;
+        color: #333 !important;
+    }
+    .light-theme header {
+        background: #ffffff !important;
+        box-shadow: 0 2px 17px #cccccc90 !important;
+        color: #333 !important;
+    }
+    .light-theme .logo-text {
+        color: #444 !important;
+        text-shadow: 0 0 5px #aaa8 !important;
+    }
+    .light-theme .menu-btn {
+        color: #333 !important;
+    }
+    .light-theme .menu-btn:active {
+        background: #eee !important;
+    }
+    .light-theme .menu-dropdown {
+        background: rgba(255, 255, 255, 0.97) !important;
+        box-shadow: -4px 0 26px rgba(0, 0, 0, 0.2) !important;
+        color: #333 !important;
+    }
+    .light-theme .menu-dropdown a {
+        color: #444 !important;
+        border-bottom: 2px solid #e0e0e0 !important;
+    }
+    .light-theme .menu-dropdown a:hover, .light-theme .menu-dropdown a:focus {
+        background: #f0f0f0 !important;
+        color: #000 !important;
+    }
+    .light-theme .menu-dropdown a:active {
+        background: #ddd !important;
+        color: #fbbf24 !important;
+    }
+    .light-theme .menu-dropdown a .icon {
+        fill: #444 !important;
+        filter: drop-shadow(0 1px 6px #4446) !important;
+    }
+    .light-theme .menu-dropdown a:hover .icon, .light-theme .menu-dropdown a:focus .icon {
+        fill: #000 !important;
+    }
+    .light-theme .page-title {
+        color: #4b5563 !important;
+        text-shadow: 0 2px 10px rgba(100, 100, 100, 0.2) !important;
+    }
+    .light-theme .inv-category-title {
+        color: #6b7280 !important;
+        text-shadow: 0 1px 10px rgba(150, 150, 150, 0.6) !important;
+    }
+    .light-theme .item-card {
+        background: #ffffff !important;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+    .light-theme .item-card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+    }
+    .light-theme .item-card img {
+        box-shadow: 0 2px 12px rgba(110, 110, 110, 0.2) !important;
+        background: #eee !important;
+    }
+    .light-theme .item-card .item-name {
+        color: #333 !important;
+        text-shadow: none !important;
+    }
+    .light-theme .equip-status {
+        color: #6b7280 !important;
+        text-shadow: none !important;
+    }
+    .light-theme .popup,
+    .light-theme #ad-popup {
+        background: #4b5563 !important;
+        color: #fff !important;
+    }
+    .light-theme #ad-popup h3 {
+        color: #fbbf24;
+    }
+    .light-theme #ad-popup button {
+        background: #3b82f6;
+    }
+    .light-theme #ad-popup button:hover {
+        background: #2563eb;
+    }
   </style>
+  <style id="lightThemeStyle"></style>
 </head>
 <body>
 
@@ -440,7 +575,7 @@
         <img src="https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/gc-logo.png?alt=media&token=ddfe6e46-7351-4a07-8140-ea702b1bd823" alt="Sharky Logo" />
         <div class="logo-text">SHARKY CHAT</div>
       </div>
-      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle menu">
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle menu" aria-expanded="false">
         ☰
         <span class="notif-badge" id="menuNotif" style="display:none;">0</span>
       </button>
@@ -448,69 +583,69 @@
     <nav class="menu-dropdown" role="menu" aria-label="Main Navigation">
       <button class="close-btn" aria-label="Close menu" title="Close menu" type="button">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
+          <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
       <a href="profile.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="12" r="7"/><ellipse cx="16" cy="23.5" rx="12" ry="6.5"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="12" r="7" fill="currentColor"/><ellipse cx="16" cy="23.5" rx="12" ry="6.5" fill="currentColor"/></svg>
         </span>
         Profile
       </a>
       <a href="chatrooms.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="8" width="28" height="16" rx="5"/><rect x="12" y="6" width="8" height="4" rx="2"/><circle cx="7" cy="12" r="2"/><circle cx="25" cy="12" r="2"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="8" width="28" height="16" rx="5" fill="currentColor"/><rect x="12" y="6" width="8" height="4" rx="2" fill="currentColor"/><circle cx="7" cy="12" r="2" fill="currentColor"/><circle cx="25" cy="12" r="2" fill="currentColor"/></svg>
         </span>
         Chat Rooms
       </a>
       <a href="friends.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="12" r="5"/><circle cx="22" cy="12" r="5"/><ellipse cx="16" cy="23" rx="12" ry="6"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="12" r="5" fill="currentColor"/><circle cx="22" cy="12" r="5" fill="currentColor"/><ellipse cx="16" cy="23" rx="12" ry="6" fill="currentColor"/></svg>
         </span>
         Friends
         <span id="friends-notif" class="notif-badge" style="display:none;">0</span>
       </a>
       <a href="add-friends.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="13" r="7"/><rect x="23" y="19" width="9" height="3" rx="1.5"/><rect x="26" y="16" width="3" height="9" rx="1.5"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="13" r="7" fill="currentColor"/><rect x="23" y="19" width="9" height="3" rx="1.5" fill="currentColor"/><rect x="26" y="16" width="3" height="9" rx="1.5" fill="currentColor"/></svg>
         </span>
         Add Friend
       </a>
       <a href="inbox.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="8" width="24" height="16" rx="4"/><polyline points="4,8 16,18 28,8" fill="none" stroke="#60a5fa" stroke-width="2"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="8" width="24" height="16" rx="4" fill="currentColor"/><polyline points="4,8 16,18 28,8" fill="none" stroke="#60a5fa" stroke-width="2"/></svg>
         </span>
         Messages
         <span id="messages-notif" class="notif-badge" style="display:none;">0</span>
       </a>
       <a href="wallet.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="10" width="24" height="12" rx="3"/><ellipse cx="24" cy="16" rx="2" ry="2"/><rect x="6" y="13" width="20" height="4" rx="2"/><circle cx="17" cy="16" r="2" fill="#fff"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="10" width="24" height="12" rx="3" fill="currentColor"/><ellipse cx="24" cy="16" rx="2" ry="2" fill="currentColor"/><rect x="6" y="13" width="20" height="4" rx="2" fill="#fff"/><circle cx="17" cy="16" r="2" fill="currentColor"/></svg>
         </span>
         Wallet
       </a>
       <a href="shop.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="13" width="20" height="9" rx="3"/><rect x="12" y="7" width="8" height="6" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><circle cx="10" cy="26" r="2"/><circle cx="22" cy="26" r="2"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="13" width="20" height="9" rx="3" fill="currentColor"/><rect x="12" y="7" width="8" height="6" rx="2" fill="currentColor"/><rect x="13" y="22" width="6" height="4" rx="2" fill="currentColor"/><circle cx="10" cy="26" r="2" fill="currentColor"/><circle cx="22" cy="26" r="2" fill="currentColor"/></svg>
         </span>
         Shop
       </a>
       <a href="inventory.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="10" width="18" height="12" rx="3"/><rect x="11" y="6" width="10" height="4" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><path d="M7 22h18"/><circle cx="16" cy="18" r="2"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="10" width="18" height="12" rx="3" fill="currentColor"/><rect x="11" y="6" width="10" height="4" rx="2" fill="currentColor"/><rect x="13" y="22" width="6" height="4" rx="2" fill="currentColor"/><path d="M7 22h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="18" r="2" fill="currentColor"/></svg>
         </span>
         Inventory
       </a>
       <a href="news.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="7" width="22" height="18" rx="4"/><rect x="9" y="11" width="14" height="2" rx="1"/><rect x="9" y="16" width="8" height="2" rx="1"/><circle cx="10" cy="21" r="2"/><rect x="14" y="20" width="7" height="2" rx="1"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="7" width="22" height="18" rx="4" fill="currentColor"/><rect x="9" y="11" width="14" height="2" rx="1" fill="#fff"/><rect x="9" y="16" width="8" height="2" rx="1" fill="#fff"/><circle cx="10" cy="21" r="2" fill="#fff"/><rect x="14" y="20" width="7" height="2" rx="1" fill="#fff"/></svg>
         </span>
         News
       </a>
       <a href="level.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 5v17" stroke="#6699ff" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="26" r="5" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><rect x="11" y="13" width="10" height="4" rx="2" fill="#bae6fd" /><rect x="13" y="8" width="6" height="3" rx="1.5" fill="#60a5fa"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 5v17" stroke="#6699ff" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="16" cy="26" r="5" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><rect x="11" y="13" width="10" height="4" rx="2" fill="#bae6fd" /><rect x="13" y="8" width="6" height="3" rx="1.5" fill="#60a5fa"/></svg>
         </span>
         Level
       </a>
@@ -522,7 +657,7 @@
       </a>
       <a href="verify-email.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="8" width="22" height="16" rx="5"/><polyline points="5,8 16,18 27,8" fill="none" stroke="#2dd4bf" stroke-width="2"/><circle cx="16" cy="19" r="2.5"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="8" width="22" height="16" rx="5" fill="currentColor"/><polyline points="5,8 16,18 27,8" fill="none" stroke="#2dd4bf" stroke-width="2"/><circle cx="16" cy="19" r="2.5" fill="#2dd4bf"/></svg>
         </span>
         Email Verification
       </a>
@@ -534,13 +669,13 @@
       </a>
       <a href="social-media.html" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="12" r="3"/><circle cx="24" cy="12" r="3"/><circle cx="16" cy="22" r="3"/><line x1="8" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/><line x1="24" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="12" r="3" fill="currentColor"/><circle cx="24" cy="12" r="3" fill="currentColor"/><circle cx="16" cy="22" r="3" fill="currentColor"/><line x1="8" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/></svg>
         </span>
         Social Media
       </a>
       <a href="#" id="themeSwitch" role="menuitem" tabindex="0">
         <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="12"/><path d="M16 4v8"/><circle cx="16" cy="16" r="5" fill="#fff"/></svg>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="12" fill="currentColor"/><path d="M16 4v8" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="5" fill="#fff"/></svg>
         </span>
         Change Theme
       </a>
@@ -558,12 +693,19 @@
       <div class="inv-items" id="invBadges"></div>
     </div>
   </main>
+  
   <div id="popup" class="popup">Item Equipped</div>
+  
+  <div id="ad-popup">
+    <h3>Sponsored Content</h3>
+    <p id="ad-text">Get 5000 Coins FREE! Click here to claim your reward.</p>
+    <button id="close-ad-btn">Close Ad</button>
+  </div>
 
   <script type="module">
     import {initializeApp} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import {getAuth,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import {getFirestore,doc,onSnapshot,setDoc,collection,query,where,getDocs} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import {getFirestore,doc,onSnapshot,setDoc,collection,query,where,getDocs, updateDoc, serverTimestamp} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
@@ -749,9 +891,13 @@
       container.innerHTML = "";
       const itemsList = itemsMeta[category];
       for (const id in itemsList) {
+        // Only render items present in the user's inventory
         if(inventory[id]){
           container.appendChild(createItemCard(itemsList[id], category));
         }
+      }
+      if(container.children.length === 0){
+        container.innerHTML = `<p style="text-align:center; color:#6b7280; font-size:0.95rem; margin:15px 0;">No items found in this category.</p>`;
       }
     }
 
@@ -778,6 +924,7 @@
     let myUID = "";
 
     function setupMenuNotifications(uid, username) {
+      // Friend Requests
       onSnapshot(
         query(collection(db, "friendRequests"), where("to", "==", uid), where("status", "==", "pending")),
         (snap) => {
@@ -792,53 +939,58 @@
     }
 
     async function setupMessageNotifications(uid, username) {
-      const friendsSnap = await getDocs(collection(db, "friends"));
-      let myFriends = [];
-      friendsSnap.forEach((doc) => {
-        if (doc.id === uid && doc.data()) myFriends = Object.keys(doc.data());
-      });
-      if (myFriends.length === 0) {
-        messagesNotif.style.display = "none";
-        updateMenuBadge();
-        return;
-      }
-      let unseenTracker = {};
-      let usernamesData = {};
-      let batchSize = 10;
+      try {
+          const friendsDoc = await getDocs(doc(db, "friends", uid));
+          let myFriends = friendsDoc.exists() ? Object.keys(friendsDoc.data()) : [];
 
-      for (let i = 0; i < myFriends.length; i += batchSize) {
-        let batch = myFriends.slice(i, i + batchSize);
-        const usersSnap = await getDocs(query(collection(db, "users"), where("__name__", "in", batch)));
-        usersSnap.forEach((doc) => {
-          usernamesData[doc.id] = doc.data().username;
-        });
-      }
-
-      for (const fid of myFriends) {
-        const friendUsername = usernamesData[fid];
-        if (!friendUsername || friendUsername === username) continue;
-        const chatId = [username, friendUsername].sort().join("_");
-        const msgRef = collection(db, "personalMessages", chatId, "messages");
-        onSnapshot(
-          query(msgRef, where("recipient", "==", username), where("seen", "==", false)),
-          (snap) => {
-            let unseen = 0;
-            snap.forEach((doc) => {
-              if (doc.data().sender !== username) unseen++;
-            });
-            unseenTracker[chatId] = unseen;
-            updateMessagesBadge();
+          if (myFriends.length === 0) {
+            messagesNotif.style.display = "none";
+            updateMenuBadge();
+            return;
           }
-        );
-      }
+          let unseenTracker = {};
+          let usernamesData = {};
+          let batchSize = 10;
+          let myFriendsClean = myFriends.filter(id => id.length > 0);
 
-      function updateMessagesBadge() {
-        let totalUnseen = Object.values(unseenTracker).reduce((a, b) => a + b, 0);
-        messagesNotif.dataset.count = totalUnseen;
-        messagesNotif.textContent = totalUnseen > 99 ? "99+" : totalUnseen;
-        messagesNotif.style.display = totalUnseen > 0 ? "inline-flex" : "none";
-        bumpBadge(messagesNotif);
-        updateMenuBadge();
+          // Fetch usernames in batches
+          for (let i = 0; i < myFriendsClean.length; i += batchSize) {
+            let batch = myFriendsClean.slice(i, i + batchSize);
+            const usersSnap = await getDocs(query(collection(db, "users"), where("__name__", "in", batch)));
+            usersSnap.forEach((doc) => {
+              usernamesData[doc.id] = doc.data()?.username || '';
+            });
+          }
+
+          for (const fid of myFriendsClean) {
+            const friendUsername = usernamesData[fid];
+            if (!friendUsername || friendUsername === username) continue;
+            const chatId = [username, friendUsername].sort().join("_");
+            const msgRef = collection(db, "personalMessages", chatId, "messages");
+            
+            // Listen for unseen messages for each friend chat
+            onSnapshot(
+              query(msgRef, where("recipient", "==", username), where("seen", "==", false)),
+              (snap) => {
+                let unseen = snap.docs.filter(doc => doc.data().sender !== username).length;
+                unseenTracker[chatId] = unseen;
+                updateMessagesBadge();
+              }
+            );
+          }
+
+          function updateMessagesBadge() {
+            let totalUnseen = Object.values(unseenTracker).reduce((a, b) => a + b, 0);
+            messagesNotif.dataset.count = totalUnseen;
+            messagesNotif.textContent = totalUnseen > 99 ? "99+" : totalUnseen;
+            messagesNotif.style.display = totalUnseen > 0 ? "inline-flex" : "none";
+            bumpBadge(messagesNotif);
+            updateMenuBadge();
+          }
+      } catch (error) {
+          console.error("Error setting up message notifications:", error);
+          messagesNotif.style.display = "none";
+          updateMenuBadge();
       }
     }
 
@@ -855,6 +1007,42 @@
       }
     }
 
+    async function setupUserPresence(uid) {
+        const userStatusRef = doc(db, "users", uid);
+
+        // Set user as online and update last seen timestamp
+        await updateDoc(userStatusRef, {
+            isOnline: true,
+            lastSeen: serverTimestamp(),
+            lastActive: serverTimestamp()
+        }, { merge: true });
+
+        // Set up listener for window unload/close/navigation
+        window.addEventListener('beforeunload', async () => {
+            // This is best effort, Firebase Admin SDK for RTDB has better offline handling
+            await updateDoc(userStatusRef, {
+                isOnline: false,
+                lastSeen: serverTimestamp()
+            }, { merge: true });
+        });
+
+        // Optional: Update lastActive when the user interacts
+        let activityTimer;
+        const updateActivity = () => {
+            clearTimeout(activityTimer);
+            updateDoc(userStatusRef, { lastActive: serverTimestamp() }, { merge: true });
+            activityTimer = setTimeout(async () => {
+                // Consider user inactive after 5 minutes of no activity
+                await updateDoc(userStatusRef, { isOnline: false, lastSeen: serverTimestamp() }, { merge: true });
+            }, 300000); // 5 minutes
+        };
+
+        ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'].forEach(event => 
+            document.addEventListener(event, updateActivity, { passive: true })
+        );
+        updateActivity(); // Initial call
+    }
+
     onAuthStateChanged(auth, async (user) => {
       if(!user){
         alert("Please login first.");
@@ -862,62 +1050,149 @@
         return;
       }
       uid = user.uid;
+      myUID = user.uid; // Set myUID
 
-      const userDoc = await getDocs(query(collection(db, "users"), where("__name__", "==", uid)));
-      userDoc.forEach(docSnap => {
+      const userDocs = await getDocs(query(collection(db, "users"), where("__name__", "==", uid)));
+      userDocs.forEach(docSnap => {
         myUsername = docSnap.data()?.username || "";
       });
 
+      // Setup Notifications
       setupMenuNotifications(uid, myUsername);
       setupMessageNotifications(uid, myUsername);
+      
+      // Setup Presence (Online Status)
+      setupUserPresence(uid);
 
+      // Inventory Listener
       const invRef = doc(db,"inventories", uid);
-      const eqRef = doc(db,"equipped", uid);
-
       onSnapshot(invRef, snap => {
         inventory = snap.exists() ? snap.data() : {};
         renderCategory("banner", "invBanner");
         renderCategory("badge", "invBadges");
       });
 
+      // Equipped Items Listener
+      const eqRef = doc(db,"equipped", uid);
       onSnapshot(eqRef, snap => {
-        equipped = snap.exists() ? snap.data() : {};
+        // IMPORTANT: Ensure equipped has default keys to prevent issues in createItemCard
+        equipped = snap.exists() ? snap.data() : {banner: null, badge: null};
         renderCategory("banner", "invBanner");
         renderCategory("badge", "invBadges");
       });
     });
+    
+    // --- Ad Logic ---
+    const adPopup = document.getElementById("ad-popup");
+    const closeAdBtn = document.getElementById("close-ad-btn");
 
+    const adMessages = [
+        "Upgrade to Premium for an Ad-Free Experience!",
+        "Play 'Shark Attack' and earn FREE in-game currency!",
+        "Get 5000 Coins FREE! Click here to claim your reward.",
+        "Limited time offer: Double XP for the next 24 hours!",
+        "Need friends? Check out our suggested list now!"
+    ];
+
+    function showAd() {
+      if (Math.random() < 0.25) { // 25% chance to show an ad
+        const adText = document.getElementById("ad-text");
+        adText.textContent = adMessages[Math.floor(Math.random() * adMessages.length)];
+        adPopup.classList.add("show");
+      }
+    }
+
+    closeAdBtn.addEventListener("click", () => {
+      adPopup.classList.remove("show");
+    });
+
+    // --- Menu & Theme Logic ---
     const mainHeader = document.getElementById("mainHeader");
     const menuBtn = document.getElementById("menuBtn");
     const closeBtn = document.querySelector(".menu-dropdown .close-btn");
+    const themeSwitch = document.getElementById("themeSwitch");
+    const lightThemeStyle = document.getElementById("lightThemeStyle");
+    const lightThemeCSS = `
+        html, body { background: #f4f4f4 !important; color: #333 !important; }
+        header { background: #ffffff !important; box-shadow: 0 2px 17px #cccccc90 !important; color: #333 !important; }
+        .logo-text { color: #444 !important; text-shadow: 0 0 5px #aaa8 !important; }
+        .menu-btn { color: #333 !important; }
+        .menu-btn:active { background: #eee !important; }
+        .menu-dropdown { background: rgba(255, 255, 255, 0.97) !important; box-shadow: -4px 0 26px rgba(0, 0, 0, 0.2) !important; color: #333 !important; }
+        .menu-dropdown a { color: #444 !important; border-bottom: 2px solid #e0e0e0 !important; }
+        .menu-dropdown a:hover, .menu-dropdown a:focus { background: #f0f0f0 !important; color: #000 !important; }
+        .menu-dropdown a:active { background: #ddd !important; color: #fbbf24 !important; }
+        .menu-dropdown a .icon { fill: #444 !important; filter: drop-shadow(0 1px 6px #4446) !important; }
+        .menu-dropdown a:hover .icon, .menu-dropdown a:focus .icon { fill: #000 !important; }
+        .page-title { color: #4b5563 !important; text-shadow: 0 2px 10px rgba(100, 100, 100, 0.2) !important; }
+        .inv-category-title { color: #6b7280 !important; text-shadow: 0 1px 10px rgba(150, 150, 150, 0.6) !important; }
+        .item-card { background: #ffffff !important; box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1) !important; }
+        .item-card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important; }
+        .item-card img { box-shadow: 0 2px 12px rgba(110, 110, 110, 0.2) !important; background: #eee !important; }
+        .item-card .item-name { color: #333 !important; text-shadow: none !important; }
+        .equip-status { color: #6b7280 !important; text-shadow: none !important; }
+        .popup, #ad-popup { background: #4b5563 !important; color: #fff !important; }
+        #ad-popup h3 { color: #fbbf24; }
+        #ad-popup button { background: #3b82f6; }
+        #ad-popup button:hover { background: #2563eb; }
+    `;
+
+    // Function to close the menu
+    function closeMenu(shouldShowAd = false) {
+      if (mainHeader.classList.contains("expanded")) {
+          mainHeader.classList.remove("expanded");
+          menuBtn.setAttribute("aria-expanded", "false");
+          if (shouldShowAd) {
+              showAd();
+          }
+      }
+    }
 
     menuBtn.addEventListener("click", (e) => {
-      mainHeader.classList.toggle("expanded");
+      const expanded = mainHeader.classList.toggle("expanded");
+      menuBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
       e.stopPropagation();
     });
 
     closeBtn.addEventListener("click", (e) => {
-      mainHeader.classList.remove("expanded");
+      closeMenu(true);
       menuBtn.focus();
       e.stopPropagation();
     });
 
     document.addEventListener("click", (e) => {
-      if (!mainHeader.contains(e.target)) mainHeader.classList.remove("expanded");
+      if (!mainHeader.contains(e.target)) {
+        closeMenu(); // Don't show ad on general click-away
+      }
     });
 
     document.querySelector(".menu-dropdown").addEventListener("click", (e) => {
-      if (e.target.tagName === "A") mainHeader.classList.remove("expanded");
+      if (e.target.tagName === "A" && e.target.id !== "themeSwitch") {
+        closeMenu(true); // Show ad when navigating away
+      }
     });
-
-    const themeSwitch = document.getElementById("themeSwitch");
+    
     if (themeSwitch) {
-      themeSwitch.addEventListener("click", function () {
-        document.body.classList.toggle("light-theme");
-        const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
-        localStorage.setItem("theme", theme);
-        mainHeader.classList.remove("expanded");
-      });
+        const applyTheme = (theme) => {
+            if (theme === "light") {
+                document.body.classList.add("light-theme");
+                lightThemeStyle.textContent = lightThemeCSS;
+            } else {
+                document.body.classList.remove("light-theme");
+                lightThemeStyle.textContent = "";
+            }
+        };
+        
+        themeSwitch.addEventListener("click", (e) => {
+            e.preventDefault();
+            const currentTheme = document.body.classList.contains("light-theme") ? "dark" : "light";
+            applyTheme(currentTheme);
+            localStorage.setItem("theme", currentTheme);
+            closeMenu(); // Just close menu on theme switch, no ad
+        });
+
+        const savedTheme = localStorage.getItem("theme");
+        applyTheme(savedTheme || "dark");
     }
   </script>
 </body>

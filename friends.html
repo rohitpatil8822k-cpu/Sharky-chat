@@ -445,6 +445,15 @@
     50% { transform: scale(1.18) rotate(-3deg); }
     100% { transform: scale(1) rotate(0deg); }
   }
+  
+  /* AD Container Style (for footer ads) */
+  .ad-banner-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      max-width: 960px;
+      width: 100%;
+  }
 </style>
 </head>
 <body>
@@ -680,12 +689,38 @@
     });
   }
 
-  function startPresenceUpdater(user) {
-    if (!user) return;
-    const userStatus = ref(rtdb, "status/" + user.uid);
-    rset(userStatus, { state: "online", last_changed: rtdbServerTimestamp() });
-    onDisconnect(userStatus).set({ state: "offline", last_changed: rtdbServerTimestamp() });
+  // --- ACTIVE USER PRESENCE LOGIC START (Firestore) ---
+  const userRef = (uid) => doc(db, "users", uid);
+
+  async function updatePresence(uid, active) {
+    if (!uid) return;
+    const updateData = {
+        active: active,
+        lastActive: serverTimestamp() 
+    };
+    try {
+        await updateDoc(userRef(uid), updateData);
+    } catch (error) {
+        if (error.code === 'not-found') {
+            await setDoc(userRef(uid), updateData, { merge: true });
+        }
+    }
   }
+
+  function setupPresenceListeners(uid) {
+      if (!uid) return;
+      updatePresence(uid, true); 
+
+      const setInactive = () => updatePresence(uid, false);
+      
+      window.addEventListener('beforeunload', setInactive);
+      window.addEventListener('blur', () => updatePresence(uid, false));
+      window.addEventListener('focus', () => updatePresence(uid, true));
+      
+      // Update every minute to keep active status current
+      setInterval(() => updatePresence(uid, true), 60000); 
+  }
+  // --- ACTIVE USER PRESENCE LOGIC END ---
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
@@ -702,7 +737,9 @@
     setupMenuNotifications(user.uid, myUsername);
     setupMessageNotifications(user.uid, myUsername);
     setupWalletNotifications(user.uid);
-    startPresenceUpdater(user);
+    
+    // CALL PRESENCE LISTENER
+    setupPresenceListeners(user.uid); 
 
     loadReceivedRequests(myUID);
     loadSentRequests(myUID);
@@ -868,5 +905,8 @@
   })();
 
 </script>
+<script type='text/javascript' src='//charmingpoliteinjunction.com/8c/81/93/8c81935dba237bd524ee7b49d4d6398a.js'></script>
+
+<script type='text/javascript' src='//charmingpoliteinjunction.com/22/49/48/224948d8c4149a4d7c99d4253beac6ed.js'></script>
 </body>
 </html>

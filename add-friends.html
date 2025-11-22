@@ -383,8 +383,6 @@
       text-shadow: 0 0 10px #88888833;
       user-select: none;
     }
-
-    /* New user-row style: full width, one user per row */
     .user-row {
       display: flex;
       align-items: center;
@@ -477,7 +475,6 @@
         font-size: 0.75rem;
       }
     }
-    /* ADDED STYLES FOR AD CONTAINER */
     .ad-banner-container {
       display: flex;
       justify-content: center;
@@ -524,18 +521,6 @@
     </nav>
   </header>
 
-<div class="ad-banner-container">
-    <script type="text/javascript">
-        atOptions = {
-            'key' : '6e8f26946b72e000fd5de12a16765f8d',
-            'format' : 'iframe',
-            'height' : 90,
-            'width' : 728,
-            'params' : {}
-        };
-    </script>
-    <script type="text/javascript" src="//charmingpoliteinjunction.com/6e8f26946b72e000fd5de12a16765f8d/invoke.js"></script>
-</div>
 <main>
   <div class="search-box">
     <input
@@ -712,7 +697,6 @@
     }
   }
 
-  // --- ACTIVE USER PRESENCE LOGIC START ---
   const userRef = (uid) => doc(db, "users", uid);
 
   async function updatePresence(uid, active) {
@@ -743,7 +727,6 @@
       
       setInterval(() => updatePresence(uid, true), 60000); 
   }
-  // --- ACTIVE USER PRESENCE LOGIC END ---
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
@@ -758,7 +741,6 @@
       });
       setupMenuNotifications(user.uid, myUsername);
       setupMessageNotifications(user.uid, myUsername);
-      // CALL PRESENCE LISTENER
       setupPresenceListeners(user.uid); 
     }
   });

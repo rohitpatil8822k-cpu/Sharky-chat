@@ -131,7 +131,6 @@
       user-select: none;
     }
 
-    /* Dropdown menu */
     .menu-dropdown {
       position: fixed;
       top: 0; right: -100%;
@@ -256,7 +255,6 @@
       filter: drop-shadow(0 2px 8px #fff4);
     }
 
-    /* Active users bar */
     .active-users-bar {
       margin: 18px auto 12px auto;
       max-width: 540px;
@@ -352,7 +350,6 @@
       color: #dceeff;
     }
 
-    /* Inbox container */
     .inbox {
       flex: 1;
       overflow-y: auto;
@@ -389,6 +386,27 @@
       transform: scale(1.035) translateY(-3px);
       box-shadow: 0 7px 24px #60a5facf;
       z-index: 1;
+    }
+    .ad-item {
+      cursor: default;
+      background: #4a1f1f;
+      border-color: #9f3e3e;
+      box-shadow: 0 2px 14px #e0454588;
+    }
+    .ad-item:hover {
+      background: #6a2f2f;
+      border-color: #f87171;
+      transform: none;
+      box-shadow: 0 7px 24px #f87171cf;
+    }
+    .ad-badge {
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: #e04545;
+      color: white;
+      font-weight: 700;
+      margin-right: 10px;
     }
     .chat-left {
       display: flex;
@@ -516,6 +534,7 @@
       .chat-info small { font-size: 0.85rem; max-width: 78vw;}
     }
   </style>
+  <style id="lightThemeStyle"></style>
 </head>
 <body>
   <header id="mainHeader" aria-label="Main Navigation Header">
@@ -673,10 +692,19 @@
     const activeUsersBar = document.getElementById("activeUsersBar");
     const errorBox = document.getElementById("errorBox");
     const searchInput = document.getElementById("searchInput");
+    const defaultProfilePic = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
     let myUsername = "";
     let myUID = "";
     let chatListeners = [];
+    let allChatItems = [];
+
+    const conceptualAdData = {
+      username: "Sharky Pro",
+      profilePic: "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.appspot.com/o/sharky_pro_ad.png?alt=media&token=placeholder",
+      preview: "Upgrade to Pro for more features!",
+      link: "upgrade.html"
+    };
 
     function bumpBadge(el, number) {
       if (!el) return;
@@ -779,7 +807,7 @@
 
     window.filterChats = () => {
       const search = searchInput.value.toLowerCase().trim();
-      document.querySelectorAll(".chat-item").forEach((chatDiv) => {
+      allChatItems.forEach((chatDiv) => {
         const name = chatDiv.querySelector("span").innerText.toLowerCase();
         chatDiv.style.display = name.includes(search) ? "flex" : "none";
       });
@@ -795,12 +823,12 @@
     async function fetchFriendsActive(uid) {
       const friendsDoc = await getDoc(doc(db, "friends", uid));
       if (!friendsDoc.exists) {
-        activeUsersBar.innerHTML = '<div style="flex:1;text-align:center;color:#74eca9;">No friends online.</div>';
+        renderActiveFriends([]);
         return;
       }
       const friendUids = Object.keys(friendsDoc.data() || {});
       if (!friendUids.length) {
-        activeUsersBar.innerHTML = '<div style="flex:1;text-align:center;color:#74eca9;">No friends online.</div>';
+        renderActiveFriends([]);
         return;
       }
       let allFriends = [];
@@ -813,7 +841,7 @@
           if(data && data.username && data.active === true && data.username !== myUsername) {
             allFriends.push({
               username: data.username,
-              profilePic: data.profilePic || "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+              profilePic: data.profilePic || defaultProfilePic
             });
           }
         });
@@ -846,6 +874,25 @@
       });
     }
 
+    function createAdItem(data) {
+        const adDiv = document.createElement("div");
+        adDiv.className = "chat-item ad-item";
+        adDiv.setAttribute("data-username", data.username);
+        adDiv.innerHTML = `
+            <div class="chat-left">
+                <img src="${data.profilePic}" alt="${data.username} logo" style="border-color:#e04545aa; box-shadow: 0 0 10px #e0454588;" />
+                <div class="chat-info">
+                    <span><span class="ad-badge">AD</span>${data.username}</span>
+                    <small>${data.preview}</small>
+                </div>
+            </div>
+        `;
+        adDiv.onclick = () => {
+            window.location.href = data.link;
+        };
+        return adDiv;
+    }
+
     async function fastInboxLoad(uid) {
       try {
         clearChatListeners();
@@ -859,10 +906,13 @@
 
         const friendsDoc = await getDoc(doc(db, "friends", uid));
         inbox.innerHTML = "";
+        allChatItems = [];
+
         if (!friendsDoc.exists || Object.keys(friendsDoc.data() || {}).length === 0) {
           inbox.innerHTML = "<p style='text-align:center; color:#94a3b8; margin-top:30px;'>No friends found. Add friends to start chatting!</p>";
           return;
         }
+        
         const friendUids = Object.keys(friendsDoc.data());
 
         let friendsData = {};
@@ -872,69 +922,94 @@
           snaps.forEach(docSnap => friendsData[docSnap.id] = docSnap.data());
         }
 
-        friendUids.forEach((fid) => {
-          const friendUsername = friendsData[fid]?.username;
-          if (!friendUsername) return;
-          const chatId = [myUsername, friendUsername].sort().join("_");
-          const chatDiv = document.createElement("div");
-          chatDiv.className = "chat-item";
-          chatDiv.setAttribute("data-username", friendUsername);
-          chatDiv.setAttribute("data-chatid", chatId);
-          inbox.appendChild(chatDiv);
+        let chatPromises = friendUids.map((fid) => {
+            return new Promise((resolve) => {
+                const friendUsername = friendsData[fid]?.username;
+                if (!friendUsername) {
+                    resolve(null);
+                    return;
+                }
+                const chatId = [myUsername, friendUsername].sort().join("_");
+                const chatDiv = document.createElement("div");
+                chatDiv.className = "chat-item";
+                chatDiv.setAttribute("data-username", friendUsername);
+                chatDiv.setAttribute("data-chatid", chatId);
 
-          const msgCollection = collection(db, "personalMessages", chatId, "messages");
-          const messagesQuery = query(msgCollection, orderBy("timestamp", "desc"), limit(40));
+                const msgCollection = collection(db, "personalMessages", chatId, "messages");
+                const messagesQuery = query(msgCollection, orderBy("timestamp", "desc"), limit(40));
 
-          const unsubscribe = onSnapshot(messagesQuery, async (snap) => {
-            let latestMsg = null;
-            let unseen = 0;
-            snap.forEach((docSnap) => {
-              const msg = docSnap.data();
-              if (!latestMsg) latestMsg = {...msg, id: docSnap.id};
-              if (msg.recipient === myUsername && !msg.seen && msg.sender !== myUsername) unseen++;
+                const unsubscribe = onSnapshot(messagesQuery, async (snap) => {
+                    let latestMsg = null;
+                    let unseen = 0;
+                    snap.forEach((docSnap) => {
+                        const msg = docSnap.data();
+                        if (!latestMsg) latestMsg = {...msg, id: docSnap.id};
+                        if (msg.recipient === myUsername && !msg.seen && msg.sender !== myUsername) unseen++;
+                    });
+                    
+                    let preview = "Start a new chat";
+                    if (latestMsg) {
+                      if (latestMsg.type === "image") preview = "📷 Image";
+                      else if (latestMsg.type === "audio") preview = "🎙️ Audio";
+                      else preview = latestMsg.text || "Start a new chat";
+                      preview = latestMsg.seen && latestMsg.sender === myUsername ? preview + ' <span class="seen-tick">✓</span>' : preview;
+                    }
+
+                    chatDiv.innerHTML = `
+                      <div class="chat-left">
+                        <img src="${friendsData[fid]?.profilePic || defaultProfilePic}" alt="${friendUsername} profile picture"/>
+                        <div class="chat-info">
+                          <span>${friendUsername}</span>
+                          <small>${preview}</small>
+                        </div>
+                      </div>
+                      ${unseen > 0 ? `<span class="unread-badge" data-unseen="${unseen}">${unseen}</span>` : ""}
+                    `;
+
+                    chatDiv.onclick = async () => {
+                        if (unseen > 0) {
+                            try {
+                                const batch = writeBatch(db);
+                                const unseenQuery = query(msgCollection, where("recipient", "==", myUsername), where("seen", "==", false));
+                                const unseenSnap = await getDocs(unseenQuery);
+                                unseenSnap.forEach((docSnap) => {
+                                    if (docSnap.data().sender !== myUsername) batch.update(docSnap.ref, {seen: true});
+                                });
+                                await batch.commit();
+                                const badge = chatDiv.querySelector(".unread-badge");
+                                if (badge) badge.remove();
+                                const small = chatDiv.querySelector("small");
+                                if (small && latestMsg) small.innerHTML = (latestMsg.type === "image" ? "📷 Image" : latestMsg.type === "audio" ? "🎙️ Audio" : latestMsg.text || "Start a new chat") + ' <span class="seen-tick">✓</span>';
+                            } catch {}
+                        }
+                        window.location.href = `personal-messages.html?username=${encodeURIComponent(friendUsername)}`;
+                    };
+                    
+                    resolve({chatDiv, latestMsg});
+                });
+                chatListeners.push(unsubscribe);
             });
-
-            let preview = "Start a new chat";
-            if (latestMsg) {
-              if (latestMsg.type === "image") preview = "📷 Image";
-              else if (latestMsg.type === "audio") preview = "🎙️ Audio";
-              else preview = latestMsg.text || "Start a new chat";
-
-              preview = latestMsg.seen ? preview + ' <span class="seen-tick">✓</span>' : preview;
-            }
-
-            chatDiv.innerHTML = `
-              <div class="chat-left">
-                <img src="${friendsData[fid]?.profilePic || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" alt="${friendUsername} profile picture"/>
-                <div class="chat-info">
-                  <span>${friendUsername}</span>
-                  <small>${preview}</small>
-                </div>
-              </div>
-              ${unseen > 0 ? `<span class="unread-badge" data-unseen="${unseen}">${unseen}</span>` : ""}
-            `;
-
-            chatDiv.onclick = async () => {
-              if (unseen > 0) {
-                try {
-                  const batch = writeBatch(db);
-                  const unseenQuery = query(msgCollection, where("recipient", "==", myUsername), where("seen", "==", false));
-                  const unseenSnap = await getDocs(unseenQuery);
-                  unseenSnap.forEach((docSnap) => {
-                    if (docSnap.data().sender !== myUsername) batch.update(docSnap.ref, {seen: true});
-                  });
-                  await batch.commit();
-                  const badge = chatDiv.querySelector(".unread-badge");
-                  if (badge) badge.remove();
-                  const small = chatDiv.querySelector("small");
-                  if (small && latestMsg) small.innerHTML = preview + ' <span class="seen-tick">✓</span>';
-                } catch {}
-              }
-              window.location.href = `personal-messages.html?username=${encodeURIComponent(friendUsername)}`;
-            };
-          });
-          chatListeners.push(unsubscribe);
         });
+
+        let loadedChats = (await Promise.all(chatPromises)).filter(c => c !== null);
+        
+        loadedChats.sort((a, b) => {
+            const timeA = a.latestMsg?.timestamp?.seconds || 0;
+            const timeB = b.latestMsg?.timestamp?.seconds || 0;
+            return timeB - timeA;
+        });
+
+        loadedChats.forEach(({chatDiv}) => {
+            inbox.appendChild(chatDiv);
+            allChatItems.push(chatDiv);
+        });
+
+        if (loadedChats.length > 2) {
+            const adItem = createAdItem(conceptualAdData);
+            inbox.insertBefore(adItem, inbox.children[2]);
+            allChatItems.splice(2, 0, adItem);
+        }
+
       } catch (err) {
         inbox.innerHTML = "";
         errorBox.style.display = "block";
@@ -952,7 +1027,7 @@
       onAuthStateChanged(auth, (user) => {
         if(!user) return;
         const userRef = doc(db, "users", user.uid);
-        userRef.update({
+        updateDoc(userRef, {
           active: true,
           lastActive: serverTimestamp()
         });
@@ -965,6 +1040,9 @@
         window.addEventListener('beforeunload', () => {
           clearInterval(intervalID);
           updateDoc(userRef, { active: false });
+        });
+        window.addEventListener('pagehide', () => {
+            updateDoc(userRef, { active: false });
         });
       });
     }
@@ -1012,18 +1090,141 @@
       }
     });
 
+    const lightThemeStyle = document.getElementById("lightThemeStyle");
     const themeSwitch = document.getElementById("themeSwitch");
+    
+    const lightThemeCSS = `
+        html, body {
+            background: linear-gradient(135deg, #f0f0f0 30%, #ffffff 110%);
+            color: #333;
+        }
+        header {
+            background: #ffffff;
+            box-shadow: 0 2px 17px #cccccc90;
+            color: #333;
+        }
+        .logo-text {
+            color: #444;
+            text-shadow: 0 0 5px #aaa8;
+        }
+        .menu-btn {
+            color: #333;
+        }
+        .menu-btn:active {
+            background: #eee;
+        }
+        .menu-dropdown {
+            background: rgba(255, 255, 255, 0.97);
+            box-shadow: -4px 0 26px rgba(0, 0, 0, 0.2);
+            color: #333;
+        }
+        .menu-dropdown a {
+            color: #444;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .menu-dropdown a:hover, .menu-dropdown a:focus {
+            background: #f0f0f0;
+            color: #000;
+        }
+        .menu-dropdown a:active {
+            background: #ddd;
+            color: #fbbf24;
+        }
+        .menu-dropdown a .icon {
+            fill: #444;
+            filter: drop-shadow(0 1px 6px #4446);
+        }
+        .menu-dropdown a:hover .icon, .menu-dropdown a:focus .icon {
+            fill: #000;
+        }
+        .active-users-bar {
+            background: #f0f0f0;
+            box-shadow: 0 4px 20px #00000022;
+        }
+        .active-users-bar:hover {
+            background: #e9e9e9;
+        }
+        .active-user-name {
+            color: #444;
+            text-shadow: none;
+        }
+        .search-bar {
+            background: #e9e9e9;
+        }
+        .search-bar input {
+            background: #fff;
+            border: 1.5px solid #ccc;
+            color: #333;
+        }
+        .search-bar input::placeholder {
+            color: #777;
+        }
+        .search-bar input:focus {
+            border-color: #60a5fa;
+            background: #faffff;
+            color: #111;
+        }
+        .inbox {
+            background: #fff;
+            box-shadow: 0 0 20px #aaaaaa55 inset;
+        }
+        .chat-item {
+            background: #f7f7f7;
+            border: 1.5px solid #eee;
+            box-shadow: 0 2px 14px #b0c6ff88;
+        }
+        .chat-item:hover {
+            background: #e0f0ff;
+            border-color: #60a5facc;
+            box-shadow: 0 7px 24px #60a5faaf;
+        }
+        .chat-info span {
+            color: #333;
+            text-shadow: none;
+        }
+        .chat-info small {
+            color: #666;
+        }
+        .chat-left img {
+            border: 3px solid #60a5faaa;
+            background: #fefefe;
+        }
+        .ad-item {
+            background: #fff2f2;
+            border-color: #fca5a5;
+            box-shadow: 0 2px 14px #fca5a588;
+        }
+        .ad-item:hover {
+            background: #ffe9e9;
+            border-color: #f87171;
+            box-shadow: 0 7px 24px #f87171cf;
+        }
+        .inbox-loader {
+             color: #60a5fa;
+        }
+    `;
+
     if (themeSwitch) {
+      const applyTheme = (theme) => {
+        if (theme === "light") {
+          document.body.classList.add("light-theme");
+          lightThemeStyle.textContent = lightThemeCSS;
+        } else {
+          document.body.classList.remove("light-theme");
+          lightThemeStyle.textContent = "";
+        }
+      };
+      
       themeSwitch.addEventListener("click", () => {
-        document.body.classList.toggle("light-theme");
-        const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
-        localStorage.setItem("theme", theme);
+        const currentTheme = document.body.classList.contains("light-theme") ? "dark" : "light";
+        applyTheme(currentTheme);
+        localStorage.setItem("theme", currentTheme);
         mainHeader.classList.remove("expanded");
         menuBtn.setAttribute("aria-expanded", "false");
       });
 
       const savedTheme = localStorage.getItem("theme");
-      if(savedTheme === "light") document.body.classList.add("light-theme");
+      applyTheme(savedTheme || "dark");
     }
   </script>
 </body>
