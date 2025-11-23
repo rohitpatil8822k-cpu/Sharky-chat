@@ -123,7 +123,98 @@
       box-sizing: border-box;
       user-select: text;
     }
+    .ad-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 30px 0;
+        min-height: 90px; /* Minimum height to prevent content jump */
+        background-color: #1e293b;
+        border: 1px dashed #334155;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    @media (max-width: 480px) {
+      .ad-container.desktop-banner {
+          display: none; /* Hide 728x90 on very small screens if needed */
+      }
+      .ad-container.mobile-ad {
+          min-height: 250px;
+      }
+    }
+    .ad-container iframe {
+        display: block;
+    }
   </style>
+  
+  <script type="module">
+    
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      updateDoc,
+      setDoc,
+      serverTimestamp,
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+      measurementId: "G-HT9T3P9KST",
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+  
+    const userRef = (uid) => doc(db, "users", uid);
+  
+    async function updatePresence(uid, active) {
+      if (!uid) return;
+      const updateData = {
+          active: active,
+          lastActive: serverTimestamp() 
+      };
+      try {
+          await updateDoc(userRef(uid), updateData);
+      } catch (error) {
+          if (error.code === 'not-found') {
+              await setDoc(userRef(uid), updateData, { merge: true });
+          }
+      }
+    }
+  
+    function setupPresenceListeners(uid) {
+        if (!uid) return;
+        updatePresence(uid, true); // Set active on page load
+  
+        const setInactive = () => updatePresence(uid, false);
+        
+        window.addEventListener('beforeunload', setInactive);
+        window.addEventListener('blur', () => updatePresence(uid, false));
+        window.addEventListener('focus', () => updatePresence(uid, true));
+        
+       setInterval(() => updatePresence(uid, true), 60000); 
+    }
+  
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        console.log("User not logged in, presence not tracked.");
+      } else {
+        setupPresenceListeners(user.uid); 
+      }
+    });
+  </script>
 </head>
 <body>
 
@@ -138,6 +229,18 @@
     <h1>Terms of Use</h1>
     <p>Effective date: August 15, 2025</p>
 
+    <div class="ad-container desktop-banner">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '6e8f26946b72e000fd5de12a16765f8d',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//charmingpoliteinjunction.com/6e8f26946b72e000fd5de12a16765f8d/invoke.js"></script>
+    </div>
     <p>Welcome to <strong>Sharky Chat</strong>. These Terms of Use (“Terms”) govern your access to and use of the Sharky Chat application and website. By accessing or using the Service, you agree to be bound by these Terms.</p>
 
     <h2>1. Acceptance of Terms</h2>
@@ -153,6 +256,18 @@
       <li>We reserve the right to terminate or suspend your account at our sole discretion, without notice, for any conduct that we believe violates these Terms.</li>
     </ul>
 
+    <div class="ad-container mobile-ad">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '3ec175937a06e144caa3b84bb80b76c5',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//charmingpoliteinjunction.com/3ec175937a06e144caa3b84bb80b76c5/invoke.js"></script>
+    </div>
     <h2>4. Prohibited Conduct and Content</h2>
     <p>You agree not to post, transmit, or otherwise make available through the Service any Content that:</p>
     <ul>
@@ -184,5 +299,9 @@
   <footer>
     &copy; 2025 Sharky Chat. All rights reserved. | <a href="privacy.html">Privacy Policy</a>
   </footer>
+
+<script type='text/javascript' src='//charmingpoliteinjunction.com/8c/81/93/8c81935dba237bd524ee7b49d4d6398a.js'></script>
+<script type='text/javascript' src='//charmingpoliteinjunction.com/22/49/48/224948d8c4149a4d7c99d4253beac6ed.js'></script>
+
 </body>
 </html>

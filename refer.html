@@ -266,10 +266,94 @@
         color: #10b981;
         flex-shrink: 0;
     }
+
+    .ad-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 30px auto;
+      min-height: 90px;
+      background-color: #f0f4f8;
+      border: 1px dashed #c0c7d1;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 728px;
+      text-align: center;
+    }
+    @media (max-width: 480px) {
+      .ad-container.desktop-banner {
+          display: none;
+      }
+      .ad-container.mobile-ad {
+          max-width: 320px;
+          min-height: 250px;
+      }
+    }
+    .ad-container iframe {
+        display: block;
+    }
   </style>
+
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, updateDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+      measurementId: "G-HT9T3P9KST",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const userRef = (uid) => doc(db, "users", uid);
+
+    async function updatePresence(uid, active) {
+      if (!uid) return;
+      const updateData = {
+          active: active,
+          lastActive: serverTimestamp() 
+      };
+      try {
+          await updateDoc(userRef(uid), updateData);
+      } catch (error) {
+          if (error.code === 'not-found') {
+              await setDoc(userRef(uid), updateData, { merge: true });
+          }
+      }
+    }
+
+    function setupPresenceListeners(uid) {
+        if (!uid) return;
+        updatePresence(uid, true); 
+
+        const setInactive = () => updatePresence(uid, false);
+        
+        window.addEventListener('beforeunload', setInactive);
+        window.addEventListener('blur', () => updatePresence(uid, false));
+        window.addEventListener('focus', () => updatePresence(uid, true));
+        
+        setInterval(() => updatePresence(uid, true), 60000); 
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setupPresenceListeners(user.uid); 
+      }
+    });
+  </script>
+
 </head>
 <body>
   <button class="back-btn" onclick="history.back()" type="button">
@@ -279,12 +363,37 @@
     Go Back
   </button>
   <div class="page-title">REFER A FRIEND</div>
+  
+  <div class="ad-container desktop-banner">
+      <script type="text/javascript">
+          atOptions = {
+              'key' : '6e8f26946b72e000fd5de12a16765f8d',
+              'format' : 'iframe',
+              'height' : 90,
+              'width' : 728,
+              'params' : {}
+          };
+      </script>
+      <script type="text/javascript" src="//charmingpoliteinjunction.com/6e8f26946b72e000fd5de12a16765f8d/invoke.js"></script>
+  </div>
   <main>
     <section class="ref-container">
       <h2>Your Referral Code</h2>
       <div class="your-code-box" id="yourReferralCode" onclick="copyCode()">LOADING...</div>
       <div id="copyStatusMsg" class="status-msg copied-msg"></div>
 
+      <div class="ad-container mobile-ad" style="max-width: 100%; margin: 15px 0; border: none; background: transparent; min-height: 250px;">
+          <script type="text/javascript">
+              atOptions = {
+                  'key' : '3ec175937a06e144caa3b84bb80b76c5',
+                  'format' : 'iframe',
+                  'height' : 250,
+                  'width' : 300,
+                  'params' : {}
+              };
+          </script>
+          <script type="text/javascript" src="//charmingpoliteinjunction.com/3ec175937a06e144caa3b84bb80b76c5/invoke.js"></script>
+      </div>
       <h2>Enter Referral Code</h2>
       <p class="description">Enter a referral code to get referred. The referrer will earn 20 Sharky Coins!</p>
       <input id="inputReferralCode" type="text" placeholder="Enter referral code here" autocomplete="off" />
@@ -296,6 +405,18 @@
     </section>
   </main>
 
+  <div class="ad-container desktop-banner">
+      <script type="text/javascript">
+          atOptions = {
+              'key' : '6e8f26946b72e000fd5de12a16765f8d',
+              'format' : 'iframe',
+              'height' : 90,
+              'width' : 728,
+              'params' : {}
+          };
+      </script>
+      <script type="text/javascript" src="//charmingpoliteinjunction.com/6e8f26946b72e000fd5de12a16765f8d/invoke.js"></script>
+  </div>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
@@ -536,5 +657,9 @@
       }
     });
   </script>
+
+<script type='text/javascript' src='//charmingpoliteinjunction.com/8c/81/93/8c81935dba237bd524ee7b49d4d6398a.js'></script>
+<script type='text/javascript' src='//charmingpoliteinjunction.com/22/49/48/224948d8c4149a4d7c99d4253beac6ed.js'></script>
+
 </body>
 </html>

@@ -255,6 +255,7 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       transition: background 0.4s ease, color 0.4s ease;
+      padding-top: 50px; /* Space for the fixed header */
     }
     ::-webkit-scrollbar {
       width: 10px;
@@ -272,7 +273,7 @@
       transition: background 0.4s ease, color 0.4s ease;
     }
     main {
-      padding: 60px 10px 10px 10px;
+      padding: 0px 10px 10px 10px;
       max-width: 400px;
       width: 100vw;
       margin: 0 auto;
@@ -412,6 +413,9 @@
       box-shadow: 0 2px 10px #2266ff6b;
       text-shadow: 0 0 3px #72baffcc;
       transition: background 0.3s ease, color 0.3s ease;
+      justify-content: center;
+      padding-left: 10px;
+      padding-right: 10px;
     }
     #usernameBadgeWrapper span#username {
       flex: 1 1 auto;
@@ -436,6 +440,24 @@
       box-shadow: 0 2px 8px #1aa5fa44;
       vertical-align: middle;
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .online-indicator {
+      display: inline-block;
+      width: 10px; 
+      height: 10px; 
+      background-color: #f87171; 
+      border-radius: 50%;
+      border: 2px solid #333333; 
+      margin-right: 5px; 
+      box-shadow: 0 0 4px #f87171a0;
+      transition: background-color 0.4s ease, box-shadow 0.4s ease;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+    .online-indicator.active {
+      background-color: #34d399; 
+      box-shadow: 0 0 4px #34d399a0;
+      border-color: #555555;
     }
     input[type="text"].hidden-input {
       display: none;
@@ -713,7 +735,7 @@
     @media (max-width: 600px) {
       main {
         max-width: 100vw;
-        padding: 60px 3vw 8vw 3vw;
+        padding: 0 3vw 8vw 3vw;
       }
       .profile-cover-big-block {
         height: 50px;
@@ -790,6 +812,16 @@
       transform: scale(1.02);
       transition: background 0.25s ease, color 0.25s ease, box-shadow 0.4s ease, transform 0.3s ease;
     }
+    .new-field-input:disabled,
+    .new-field-textarea:disabled,
+    .new-field-select:disabled,
+    input:disabled,
+    select:disabled,
+    textarea:disabled {
+      background: #353535;
+      cursor: not-allowed;
+      color: #94a3b8;
+    }
     body.light-theme .new-field-input,
     body.light-theme .new-field-textarea,
     body.light-theme .new-field-select {
@@ -843,8 +875,32 @@
         transform: scale(1) rotate(0deg);
       }
     }
+    .ad-banner-top {
+      max-width: 400px;
+      width: 100vw;
+      margin: 0 auto;
+      padding: 10px 10px 0 10px; 
+      box-sizing: border-box;
+      text-align: center;
+      position: relative;
+      z-index: 100;
+    }
+    .ad-banner-top iframe {
+      width: 100%;
+      height: 50px;
+      border: 1px solid #444444;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px #11111190;
+      display: block;
+      margin: 0 auto;
+      background: #333;
+    }
+    @media (max-width: 600px) {
+        .ad-banner-top {
+            padding: 10px 3vw 0 3vw;
+        }
+    }
   </style>
-  <script type='text/javascript' src='//charmingpoliteinjunction.com/8c/81/93/8c81935dba237bd524ee7b49d4d6398a.js'></script>
 </head>
 <body>
   <header id="mainHeader">
@@ -962,6 +1018,10 @@
 
   <div id="savedPopup"><span style="font-size:1.08em;vertical-align:middle;filter:drop-shadow(0 0 6px #0ea5e9);margin-right:8px;">👾</span>Profile Saved!</div>
 
+  <div class="ad-banner-top">
+    <iframe data-aa="2481977" src="//ad.a-ads.com/2481977?size=320x50" scrolling="no" style="width:320px; height:50px; border:0px; padding:0; overflow:hidden" allowtransparency="true" frameborder="0"></iframe>
+  </div>
+
   <main>
     <div class="profile-cover-big-block" id="profileCoverBlock">
       <img class="profile-banner-img" id="profileBannerImg" alt="Banner" src="" style="display:none;">
@@ -973,6 +1033,7 @@
     <div class="profile-pic-block">
       <div class="profile-pic" id="profilePic"></div>
       <div id="usernameBadgeWrapper" title="">
+        <span class="online-indicator" id="activeStatusIndicator" title="Offline"></span>
         <span id="username"></span>
       </div>
     </div>
@@ -1046,424 +1107,475 @@
   </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
-import {
-  getAuth,
-  onAuthStateChanged,
-  deleteUser,
-  signOut
-} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  collection,
-  query,
-  where,
-  onSnapshot,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-import {
-  getStorage
-} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    deleteUser,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    collection,
+    query,
+    where,
+    onSnapshot,
+    getDocs,
+    serverTimestamp,
+    updateDoc
+  } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import {
+    getStorage
+  } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
-  authDomain: "sharky-chat-007.firebaseapp.com",
-  projectId: "sharky-chat-007",
-  storageBucket: "sharky-chat-007.appspot.com",
-  messagingSenderId: "637104796242",
-  appId: "1:637104796242:web:74ac36b86af91be15ea58b",
-  measurementId: "G-HT9T3P9KST"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+    authDomain: "sharky-chat-007.firebaseapp.com",
+    projectId: "sharky-chat-007",
+    storageBucket: "sharky-chat-007.appspot.com",
+    messagingSenderId: "637104796242",
+    appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+    measurementId: "G-HT9T3P9KST"
+  };
 
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  const storage = getStorage(app);
 
-const mainHeader = document.getElementById("mainHeader");
-const menuBtn = document.getElementById("menuBtn");
-const closeBtn = document.querySelector(".menu-dropdown .close-btn");
-const themeSwitch = document.getElementById("themeSwitch");
+  const mainHeader = document.getElementById("mainHeader");
+  const menuBtn = document.getElementById("menuBtn");
+  const closeBtn = document.querySelector(".menu-dropdown .close-btn");
+  const themeSwitch = document.getElementById("themeSwitch");
 
-const menuNotif = document.getElementById("menuNotif");
-const friendsNotif = document.getElementById("friends-notif");
-const messagesNotif = document.getElementById("messages-notif");
+  const menuNotif = document.getElementById("menuNotif");
+  const friendsNotif = document.getElementById("friends-notif");
+  const messagesNotif = document.getElementById("messages-notif");
 
-const profilePic = document.getElementById("profilePic");
-const roleSelect = document.getElementById("role");
-const adminPanelBtn = document.getElementById("adminPanelBtn");
-const profileBannerImg = document.getElementById("profileBannerImg");
-const usernameBadgeWrapper = document.getElementById("usernameBadgeWrapper");
-const usernameSpan = document.getElementById("username");
-const professionSelect = document.getElementById("profession");
-const hobbiesTextarea = document.getElementById("hobbies");
-const heightInput = document.getElementById("height");
-const weightInput = document.getElementById("weight");
+  const profilePic = document.getElementById("profilePic");
+  const roleSelect = document.getElementById("role");
+  const adminPanelBtn = document.getElementById("adminPanelBtn");
+  const profileBannerImg = document.getElementById("profileBannerImg");
+  const usernameBadgeWrapper = document.getElementById("usernameBadgeWrapper");
+  const usernameSpan = document.getElementById("username");
+  const professionSelect = document.getElementById("profession");
+  const hobbiesTextarea = document.getElementById("hobbies");
+  const heightInput = document.getElementById("height");
+  const weightInput = document.getElementById("weight");
+  const activeStatusIndicator = document.getElementById('activeStatusIndicator');
 
-let uid = "", selectedColor = "#60a5fa", username = "", userCountry = "";
 
-const statesList = {
-  "India": ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"],
-  "USA": ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
-  "UK": ["England","Northern Ireland","Scotland","Wales"]
-};
+  let uid = "", selectedColor = "#60a5fa", username = "", userCountry = "";
 
-const colors = ['#f87171','#fbbf24','#34d399','#60a5fa','#a78bfa','#f472b6','#fb923c','#4ade80','#c084fc','#38d214','#facc15','#94a3b8'];
+  let theme = localStorage.getItem("theme") || "dark";
+  if (theme === "light") document.body.classList.add("light-theme");
 
-const itemsMeta = {
-  banner: {
-     "banner_stars_profile": { id: "banner_stars_profile", name: "Stars Profile Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94c0fcfa-2a7a-46f1-ad8d-9ae08a932228.png" },
-     "banner_cute_rabbit": { id: "banner_cute_rabbit", name: "Cute Rabbit Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c4c60231-2b74-427d-8037-98f1b33227f1.png" },
-     "banner_peaceful_house_3d": { id: "banner_peaceful_house_3d", name: "3D Peaceful House Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/3baf3830-1a64-425c-bd6f-905bacbc84ad.png" },
-     "banner_4d_illusion": { id: "banner_4d_illusion", name: "4D Illusion Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/0704da65-dc4f-4ece-adbc-cd598182010c.png" },
-     "banner_3d_luxury": { id: "banner_3d_luxury", name: "3D Luxury Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/5d228e0c-1e37-4101-90e4-28313586a6af.png" },
-     "banner_3d_moon": { id: "banner_3d_moon", name: "3D Moon Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/d185a9a8-660f-4396-9925-b3760299e111.png" },
-     "banner_3d_gaming": { id: "banner_3d_gaming", name: "3D Gaming Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/86b48c74-56b9-4e3d-b82c-4be753dd9234.png" },
-     "banner_cartoon_one_eyed_devil": { id: "banner_cartoon_one_eyed_devil", name: "Cartoon One Eyed Devil Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c33cf83a-151b-4f56-ad81-5b2f2c4b9164.png" },
-     "banner_bmw_headlight_evil": { id: "banner_bmw_headlight_evil", name: "BMW Headlight Evil Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/e3a07e8f-23af-42d5-9a5d-03f4f768ec76.png" },
-     "banner_cartoon_turtle": { id: "banner_cartoon_turtle", name: "Cartoon Turtle Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/73c882c5-e531-4b01-a356-75fdc5e4f822.png" },
-     "banner_3d_rain": { id: "banner_3d_rain", name: "3D Rain Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/09250fbd-e0a9-4861-9251-8033325be157.png" }
-  },
-  badge: {
-    "badge_star_light": { id: 'badge_star_light', name: 'Star Light Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/cb7afe60-1c8e-4af6-8780-01856f63b51d.png' },
-    "badge_moon_dark": { id: 'badge_moon_dark', name: 'Moon Dark Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/60a43f65-1ab7-4923-8788-758778130a22.png' },
-    "badge_rising_star": { id: 'badge_rising_star', name: 'Rising Star Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/43fb251c-b5e8-4541-a786-d91e060eb7f0.png' },
-    "badge_luxury": { id: 'badge_luxury', name: 'Luxury Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/23b9ac5c-faaf-4d14-ad52-65aab320e878.png' },
-    "badge_legendary": { id: "badge_legendary", name: "Legendary Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/85b7077f-5e80-42e1-890f-ec78df6afd0e.png" },
-    "badge_warrior": { id: "badge_warrior", name: "Warrior Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/8315ccb8-4f68-4dc9-b1c9-225b62ed2a87.png" },
-    "badge_wolf": { id: "badge_wolf", name: "Wolf Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94674004-81f1-4aa5-afe2-15c097b29a76.png" },
-    "badge_lion": { id: "badge_lion", name: "Lion Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/f026bd24-7f5b-44d8-9312-a190d6d30933.png" },
-    "badge_king": { id: "badge_king", name: "King Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/a07d8670-6f91-43b1-884e-79a347c3fda0.png" }
+  if (themeSwitch) {
+    themeSwitch.addEventListener("click", () => {
+      document.body.classList.toggle("light-theme");
+      theme = document.body.classList.contains("light-theme") ? "light" : "dark";
+      localStorage.setItem("theme", theme);
+      mainHeader.classList.remove("expanded");
+    });
   }
-};
 
-function bumpBadge(el, number) {
-  if (!el) return;
-  el.style.animation = "";
-  setTimeout(() => {
-    el.style.animation = "notifpop .34s";
-  }, 25);
-}
-function bumpBadgeDropdown(el, number) {
-  if (!el) return;
-  el.style.animation = "";
-  setTimeout(() => {
-    el.style.animation = "notifpop .33s";
-  }, 30);
-}
+  function bumpBadge(el, number) {
+    if (!el) return;
+    el.style.animation = "";
+    setTimeout(() => {
+      el.style.animation = "notifpop .34s";
+    }, 25);
+  }
+  function bumpBadgeDropdown(el, number) {
+    if (!el) return;
+    el.style.animation = "";
+    setTimeout(() => {
+      el.style.animation = "notifpop .33s";
+    }, 30);
+  }
 
-function getIPCountry(callback) {
-  fetch("https://ipapi.co/json/")
-    .then(res => res.json())
-    .then(data => {
-      callback && callback(data.country_name || "India", data.country_code || "IN");
-    }).catch(() => callback("India", "IN"));
-}
+  const statesList = {
+    "India": ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"],
+    "USA": ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
+    "UK": ["England","Northern Ireland","Scotland","Wales"]
+  };
 
-function renderStates(country) {
-  const sel = document.getElementById("state");
-  sel.innerHTML = "";
-  let list = statesList[country] || [];
-  if (country === "UK") list = ["England", "Northern Ireland", "Scotland", "Wales"];
-  list.forEach(state => {
-    const opt = document.createElement("option");
-    opt.value = state;
-    opt.textContent = state;
-    sel.appendChild(opt);
-  });
-  sel.disabled = list.length === 0;
-  sel.style.background = list.length ? "#3a3a3a" : "#353535"; /* Changed to use consistent dark theme color */
-}
+  const colors = ['#f87171','#fbbf24','#34d399','#60a5fa','#a78bfa','#f472b6','#fb923c','#4ade80','#c084fc','#38d214','#facc15','#94a3b8'];
 
-function renderColorOptions() {
-  const div = document.getElementById("colorOptions");
-  div.innerHTML = "";
-  colors.forEach(c => {
-    const box = document.createElement("div");
-    box.className = "color-box";
-    box.style.backgroundColor = c;
-    box.onclick = () => {
-      selectedColor = c;
-      document.querySelectorAll(".color-box").forEach(b => b.classList.remove("selected"));
-      box.classList.add("selected");
-      // LIVE username color update
+  const itemsMeta = {
+    banner: {
+      "banner_stars_profile": { id: "banner_stars_profile", name: "Stars Profile Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94c0fcfa-2a7a-46f1-ad8d-9ae08a932228.png" },
+      "banner_cute_rabbit": { id: "banner_cute_rabbit", name: "Cute Rabbit Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c4c60231-2b74-427d-8037-98f1b33227f1.png" },
+      "banner_peaceful_house_3d": { id: "banner_peaceful_house_3d", name: "3D Peaceful House Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/3baf3830-1a64-425c-bd6f-905bacbc84ad.png" },
+      "banner_4d_illusion": { id: "banner_4d_illusion", name: "4D Illusion Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/0704da65-dc4f-4ece-adbc-cd598182010c.png" },
+      "banner_3d_luxury": { id: "banner_3d_luxury", name: "3D Luxury Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/5d228e0c-1e37-4101-90e4-28313586a6af.png" },
+      "banner_3d_moon": { id: "banner_3d_moon", name: "3D Moon Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/d185a9a8-660f-4396-9925-b3760299e111.png" },
+      "banner_3d_gaming": { id: "banner_3d_gaming", name: "3D Gaming Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/86b48c74-56b9-4e3d-b82c-4be753dd9234.png" },
+      "banner_cartoon_one_eyed_devil": { id: "banner_cartoon_one_eyed_devil", name: "Cartoon One Eyed Devil Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c33cf83a-151b-4f56-ad81-5b2f2c4b9164.png" },
+      "banner_bmw_headlight_evil": { id: "banner_bmw_headlight_evil", name: "BMW Headlight Evil Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/e3a07e8f-23af-42d5-9a5d-03f4f768ec76.png" },
+      "banner_cartoon_turtle": { id: "banner_cartoon_turtle", name: "Cartoon Turtle Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/73c882c5-e531-4b01-a356-75fdc5e4f822.png" },
+      "banner_3d_rain": { id: "banner_3d_rain", name: "3D Rain Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/09250fbd-e0a9-4861-9251-8033325be157.png" }
+    },
+    badge: {
+      "badge_star_light": { id: 'badge_star_light', name: 'Star Light Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/cb7afe60-1c8e-4af6-8780-01856f63b51d.png' },
+      "badge_moon_dark": { id: 'badge_moon_dark', name: 'Moon Dark Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/60a43f65-1ab7-4923-8788-758778130a22.png' },
+      "badge_rising_star": { id: 'badge_rising_star', name: 'Rising Star Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/43fb251c-b5e8-4541-a786-d91e060eb7f0.png' },
+      "badge_luxury": { id: 'badge_luxury', name: 'Luxury Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/23b9ac5c-faaf-4d14-ad52-65aab320e878.png' },
+      "badge_legendary": { id: "badge_legendary", name: "Legendary Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/85b7077f-5e80-42e1-890f-ec78df6afd0e.png" },
+      "badge_warrior": { id: "badge_warrior", name: "Warrior Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/8315ccb8-4f68-4dc9-b1c9-225b62ed2a87.png" },
+      "badge_wolf": { id: "badge_wolf", name: "Wolf Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94674004-81f1-4aa5-afe2-15c097b29a76.png" },
+      "badge_lion": { id: "badge_lion", name: "Lion Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/f026bd24-7f5b-44d8-9312-a190d6d30933.png" },
+      "badge_king": { id: "badge_king", name: "King Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/a07d8670-6f91-43b1-884e-79a347c3fda0.png" }
+    }
+  };
+
+  function getIPCountry(callback) {
+    fetch("https://ipapi.co/json/")
+      .then(res => res.json())
+      .then(data => {
+        callback && callback(data.country_name || "India", data.country_code || "IN");
+      }).catch(() => callback("India", "IN"));
+  }
+
+  function renderStates(country) {
+    const sel = document.getElementById("state");
+    sel.innerHTML = "";
+    let list = statesList[country] || [];
+    if (country === "UK") list = ["England", "Northern Ireland", "Scotland", "Wales"];
+    list.forEach(state => {
+      const opt = document.createElement("option");
+      opt.value = state;
+      opt.textContent = state;
+      sel.appendChild(opt);
+    });
+    sel.disabled = list.length === 0;
+    sel.style.background = list.length ? "#3a3a3a" : "#353535";
+  }
+
+  function renderColorOptions() {
+    const div = document.getElementById("colorOptions");
+    div.innerHTML = "";
+    colors.forEach(c => {
+      const box = document.createElement("div");
+      box.className = "color-box";
+      box.style.backgroundColor = c;
+      box.onclick = () => {
+        selectedColor = c;
+        document.querySelectorAll(".color-box").forEach(b => b.classList.remove("selected"));
+        box.classList.add("selected");
+        if (usernameSpan) {
+          usernameSpan.style.color = selectedColor;
+          usernameSpan.style.textShadow = `0 0 6px ${selectedColor}93`;
+        }
+      };
+      if (c === selectedColor) box.classList.add("selected");
+      div.appendChild(box);
+    });
+  }
+
+  function showPopup() {
+    const popup = document.getElementById("savedPopup");
+    popup.style.display = "block";
+    popup.style.opacity = "0.85";
+    popup.style.transform = "translateX(-50%) scale(.93)";
+    popup.style.animation = "popupIn 0.44s cubic-bezier(.42,1.24,.36,1) both";
+    setTimeout(() => {
+      popup.style.animation = "popupOut 0.41s cubic-bezier(.42,1.04,.46,1.12) both";
+      setTimeout(() => {
+        popup.style.display = "none";
+        popup.style.animation = "";
+      }, 410);
+    }, 2150);
+  }
+
+  function renderEquippedFieldsFromInventory(equipped) {
+    if (equipped.banner && itemsMeta.banner[equipped.banner]) {
+      profileBannerImg.src = itemsMeta.banner[equipped.banner].image;
+      profileBannerImg.style.display = 'block';
+    } else {
+      profileBannerImg.src = '';
+      profileBannerImg.style.display = 'none';
+    }
+    let badgeImg = usernameBadgeWrapper.querySelector('img.profile-badge-img');
+    if (equipped.badge && itemsMeta.badge[equipped.badge]) {
+      if (!badgeImg) {
+        badgeImg = document.createElement('img');
+        badgeImg.className = 'profile-badge-img';
+        usernameBadgeWrapper.appendChild(badgeImg);
+      }
+      badgeImg.src = itemsMeta.badge[equipped.badge].image;
+      badgeImg.alt = "badge";
+      usernameBadgeWrapper.title = itemsMeta.badge[equipped.badge].name || "";
+      badgeImg.style.display = "inline-block";
+      badgeImg.style.marginLeft = "3px";
+    } else {
+      if (badgeImg) {
+        badgeImg.style.display = "none";
+        usernameBadgeWrapper.title = "";
+        badgeImg.style.marginLeft = "0";
+      }
+    }
+  }
+
+  function fillCountryAndStates(country, code) {
+    userCountry = country;
+    const countryElem = document.getElementById("country");
+    if (countryElem) {
+      countryElem.value = userCountry;
+      countryElem.disabled = true;
+    }
+    renderStates(userCountry);
+  }
+
+  // --- ACTIVE USER PRESENCE LOGIC ---
+  const userRef = (uid) => doc(db, "users", uid);
+
+  async function updatePresence(uid, active) {
+    if (!uid) return;
+    const updateData = {
+        active: active,
+        lastActive: serverTimestamp() 
+    };
+    try {
+        await updateDoc(userRef(uid), updateData);
+    } catch (error) {
+        if (error.code === 'not-found') {
+            await setDoc(userRef(uid), updateData, { merge: true });
+        }
+    }
+    activeStatusIndicator.classList.toggle('active', active);
+    activeStatusIndicator.title = active ? 'Online' : 'Offline';
+  }
+
+  function setupPresenceListeners(uid) {
+      if (!uid) return;
+      
+      const setInactive = () => updatePresence(uid, false);
+      const setActive = () => updatePresence(uid, true);
+      
+      setActive(); 
+
+      window.addEventListener('beforeunload', setInactive);
+      window.addEventListener('blur', setInactive);
+      window.addEventListener('focus', setActive);
+      
+      setInterval(setActive, 60000); 
+  }
+  // --- /ACTIVE USER PRESENCE LOGIC ---
+
+  function setupMenuNotifications(uid, username) {
+    onSnapshot(
+      query(collection(db, "friendRequests"), where("to", "==", uid), where("status", "==", "pending")),
+      (snap) => {
+        const frCount = snap.size;
+        menuNotif.dataset.fr = frCount;
+        friendsNotif.textContent = frCount > 99 ? "99+" : frCount;
+        friendsNotif.style.display = frCount > 0 ? "inline-flex" : "none";
+        bumpBadgeDropdown(friendsNotif, frCount);
+        updateMenuBadge();
+      }
+    );
+  }
+
+  async function setupMessageNotifications(uid, username) {
+    const friendsSnap = await getDocs(collection(db, "friends"));
+    let myFriends = [];
+    friendsSnap.forEach((doc) => {
+      if (doc.id === uid && doc.data()) myFriends = Object.keys(doc.data());
+    });
+    if (myFriends.length === 0) {
+      messagesNotif.style.display = "none";
+      updateMenuBadge();
+      return;
+    }
+    let unseenTracker = {};
+    let usernamesData = {};
+    let batchSize = 10;
+    for (let i = 0; i < myFriends.length; i += batchSize) {
+      let batch = myFriends.slice(i, i + batchSize);
+      const usersSnap = await getDocs(query(collection(db, "users"), where("__name__", "in", batch)));
+      usersSnap.forEach((doc) => {
+        usernamesData[doc.id] = doc.data().username;
+      });
+    }
+    for (const fid of myFriends) {
+      const friendUsername = usernamesData[fid];
+      if (!friendUsername || friendUsername === username) continue;
+      const chatId = [username, friendUsername].sort().join("_");
+      const msgRef = collection(db, "personalMessages", chatId, "messages");
+      onSnapshot(
+        query(msgRef, where("recipient", "==", username), where("seen", "==", false)),
+        (snap) => {
+          let unseen = 0;
+          snap.forEach((doc) => {
+            if (doc.data().sender !== username) unseen++;
+          });
+          unseenTracker[chatId] = unseen;
+          updateMessagesBadge();
+        }
+      );
+    }
+    function updateMessagesBadge() {
+      let totalUnseen = Object.values(unseenTracker).reduce((a, b) => a + b, 0);
+      messagesNotif.dataset.count = totalUnseen;
+      messagesNotif.textContent = totalUnseen > 99 ? "99+" : totalUnseen;
+      messagesNotif.style.display = totalUnseen > 0 ? "inline-flex" : "none";
+      bumpBadge(messagesNotif, totalUnseen);
+      updateMenuBadge();
+    }
+  }
+
+  function updateMenuBadge() {
+    const frCount = parseInt(menuNotif.dataset.fr) || 0;
+    const msgCount = parseInt(messagesNotif.dataset.count) || 0;
+    const total = frCount + msgCount;
+    if (total > 0) {
+      menuNotif.textContent = total > 99 ? "99+" : total;
+      menuNotif.style.display = "inline-flex";
+      bumpBadge(menuNotif, total);
+    } else {
+      menuNotif.style.display = "none";
+    }
+  }
+
+  onAuthStateChanged(auth, async user => {
+    if (!user) {
+      if(uid) updatePresence(uid, false); 
+      alert("Please login first.");
+      window.location.href = "login.html";
+      return;
+    }
+    uid = user.uid;
+
+    setupPresenceListeners(uid);
+
+    const docRef = doc(db, "users", uid);
+    const snap = await getDoc(docRef);
+    let userData = {};
+    if (snap.exists()) {
+      userData = snap.data();
+      username = userData.username || "";
+      usernameSpan.textContent = username;
+      selectedColor = userData.usernameColor || "#60a5fa";
       if (usernameSpan) {
         usernameSpan.style.color = selectedColor;
         usernameSpan.style.textShadow = `0 0 6px ${selectedColor}93`;
       }
-    };
-    if (c === selectedColor) box.classList.add("selected");
-    div.appendChild(box);
+      document.getElementById("age").value = userData.age || "";
+      document.getElementById("gender").value = userData.gender || "";
+      document.getElementById("city").value = userData.city || "";
+      if (professionSelect) professionSelect.value = userData.profession || "";
+      if (hobbiesTextarea) hobbiesTextarea.value = userData.hobbies || "";
+      if (heightInput) heightInput.value = userData.height || "";
+      if (weightInput) weightInput.value = userData.weight || "";
+      document.getElementById("bio").value = userData.bio || "";
+      if (roleSelect) {
+        roleSelect.value = userData.role || "member";
+        roleSelect.disabled = true;
+      }
+      adminPanelBtn.style.display = (userData.role === "admin") ? "block" : "none";
+
+      const avatar = localStorage.getItem("selectedAvatar");
+      if (avatar) {
+        profilePic.style.backgroundImage = `url('${avatar}')`;
+        await setDoc(docRef, { profilePic: avatar }, { merge: true });
+        localStorage.removeItem("selectedAvatar");
+      } else {
+        profilePic.style.backgroundImage = `url('${userData.profilePic || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}')`;
+      }
+
+      getIPCountry((country, code) => {
+        fillCountryAndStates(country, code);
+        setTimeout(() => {
+          const stateSelect = document.getElementById("state");
+          if (userData.state && stateSelect.options.length > 0) {
+            const found = Array.from(stateSelect.options).find(opt => opt.value === userData.state);
+            if (found) found.selected = true;
+          }
+        }, 120);
+      });
+    }
+    renderColorOptions();
+    const eqRef = doc(db, "equipped", uid);
+    const snapEq = await getDoc(eqRef);
+    if (!snapEq.exists()) {
+      renderEquippedFieldsFromInventory({});
+    } else {
+      renderEquippedFieldsFromInventory(snapEq.data());
+    }
+
+    setupMenuNotifications(uid, username);
+    setupMessageNotifications(uid, username);
   });
-}
 
-function showPopup() {
-  const popup = document.getElementById("savedPopup");
-  popup.style.display = "block";
-  popup.style.opacity = "0.85";
-  popup.style.transform = "translateX(-50%) scale(.93)";
-  popup.style.animation = "popupIn 0.44s cubic-bezier(.42,1.24,.36,1) both";
-  setTimeout(() => {
-    popup.style.animation = "popupOut 0.41s cubic-bezier(.42,1.04,.46,1.12) both";
-    setTimeout(() => {
-      popup.style.display = "none";
-      popup.style.animation = "";
-    }, 410);
-  }, 2150);
-}
-
-function renderEquippedFieldsFromInventory(equipped) {
-  if (equipped.banner && itemsMeta.banner[equipped.banner]) {
-    profileBannerImg.src = itemsMeta.banner[equipped.banner].image;
-    profileBannerImg.style.display = 'block';
-  } else {
-    profileBannerImg.src = '';
-    profileBannerImg.style.display = 'none';
-  }
-  let badgeImg = usernameBadgeWrapper.querySelector('img.profile-badge-img');
-  if (equipped.badge && itemsMeta.badge[equipped.badge]) {
-    if (!badgeImg) {
-      badgeImg = document.createElement('img');
-      badgeImg.className = 'profile-badge-img';
-      usernameBadgeWrapper.appendChild(badgeImg);
-    }
-    badgeImg.src = itemsMeta.badge[equipped.badge].image;
-    badgeImg.alt = "badge";
-    usernameBadgeWrapper.title = itemsMeta.badge[equipped.badge].name || "";
-    badgeImg.style.display = "inline-block";
-    badgeImg.style.marginLeft = "3px";
-  } else {
-    if (badgeImg) {
-      badgeImg.style.display = "none";
-      usernameBadgeWrapper.title = "";
-      badgeImg.style.marginLeft = "0";
-    }
-  }
-}
-
-function fillCountryAndStates(country, code) {
-  userCountry = country;
-  const countryElem = document.getElementById("country");
-  if (countryElem) {
-    countryElem.value = userCountry;
-    countryElem.disabled = true;
-  }
-  renderStates(userCountry);
-}
-
-onAuthStateChanged(auth, async user => {
-  if (!user) {
-    alert("Please login first.");
-    window.location.href = "login.html";
-    return;
-  }
-  uid = user.uid;
-
-  const docRef = doc(db, "users", uid);
-  const snap = await getDoc(docRef);
-  let userData = {};
-  if (snap.exists()) {
-    userData = snap.data();
-    username = userData.username || "";
-    usernameSpan.textContent = username;
-    // Username color - set on load
-    selectedColor = userData.usernameColor || "#60a5fa";
+  window.saveProfile = async () => {
+    const stateVal = document.getElementById("state").value;
+    await setDoc(doc(db, "users", uid), {
+      age: document.getElementById("age").value,
+      gender: document.getElementById("gender").value,
+      country: document.getElementById("country").value,
+      state: stateVal,
+      city: document.getElementById("city").value,
+      profession: professionSelect.value,
+      hobbies: hobbiesTextarea.value,
+      height: heightInput.value,
+      weight: weightInput.value,
+      bio: document.getElementById("bio").value,
+      usernameColor: selectedColor
+    }, { merge: true });
     if (usernameSpan) {
       usernameSpan.style.color = selectedColor;
       usernameSpan.style.textShadow = `0 0 6px ${selectedColor}93`;
     }
-    document.getElementById("age").value = userData.age || "";
-    document.getElementById("gender").value = userData.gender || "";
-    document.getElementById("city").value = userData.city || "";
-    if (professionSelect) professionSelect.value = userData.profession || "";
-    if (hobbiesTextarea) hobbiesTextarea.value = userData.hobbies || "";
-    if (heightInput) heightInput.value = userData.height || "";
-    if (weightInput) weightInput.value = userData.weight || "";
-    document.getElementById("bio").value = userData.bio || "";
-    if (roleSelect) {
-      roleSelect.value = userData.role || "member";
-      roleSelect.disabled = true;
-    }
-    adminPanelBtn.style.display = (userData.role === "admin") ? "block" : "none";
+    showPopup();
+  };
 
-    const avatar = localStorage.getItem("selectedAvatar");
-    if (avatar) {
-      profilePic.style.backgroundImage = `url('${avatar}')`;
-      await setDoc(docRef, { profilePic: avatar }, { merge: true });
-      localStorage.removeItem("selectedAvatar");
-    } else {
-      profilePic.style.backgroundImage = `url('${userData.profilePic || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}')`;
-    }
+  window.changePassword = () => { location.href = 'change-password.html'; };
+  window.changeEmail = () => { location.href = 'change-email.html'; };
 
-    getIPCountry((country, code) => {
-      fillCountryAndStates(country, code);
-      setTimeout(() => {
-        const stateSelect = document.getElementById("state");
-        if (userData.state && stateSelect.options.length > 0) {
-          const found = Array.from(stateSelect.options).find(opt => opt.value === userData.state);
-          if (found) found.selected = true;
-        }
-      }, 120);
-    });
-  }
-  renderColorOptions();
-  // --- Equipped items render ---
-  const eqRef = doc(db, "equipped", uid);
-  const snapEq = await getDoc(eqRef);
-  if (!snapEq.exists()) {
-    renderEquippedFieldsFromInventory({});
-  } else {
-    renderEquippedFieldsFromInventory(snapEq.data());
-  }
+  window.logout = async () => { 
+    if(uid) updatePresence(uid, false); 
+    await signOut(auth); 
+    location.href = "login.html"; 
+  };
+  window.deleteAccount = async () => {
+    if (!confirm("Are you sure? Your account will be permanently deleted.")) return;
+    try {
+      if(uid) updatePresence(uid, false); 
+      await deleteUser(auth.currentUser);
+      location.href = "login.html";
+    } catch(e) { alert(e.message || e); }
+  };
 
-  setupMenuNotifications(uid, username);
-  setupMessageNotifications(uid, username);
-});
+  profilePic.onclick = () => { location.href = "gallery.html"; };
 
-window.saveProfile = async () => {
-  const stateVal = document.getElementById("state").value;
-  await setDoc(doc(db, "users", uid), {
-    age: document.getElementById("age").value,
-    gender: document.getElementById("gender").value,
-    country: document.getElementById("country").value,
-    state: stateVal,
-    city: document.getElementById("city").value,
-    profession: professionSelect.value,
-    hobbies: hobbiesTextarea.value,
-    height: heightInput.value,
-    weight: weightInput.value,
-    bio: document.getElementById("bio").value,
-    usernameColor: selectedColor
-  }, { merge: true });
-  // Username color apply (live after save as well)
-  if (usernameSpan) {
-    usernameSpan.style.color = selectedColor;
-    usernameSpan.style.textShadow = `0 0 6px ${selectedColor}93`;
-  }
-  showPopup();
-};
-
-window.changePassword = () => { location.href = 'change-password.html'; };
-window.changeEmail = () => { location.href = 'change-email.html'; };
-window.logout = async () => { await signOut(auth); location.href = "login.html"; };
-window.deleteAccount = async () => {
-  if (!confirm("Are you sure? Your account will be permanently deleted.")) return;
-  try {
-    await deleteUser(auth.currentUser);
-    location.href = "login.html";
-  } catch(e) { alert(e.message || e); }
-};
-
-function setupMenuNotifications(uid, username) {
-  onSnapshot(
-    query(collection(db, "friendRequests"), where("to", "==", uid), where("status", "==", "pending")),
-    (snap) => {
-      const frCount = snap.size;
-      menuNotif.dataset.fr = frCount;
-      friendsNotif.textContent = frCount > 99 ? "99+" : frCount;
-      friendsNotif.style.display = frCount > 0 ? "inline-flex" : "none";
-      bumpBadgeDropdown(friendsNotif, frCount);
-      updateMenuBadge();
-    }
-  );
-}
-
-async function setupMessageNotifications(uid, username) {
-  const friendsSnap = await getDocs(collection(db, "friends"));
-  let myFriends = [];
-  friendsSnap.forEach((doc) => {
-    if (doc.id === uid && doc.data()) myFriends = Object.keys(doc.data());
+  menuBtn.addEventListener("click", (e) => {
+    mainHeader.classList.toggle("expanded");
+    e.stopPropagation();
   });
-  if (myFriends.length === 0) {
-    messagesNotif.style.display = "none";
-    updateMenuBadge();
-    return;
-  }
-  let unseenTracker = {};
-  let usernamesData = {};
-  let batchSize = 10;
-  for (let i = 0; i < myFriends.length; i += batchSize) {
-    let batch = myFriends.slice(i, i + batchSize);
-    const usersSnap = await getDocs(query(collection(db, "users"), where("__name__", "in", batch)));
-    usersSnap.forEach((doc) => {
-      usernamesData[doc.id] = doc.data().username;
-    });
-  }
-  for (const fid of myFriends) {
-    const friendUsername = usernamesData[fid];
-    if (!friendUsername || friendUsername === username) continue;
-    const chatId = [username, friendUsername].sort().join("_");
-    const msgRef = collection(db, "personalMessages", chatId, "messages");
-    onSnapshot(
-      query(msgRef, where("recipient", "==", username), where("seen", "==", false)),
-      (snap) => {
-        let unseen = 0;
-        snap.forEach((doc) => {
-          if (doc.data().sender !== username) unseen++;
-        });
-        unseenTracker[chatId] = unseen;
-        updateMessagesBadge();
-      }
-    );
-  }
-  function updateMessagesBadge() {
-    let totalUnseen = Object.values(unseenTracker).reduce((a, b) => a + b, 0);
-    messagesNotif.dataset.count = totalUnseen;
-    messagesNotif.textContent = totalUnseen > 99 ? "99+" : totalUnseen;
-    messagesNotif.style.display = totalUnseen > 0 ? "inline-flex" : "none";
-    bumpBadge(messagesNotif, totalUnseen);
-    updateMenuBadge();
-  }
-}
 
-function updateMenuBadge() {
-  const frCount = parseInt(menuNotif.dataset.fr) || 0;
-  const msgCount = parseInt(messagesNotif.dataset.count) || 0;
-  const total = frCount + msgCount;
-  if (total > 0) {
-    menuNotif.textContent = total > 99 ? "99+" : total;
-    menuNotif.style.display = "inline-flex";
-    bumpBadge(menuNotif, total);
-  } else {
-    menuNotif.style.display = "none";
-  }
-}
-
-profilePic.onclick = () => { location.href = "gallery.html"; };
-
-menuBtn.addEventListener("click", (e) => {
-  mainHeader.classList.toggle("expanded");
-  e.stopPropagation();
-});
-
-closeBtn.addEventListener("click", (e) => {
-  mainHeader.classList.remove("expanded");
-  menuBtn.focus();
-  e.stopPropagation();
-});
-
-document.addEventListener("click", (e) => {
-  if (!mainHeader.contains(e.target)) mainHeader.classList.remove("expanded");
-});
-
-document.querySelector(".menu-dropdown").addEventListener("click", (e) => {
-  if (e.target.tagName === "A") mainHeader.classList.remove("expanded");
-});
-
-if (themeSwitch) {
-  themeSwitch.addEventListener("click", () => {
-    document.body.classList.toggle("light-theme");
-    const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
-    localStorage.setItem("theme", theme);
+  closeBtn.addEventListener("click", (e) => {
     mainHeader.classList.remove("expanded");
+    menuBtn.focus();
+    e.stopPropagation();
   });
-}
+
+  document.addEventListener("click", (e) => {
+    if (!mainHeader.contains(e.target)) mainHeader.classList.remove("expanded");
+  });
+
+  document.querySelector(".menu-dropdown").addEventListener("click", (e) => {
+    if (e.target.tagName === "A") mainHeader.classList.remove("expanded");
+  });
+
 </script>
-  <script type='text/javascript' src='//charmingpoliteinjunction.com/22/49/48/224948d8c4149a4d7c99d4253beac6ed.js'></script>
+
+<script type='text/javascript' src='//charmingpoliteinjunction.com/8c/81/93/8c81935dba237bd524ee7b49d4d6398a.js'></script>
+
+<script type='text/javascript' src='//charmingpoliteinjunction.com/22/49/48/224948d8c4149a4d7c99d4253beac6ed.js'></script>
+
 </body>
 </html>
