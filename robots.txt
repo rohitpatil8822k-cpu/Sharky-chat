@@ -1,0 +1,15 @@
+# robots.txt for Sharky Chat
+# Date: 2025-11-23
+
+# Allow all major search engines
+User-agent: *
+
+# Pages or directories to block from crawling (Recommended for privacy/security)
+Disallow: /admin/
+Disallow: /cgi-bin/
+Disallow: /temp/
+# Note: If your /profile.html contains private user data, consider uncommenting the line below.
+# Disallow: /profile.html 
+
+# Location of the Sitemap file
+Sitemap: https://sharkychat.com/sitemap.xml
