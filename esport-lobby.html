@@ -4,57 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
   
-  <title>Sharky Chat | Free Live Chat Rooms List - Join a Room Now</title>
+  <title>Sharky eSport Lobby | Live Gaming & Tournament Chat Rooms</title>
   
-  <meta name="description" content="Explore and join the best free live chat rooms on Sharky Chat. Find groups for dating, talking to strangers, or casual conversation. Secure, real-time access to global rooms." />
+  <meta name="description" content="Join Sharky Chat's exclusive eSport lobby. Find live chat rooms for Free Fire, BGMI, and dedicated rooms for Freestylers and Tournament Warriors. Connect with competitive gamers and watch parties." />
   
-  <meta name="keywords" content="Sharky chat rooms, live chat rooms, free group chat, join chat rooms, list of chat rooms, real-time chat, free chat, group chat, chat rooms list, anonymous chat rooms, meet people, secure chat, best chat rooms" />
+  <meta name="keywords" content="eSport chat rooms, gaming lobby, Free Fire chat, BGMI chat, Freestylers chat, Tournament Warriors, competitive gaming, live stream chat, gamer community, Sharky eSport" />
   
   <meta name="author" content="Sharky Chat Team" />
   <meta name="robots" content="index,follow" />
-  <link rel="canonical" href="https://sharkychat.com/chatrooms.html" />
+  <link rel="canonical" href="https://sharkychat.com/esport-lobby.html" />
 
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="/logo.png" />
-  <meta name="theme-color" content="#2c2c2c" />
+  <meta name="theme-color" content="#1a1a1a" />
   <link rel="manifest" href="/manifest.json" />
 
-  <meta property="og:title" content="Sharky Chat Rooms: Live Group Chat & Meet People" />
-  <meta property="og:description" content="Browse available live chat rooms on Sharky Chat. Click to join and start chatting instantly with users worldwide!" />
+  <meta property="og:title" content="Sharky eSport Lobby | Connect with Gamers" />
+  <meta property="og:description" content="Find and join live chat rooms for competitive gaming on Sharky Chat's eSport Lobby." />
   <meta property="og:image" content="https://sharkychat.com/logo.png" />
-  <meta property="og:url" content="https://sharkychat.com/chatrooms.html" />
+  <meta property="og:url" content="https://sharkychat.com/esport-lobby.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Sharky Chat" /> 
   
   <meta name="twitter:card" content="summary" /> 
-  <meta name="twitter:title" content="Sharky Chat Rooms | Find Your Group Chat" />
-  <meta name="twitter:description" content="The best place to find and join active chat rooms. Talk to strangers, make friends, and more. Join a room now!" />
+  <meta name="twitter:title" content="Sharky eSport Lobby | Gamer Chat" />
+  <meta name="twitter:description" content="The best place to find and join active eSport and gaming chat rooms. Talk strategy, find teammates, and more. Join a room now!" />
   <meta name="twitter:image" content="https://sharkychat.com/logo.png" />
 
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "Sharky Chat",
-      "url": "https://sharkychat.com",
-      "description": "A real-time chatroom and social networking website for meeting strangers, dating, and engaging in fun online conversations.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://sharkychat.com/search?q={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
-      },
-      "image": "https://sharkychat.com/logo.png" 
+      "name": "Sharky Chat eSport",
+      "url": "https://sharkychat.com/esport-lobby.html"
     }
   </script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto&family=Poppins:wght@600&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
   <style>
-    /* -------------------- START: CSS STYLES -------------------- */
+    /* -------------------- START: CSS STYLES (GAMING THEME) -------------------- */
     html {
       scroll-behavior: smooth;
     }
@@ -62,9 +51,14 @@
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      background: linear-gradient(145deg, #2c2c2c, #3b3b3b);
-      color: #d1d1d1;
-      font-family: 'Roboto', Arial, Helvetica, sans-serif;
+      /* Deep space dark background with neon grid effect */
+      background: #1a1a1a;
+      background-image: 
+        linear-gradient(rgba(0, 150, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 150, 255, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      color: #00ff99; /* Neon green text */
+      font-family: 'Share Tech Mono', monospace, sans-serif; /* Techy font */
       overflow-x: hidden;
       display: flex;
       flex-direction: column;
@@ -76,12 +70,12 @@
     main {
       flex-grow: 1;
       width: 100vw;
-      max-width: 580px;
-      padding: 90px 20px 20px; /* Adjusted bottom padding */
+      max-width: 650px; /* Slightly wider main content */
+      padding: 90px 20px 20px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 35px;
       animation: fadeInSlide 0.8s cubic-bezier(0.46, 0.03, 0.52, 0.96) forwards;
       margin: 0 auto;
       user-select: text;
@@ -99,59 +93,75 @@
     h1 {
       font-family: 'Orbitron', monospace, sans-serif;
       font-weight: 700;
-      font-size: 1.6rem;
-      letter-spacing: 2px;
-      color: #a9a9a9;
+      font-size: 1.8rem;
+      letter-spacing: 3px;
+      color: #00ff99;
       text-shadow:
-        0 0 6px #b0b0b0aa,
-        0 0 12px #7f7f7fcc;
+        0 0 10px #00ff99aa, /* Strong neon glow */
+        0 0 20px #00cc8844;
       text-align: center;
-      margin: 0 0 14px;
+      margin: 0 0 10px;
+      text-transform: uppercase;
     }
     #roomList {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 24px;
       width: 100%;
-      min-height: 80px;
+      min-height: 100px;
       pointer-events: auto;
     }
     .room {
-      background: linear-gradient(145deg, #3a3a3a, #2e2e2e);
-      border-radius: 14px;
+      /* Futuristic, angular design */
+      background: linear-gradient(135deg, #2a2a2a 0%, #151515 100%);
+      border-radius: 6px;
+      border: 2px solid #00ff99; /* Neon border */
       box-shadow:
-        0 4px 12px rgba(150,150,150,0.25),
-        inset 0 0 12px rgba(125,125,125,0.3);
-      padding: 15px 18px;
+        0 0 15px rgba(0, 255, 153, 0.3), /* Outer glow */
+        inset 0 0 8px rgba(0, 255, 153, 0.2); /* Inner glow */
+      padding: 16px 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 14px;
-      color: #b8b8b8;
-      font-weight: 600;
+      gap: 16px;
+      color: #ffffff;
+      font-weight: 400;
       font-size: 1.1rem;
       transition:
-        transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-        box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-        background-color 0.4s ease,
-        color 0.3s ease;
+        transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.3s,
+        background-color 0.3s,
+        border-color 0.3s;
       overflow: hidden;
       position: relative;
       will-change: transform;
-      perspective: 550px;
+    }
+    /* Hover/Active effects */
+    .room:hover {
+      transform: scale(1.03) translateY(-3px);
+      border-color: #ff00cc; /* Highlight color change */
+      box-shadow:
+        0 0 20px rgba(255, 0, 204, 0.5),
+        inset 0 0 10px rgba(255, 0, 204, 0.3);
+      background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);
     }
     .room:active {
-      transform: scale(0.95) rotateX(8deg) rotateZ(-2deg);
+      transform: scale(0.98);
       box-shadow:
-        0 6px 18px rgba(255,255,255,0.2),
-        inset 0 0 14px rgba(200,200,200,0.4);
+        0 0 10px rgba(0, 255, 153, 0.8),
+        inset 0 0 5px rgba(0, 255, 153, 0.6);
     }
+
     .room-icon {
       flex-shrink: 0;
-      font-size: 22px;
-      color: #9aaabb;
-      filter: drop-shadow(0 0 3px #899bbbcc);
-      transition: color 0.4s ease;
+      font-size: 24px;
+      color: #00ff99;
+      filter: drop-shadow(0 0 5px #00ff99aa);
+      transition: color 0.3s ease;
+    }
+    .room:hover .room-icon {
+        color: #ff00cc;
+        filter: drop-shadow(0 0 6px #ff00ccaa);
     }
     .room-info {
       flex-grow: 1;
@@ -161,64 +171,58 @@
       white-space: nowrap;
       overflow-x: auto;
       scrollbar-width: none;
-      color: #d3d3d3;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 1.12rem;
-      margin-bottom: 3px;
-      text-shadow: 0 0 4px #707070aa;
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+      text-shadow: 0 0 5px #fff3;
+      text-transform: uppercase;
     }
     .room-title::-webkit-scrollbar {
       display: none;
     }
     .user-count {
-      font-size: 0.92rem;
-      color: #999999;
+      font-size: 0.9rem;
+      color: #00ff99;
+      font-family: 'Share Tech Mono', monospace;
       font-weight: 400;
-      font-family: 'Roboto', sans-serif;
-      text-shadow: 0 0 2px #5a5a5aaa;
+      text-shadow: 0 0 4px #00ff9977;
     }
-    .room:hover {
-      transform: scale(1.08) translateY(-4px) rotateZ(-1deg);
-      box-shadow:
-        0 16px 26px rgba(200,200,200,0.45),
-        inset 0 0 16px rgba(220,220,220,0.55);
-      background-color: #444444;
-      color: #e7e7e7;
-    }
-    .room:hover .room-icon {
-      color: #ccddee;
-    }
+    
+    /* Loader/Overlay */
     #loaderOverlay {
+      /* Same styles as chatrooms for consistency */
       position: fixed;
       z-index: 101;
       left: 0; top: 0; width: 100vw; height: 100vh;
-      background: rgba(46, 46, 46, 0.95);
+      background: rgba(26, 26, 26, 0.98);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       font-family: 'Orbitron', monospace, sans-serif;
       font-size: 1.3rem;
-      color: #b0b0b0;
+      color: #00ff99;
       letter-spacing: 1.5px;
       transition: opacity 0.4s ease;
       pointer-events: all;
+      text-shadow: 0 0 8px #00ff99aa;
     }
     .rotator {
-      border: 5px solid #5a5a5a;
-      border-top: 5px solid #bbbbbb;
+      border: 5px solid #005533;
+      border-top: 5px solid #00ff99;
       border-radius: 50%;
       width: 54px; height: 54px;
       animation: spin 1.3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
       margin-bottom: 24px;
-      filter: drop-shadow(0 0 8px #cdd5dfcc);
+      filter: drop-shadow(0 0 10px #00ff99cc);
     }
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
     
-    /* Esport Lobby Button Styles */
+    /* Back Button (lobby-btn) Styles */
     #extraNav {
         max-width: 580px;
         width: 100%;
@@ -227,8 +231,8 @@
         box-sizing: border-box;
         display: flex;
         justify-content: center;
-        margin-top: 20px; /* Space after the last chat room */
-        margin-bottom: 30px; /* Space before the footer */
+        margin-top: 25px; 
+        margin-bottom: 40px; 
     }
     .lobby-btn {
         display: block;
@@ -242,24 +246,23 @@
         font-weight: 700;
         text-transform: uppercase;
         text-decoration: none;
-        color: #fff;
-        background: linear-gradient(135deg, #007bff 0%, #00c7e2 100%);
-        border: 2px solid #00c7e2;
+        color: #1a1a1a; /* Dark text for contrast */
+        background: linear-gradient(135deg, #00ff99 0%, #ccff00 100%); /* Bright gradient */
+        border: 2px solid #ccff00;
         box-shadow: 
-          0 0 8px rgba(0, 199, 226, 0.6), 
-          0 3px 12px rgba(0, 0, 0, 0.4);
+          0 0 12px rgba(0, 255, 153, 0.8), 
+          0 4px 15px rgba(0, 0, 0, 0.6);
         transition: 
           transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
           box-shadow 0.2s, 
-          background 0.2s,
-          opacity 0.4s ease-out, /* Added opacity transition */
-          transform 0.4s ease-out; /* Added transform transition */
+          background 0.2s;
         position: relative;
         overflow: hidden;
         z-index: 10;
         letter-spacing: 1px;
-        opacity: 0; /* Initially hidden */
+        opacity: 0; 
         transform: translateY(20px);
+        transition: opacity 0.4s ease-out, transform 0.4s ease-out;
     }
     .lobby-btn.loaded {
         opacity: 1;
@@ -272,7 +275,7 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.3);
         transform: skewX(-30deg);
         transition: all 0.5s;
         z-index: 0;
@@ -281,11 +284,11 @@
         left: 100%;
     }
     .lobby-btn:active {
-        transform: scale(0.98);
+        transform: scale(0.96);
         box-shadow: 
-          0 0 15px rgba(0, 199, 226, 0.9), 
-          0 2px 8px rgba(0, 0, 0, 0.6);
-        background: linear-gradient(135deg, #0060c0 0%, #0099ad 100%);
+          0 0 20px rgba(0, 255, 153, 1), 
+          0 2px 10px rgba(0, 0, 0, 0.8);
+        background: linear-gradient(135deg, #00cc77 0%, #aaee00 100%);
     }
     .lobby-btn span {
         position: relative;
@@ -298,45 +301,49 @@
     .lobby-btn svg {
         width: 18px;
         height: 18px;
-        stroke: #fff;
+        stroke: #1a1a1a; /* Dark stroke to show up on bright background */
         stroke-width: 2.5;
-        filter: drop-shadow(0 0 3px #fff);
+        filter: drop-shadow(0 0 1px #000);
     }
     .lobby-btn-anim {
-        animation: neonGlow 0.5s ease-out;
+        animation: neonPulse 0.5s ease-out;
         pointer-events: none;
     }
-    @keyframes neonGlow {
-        0% { transform: scale(1); box-shadow: 0 0 8px #00c7e2; }
-        50% { transform: scale(1.03) rotateZ(1deg); box-shadow: 0 0 20px #00c7e2, 0 0 30px #007bff; }
-        100% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 199, 226, 0.6); }
+    @keyframes neonPulse {
+        0% { transform: scale(1); box-shadow: 0 0 12px #00ff99; }
+        50% { transform: scale(1.04) rotateZ(-1deg); box-shadow: 0 0 30px #00ff99, 0 0 40px #ccff00; }
+        100% { transform: scale(1); box-shadow: 0 0 12px rgba(0, 255, 153, 0.8); }
     }
 
 
+    /* Footer Styles */
     footer {
       text-align: center;
       font-size: 0.91rem;
-      color: #999999;
+      color: #00ff99;
       padding: 14px 10px 32px 10px;
       background: transparent;
       max-width: 580px;
       width: 100vw;
       user-select: none;
       margin: 0 auto;
+      text-shadow: 0 0 3px #00ff9955;
+      font-family: 'Share Tech Mono', monospace;
     }
     footer a {
-      color: #b0b0b0;
+      color: #00ccff; /* secondary neon color */
       margin: 0 14px;
       text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
+      font-weight: 700;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
     }
     footer a:hover {
       text-decoration: underline;
-      color: #dddddd;
+      color: #ffffff;
+      text-shadow: 0 0 8px #ffffff;
     }
 
-    /* Header styles */
+    /* Header styles (Copied from chatrooms.html - keeping consistent look) */
     header {
       background: #2e2e2e;
       position: fixed;
@@ -556,54 +563,7 @@
       filter: drop-shadow(0 2px 8px #fff4);
     }
 
-
-    .room-animate-click {
-      animation: roomClickAnim 0.7s ease forwards;
-      pointer-events: none;
-      position: relative;
-      z-index: 1000;
-    }
-    @keyframes roomClickAnim {
-      0% {
-        box-shadow: 0 0 14px 4px #a4beff88;
-        transform: scale(1);
-      }
-      50% {
-        box-shadow: 0 0 30px 12px #7da5ffbb;
-        transform: scale(1.06) rotateZ(1deg);
-      }
-      100% {
-        box-shadow: 0 0 6px 2px #637dad66;
-        transform: scale(1) rotate(0);
-        opacity: 0.85;
-      }
-    }
-
-    .flower {
-      pointer-events: none;
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      background: radial-gradient(circle, #b2dffc, #799edb);
-      border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
-      filter: drop-shadow(0 0 3px #a9c6ffcc);
-      animation: flowerRise 1200ms ease forwards;
-      opacity: 1;
-      transform-origin: center bottom;
-      mix-blend-mode: screen;
-      z-index: 1200;
-    }
-    @keyframes flowerRise {
-      0% {
-        opacity: 1;
-        transform: translateY(0) scale(0.85) rotate(0deg);
-      }
-      100% {
-        opacity: 0;
-        transform: translateY(-90px) scale(1.3) rotate(360deg);
-      }
-    }
-
+    /* Ad Banner Styling */
     #topBannerAd {
         width: 100%;
         max-width: 728px;
@@ -612,9 +572,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: #252525;
+        background: #0d0d0d;
         border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        box-shadow: 0 0 15px rgba(0, 255, 153, 0.4);
+        border: 1px solid #00ff9988;
     }
     @media (max-width: 768px) {
         #topBannerAd {
@@ -623,12 +584,53 @@
             min-height: 50px;
         }
     }
+    
+    /* Animation effects (copied from chatrooms for click effect) */
+    .room-animate-click {
+      animation: roomClickAnim 0.7s ease forwards;
+      pointer-events: none;
+      position: relative;
+      z-index: 1000;
+    }
+    @keyframes roomClickAnim {
+      0% {
+        box-shadow: 0 0 14px 4px #00ff9988;
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 30px 12px #00ff99bb;
+        transform: scale(1.06) rotateZ(1deg);
+      }
+      100% {
+        box-shadow: 0 0 6px 2px #00ff9966;
+        transform: scale(1) rotate(0);
+        opacity: 0.85;
+      }
+    }
+    .flower {
+      /* Explosion effect on click - changed colors to fit gaming theme */
+      pointer-events: none;
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: radial-gradient(circle, #00ff99, #ccff00);
+      border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+      filter: drop-shadow(0 0 3px #00ff99cc);
+      animation: flowerRise 1200ms ease forwards;
+      opacity: 1;
+      transform-origin: center bottom;
+      mix-blend-mode: screen;
+      z-index: 1200;
+    }
 
-
-    @media (max-width: 600px) {
+    @media (max-width: 650px) {
       main {
         padding: 90px 14px 20px;
-        gap: 22px;
+        gap: 25px;
+      }
+      h1 {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
       }
       .room {
         font-size: 1rem;
@@ -636,19 +638,7 @@
         gap: 12px;
       }
       .room-title {
-        font-size: 1rem;
-      }
-      h1 {
-        font-size: 1.38rem;
-        letter-spacing: 1.5px;
-      }
-      footer {
-        font-size: 0.85rem;
-        padding: 12px 8px 28px;
-      }
-      footer a {
-        margin: 0 10px;
-        font-size: 0.9rem;
+        font-size: 1.05rem;
       }
       .lobby-btn {
         font-size: 1rem;
@@ -660,16 +650,7 @@
         height: 16px;
       }
     }
-    @media (max-width: 400px) {
-      main {
-        padding: 90px 10px 20px;
-        gap: 18px;
-      }
-      h1 {
-        font-size: 1.14rem;
-      }
-    }
-    
+    /* -------------------- END: CSS STYLES (GAMING THEME) -------------------- */
   </style>
 </head>
 <body>
@@ -719,7 +700,7 @@
   </header>
 
   <main>
-    <h1>Chat Rooms</h1>
+    <h1>eSport Lobby Access</h1>
 
     <div id="topBannerAd" role="presentation">
         <script type="text/javascript">
@@ -735,15 +716,17 @@
     </div>
     <div id="loaderOverlay" role="alert" aria-live="assertive">
       <div class="rotator" aria-hidden="true"></div>
-      Loading chat rooms...
+      Initializing combat zones...
     </div>
-    <div id="roomList" role="list"></div>
+    
+    <div id="roomList" role="list">
+        </div>
     
     <div id="extraNav">
-      <a href="esport-lobby.html" class="lobby-btn" id="esportLobbyBtn" role="button">
+      <a href="chatrooms.html" class="lobby-btn loaded" id="chatRoomsBtn" role="button">
           <span>
-              <svg data-lucide="zap-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12A10 10 0 0 0 12 2A10 10 0 0 0 22 12A10 10 0 0 0 12 22A10 10 0 0 0 2 12Z" stroke-width="2"/><path d="M10 12L14 12M12 10L12 14" stroke-width="2"/></svg>
-              ESPORT LOBBY
+              <svg data-lucide="arrow-left-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8L8 12L12 16"/><path d="M16 12H8"/></svg>
+              BACK TO CHAT LOBBY
           </span>
       </a>
     </div>
@@ -786,10 +769,56 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
     
+    // --- Custom eSport Room Data (Updated with new rooms) ---
+    const ESPORT_ROOM_DATA = [
+        { 
+            id: "esport_ff", 
+            name: "Free Fire Max - Booyah Zone", 
+            file: "ff_lobby.html", 
+            icon: "swords", 
+            maxUsers: 100 
+        },
+        { 
+            id: "esport_bgmi", 
+            name: "BGMI War Room - Squad Up", 
+            file: "bgmi_lobby.html", 
+            icon: "shield-check", 
+            maxUsers: 100 
+        },
+        { 
+            id: "esport_freestylers", 
+            name: "FREESTYLERS - Montages & Fun", 
+            file: "freestylers_lobby.html", 
+            icon: "dices", // New Icon
+            maxUsers: 120 
+        },
+        { 
+            id: "esport_tournament", 
+            name: "TOURNAMENT WARRIORS - Scrims", 
+            file: "tournament_lobby.html", 
+            icon: "trophy", // New Icon
+            maxUsers: 80 
+        },
+        { 
+            id: "esport_codm", 
+            name: "CoD Mobile - Ranked Grind", 
+            file: "codm_lobby.html", 
+            icon: "crosshair", 
+            maxUsers: 60 
+        },
+        { 
+            id: "esport_general", 
+            name: "General Gaming - Chill Stream", 
+            file: "general_gaming.html", 
+            icon: "gamepad-2", 
+            maxUsers: 150 
+        }
+    ];
+    
 
     const loaderOverlay = document.getElementById("loaderOverlay");
     const roomList = document.getElementById("roomList");
-    const esportLobbyBtn = document.getElementById("esportLobbyBtn");
+    const chatRoomsBtn = document.getElementById("chatRoomsBtn");
     let roomsLoaded = false;
     let myUsername = "";
 
@@ -924,6 +953,7 @@
       });
     }
 
+    // --- Active User Presence Logic (Firestore) ---
     const userRef = (uid) => doc(db, "users", uid);
 
     async function updatePresence(uid, active) {
@@ -960,6 +990,7 @@
         setInterval(() => updatePresence(uid, true), 60000); 
     }
 
+    // --- Theme Toggle Logic ---
     const themeSwitch = document.getElementById("themeSwitch");
     function setTheme(theme) {
       if (theme === "light") {
@@ -984,6 +1015,8 @@
     });
     (() => {
       const savedTheme = localStorage.getItem("sharky-chat-theme");
+      // For esport lobby, we might default to dark or force a gaming theme, but 
+      // keeping the same theme toggle logic as chatrooms.html for consistency.
       if(savedTheme === "light") {
         setTheme("light");
       } else {
@@ -992,6 +1025,7 @@
     })();
 
 
+    // --- Auth and Initialization ---
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "index.html";
@@ -1010,9 +1044,10 @@
       setupWalletNotifications(user.uid);
       setupPresenceListeners(user.uid);
 
-      loadChatRooms();
+      loadESportRooms();
     });
 
+    // --- Header Menu Logic ---
     const mainHeader = document.getElementById("mainHeader");
     document.getElementById("menuBtn").addEventListener("click", (e) => {
       mainHeader.classList.toggle("expanded");
@@ -1030,6 +1065,7 @@
     });
 
 
+    // --- Room Loading Logic ---
     function createFlowerAt(x, y, container) {
       const flower = document.createElement('span');
       flower.className = 'flower';
@@ -1039,116 +1075,102 @@
       flower.addEventListener('animationend', () => flower.remove());
     }
 
-    async function loadChatRooms() {
+    // Function to simulate a real-time user count listener
+    function setupActiveUserListener(roomId, maxUsers) {
+        const countEl = document.getElementById(`count-${roomId}`);
+        if (!countEl) return;
+        
+        const userRef = collection(db, `roomActiveUsers/${roomId}/users`);
+
+        // This simulates the actual real-time connection
+        return onSnapshot(userRef, userSnap => {
+            const now = Date.now();
+            let trueActive = 0;
+            userSnap.forEach(userDoc => {
+              const u = userDoc.data();
+              // Check if lastSeen is within the last 32 seconds (approx)
+              if(u && u.lastSeen && u.lastSeen.toMillis && (now - u.lastSeen.toMillis() < 32000)) {
+                trueActive++;
+              }
+            });
+            countEl.textContent = `Active Players: ${trueActive}/${maxUsers}`;
+        }, (err) => {
+            console.error(`Error fetching user count for ${roomId}:`, err);
+            countEl.textContent = `Active Players: N/A`;
+        });
+    }
+
+    async function loadESportRooms() {
       loaderOverlay.style.display = "flex";
       roomsLoaded = false;
+      roomList.innerHTML = ""; 
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 800));
 
-      let roomsSnapshotUnsubscribe;
+      loaderOverlay.style.display = "none";
+      roomsLoaded = true;
+      
+      let userCountUnsubscribes = [];
 
-      const attemptLoad = () => {
-        if (roomsSnapshotUnsubscribe) roomsSnapshotUnsubscribe();
+      ESPORT_ROOM_DATA.forEach((room, i) => {
+        const div = document.createElement("div");
+        div.className = "room";
+        div.setAttribute('role','listitem');
+        div.innerHTML = `
+          <i class="room-icon" data-lucide="${room.icon}"></i>
+          <div class="room-info">
+            <div class="room-title">${room.name}</div>
+            <div class="user-count" id="count-${room.id}">Active Players: Loading...</div>
+          </div>
+        `;
 
-        roomsSnapshotUnsubscribe = onSnapshot(collection(db, "chatrooms"), (snapshot) => {
-          if (!roomsLoaded) {
-            loaderOverlay.style.display = "none";
-            roomsLoaded = true;
-            esportLobbyBtn.classList.add('loaded'); 
+        div.addEventListener('click', e => {
+          if (div.classList.contains('room-animate-click')) return;
+          div.classList.add('room-animate-click');
+
+          const rect = div.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          for(let f = 0; f < 6; f++) {
+            const angle = Math.random() * 2 * Math.PI;
+            const radius = 10 + Math.random() * 10;
+            const flowerX = cx + Math.cos(angle) * radius;
+            const flowerY = cy + Math.sin(angle) * radius;
+            createFlowerAt(flowerX, flowerY, document.body);
           }
-          roomList.innerHTML = "";
-          if (snapshot.empty) {
-            roomList.innerHTML = "<div style='color:#999999;font-size:1.09rem;margin-top:40px;text-align:center;'>No chat rooms found.</div>";
-            esportLobbyBtn.classList.add('loaded'); // Ensure button is shown even if rooms are empty
-            return;
-          }
-          
-          let userCountUnsubscribes = [];
 
-          snapshot.forEach((doc, i) => {
-            const room = doc.data();
-            const roomId = doc.id;
-            const div = document.createElement("div");
-            div.className = "room";
-            div.setAttribute('role','listitem');
-            div.innerHTML = `
-              <i class="room-icon" data-lucide="message-circle"></i>
-              <div class="room-info">
-                <div class="room-title">${room.name}</div>
-                <div class="user-count" id="count-${roomId}">Users: Loading...</div>
-              </div>
-            `;
-
-            div.addEventListener('click', e => {
-              if (div.classList.contains('room-animate-click')) return;
-              div.classList.add('room-animate-click');
-
-              const rect = div.getBoundingClientRect();
-              const cx = rect.left + rect.width / 2;
-              const cy = rect.top + rect.height / 2;
-              for(let f = 0; f < 6; f++) {
-                const angle = Math.random() * 2 * Math.PI;
-                const radius = 10 + Math.random() * 10;
-                const flowerX = cx + Math.cos(angle) * radius;
-                const flowerY = cy + Math.sin(angle) * radius;
-                createFlowerAt(flowerX, flowerY, document.body);
-              }
-
-              setTimeout(() => {
-                div.classList.remove('room-animate-click');
-                window.location.href = room.file || "#";
-              }, 700); 
-            });
-
-            div.style.opacity = '0';
-            div.style.transform = 'translateY(10px)';
-            setTimeout(() => {
-              div.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-              div.style.opacity = '1';
-              div.style.transform = 'translateY(0)';
-            }, 60 * i);
-
-            roomList.appendChild(div);
-
-            const userRef = collection(db, `roomActiveUsers/${roomId}/users`);
-            const usersSub = onSnapshot(userRef, userSnap => {
-                const now = Date.now();
-                let trueActive = 0;
-                userSnap.forEach(userDoc => {
-                  const u = userDoc.data();
-              
-                  if(u && u.lastSeen && u.lastSeen.toMillis && (now - u.lastSeen.toMillis() < 32000)) {
-                    trueActive++;
-                  }
-                });
-                const countEl = document.getElementById(`count-${roomId}`);
-                if (countEl) {
-                  countEl.textContent = `Users: ${trueActive}/${room.maxUsers || 20}`;
-                }
-            });
-            userCountUnsubscribes.push(usersSub);
-          });
-          
-          window.onbeforeunload = () => {
-              userCountUnsubscribes.forEach(unsub => unsub());
-              if (roomsSnapshotUnsubscribe) roomsSnapshotUnsubscribe();
-          };
-
-          lucide.createIcons();
-
-        }, (err) => {
-          loaderOverlay.style.display = 'none';
-          roomList.innerHTML = "<div style='color:#ff5555;font-size:1.07rem;margin-top:30px;text-align:center;'>Error loading chat rooms.</div>";
-          console.error("Chatrooms Load Error:", err);
+          setTimeout(() => {
+            div.classList.remove('room-animate-click');
+            window.location.href = room.file || "#";
+          }, 700); 
         });
+
+        // Animation for showing rooms sequentially
+        div.style.opacity = '0';
+        div.style.transform = 'translateY(15px)';
+        setTimeout(() => {
+          div.style.transition = 'opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1), transform 0.4s cubic-bezier(0.19, 1, 0.22, 1)';
+          div.style.opacity = '1';
+          div.style.transform = 'translateY(0)';
+        }, 80 * i); // Staggered animation
+
+        roomList.appendChild(div);
+
+        // Start listening for active users for this specific eSport room
+        const unsub = setupActiveUserListener(room.id, room.maxUsers);
+        userCountUnsubscribes.push(unsub);
+      });
+      
+      window.onbeforeunload = () => {
+          userCountUnsubscribes.forEach(unsub => unsub());
       };
 
-      attemptLoad();
-      
-      setTimeout(() => {
-        if(!roomsLoaded) loaderOverlay.style.opacity = '0';
-      }, 10000);
+      lucide.createIcons();
     }
     
-    esportLobbyBtn.addEventListener('click', function(e) {
+    // --- Back Button Click Animation ---
+    chatRoomsBtn.addEventListener('click', function(e) {
         e.preventDefault();
         
         this.classList.add('lobby-btn-anim');
