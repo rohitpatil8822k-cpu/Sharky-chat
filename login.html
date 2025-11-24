@@ -5,12 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sharky Chat | Login/Register</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
+  
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
+     crossorigin="anonymous"></script>
+
   <style>
    
     :root {
       --primary-bg: linear-gradient(145deg, #101224 0%, #05071a 100%);
-      --accent-color: #5d98ff; /* Brighter, modern blue */
-      --secondary-accent: #7a73ff; /* Purple glow */
+      --accent-color: #5d98ff;
+      --secondary-accent: #7a73ff;
       --panel-bg: rgba(18, 20, 36, 0.95);
       --card-radius: 18px;
       --glow-light: 0 0 15px #5d98ff88, 0 0 35px #7a73ff55;
@@ -372,7 +376,7 @@
     }
     .banner-ad-container {
       width: 100%;
-      max-width: 460px; /* Matching card max-width roughly */
+      max-width: 460px;
       height: 60px; 
       margin: 30px auto 10px auto; 
       display: flex;
@@ -382,6 +386,10 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 0 10px #5d98ff33;
+      color: #5d98ff;
+      font-size: 0.9em;
+      font-weight: 500;
+      letter-spacing: 0.05em;
     }
     @media (max-width: 500px) {
         .banner-ad-container {
@@ -390,7 +398,6 @@
         }
     }
 
-    /* Keyframe Animations */
     @keyframes fadeInDown {
       0% {opacity: 0; transform: translateY(-30px);}
       100% {opacity: 1; transform: translateY(0);}
@@ -399,7 +406,6 @@
       0% {opacity: 0; transform: translateY(30px);}
       100% {opacity: 1; transform: translateY(0);}
     }
-    /* Responsive Adjustments */
     @media (max-width: 500px) {
       header {
         font-size: 2.2rem;
@@ -431,17 +437,9 @@
   <header>SHARKY CHAT</header>
   
   <div class="banner-ad-container">
-    <script type="text/javascript">
-        atOptions = {
-            'key' : '6e8f26946b72e000fd5de12a16765f8d',
-            'format' : 'iframe',
-            'height' : 50,
-            'width' : 320,
-            'params' : {}
-        };
-    </script>
-    <script type="text/javascript" src="//charmingpoliteinjunction.com/6e8f26946b72e000fd5de12a16765f8d/invoke.js"></script>
+    Banner Ad Space (Placed by AdSense Auto Ads)
   </div>
+  
   <div id="agreementModal" class="modal-overlay">
     <div class="agreement-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <h3 id="modalTitle">Accept Terms to Continue</h3>
@@ -501,10 +499,6 @@
     </form>
   </div>
   
-  <script type='text/javascript' src='//charmingpoliteinjunction.com/22/49/48/224948d8c4149a4d7c99d4253beac6ed.js'></script>
-  <script type='text/javascript' src='//charmingpoliteinjunction.com/8c/81/93/8c81935dba237bd524ee7b49d4d6398a.js'></script>
-
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
@@ -538,7 +532,6 @@
         return BAD_WORDS.some(word => lowerText.includes(word));
     }
 
-    // --- Active User Presence Logic ---
     const userRef = (uid) => doc(db, "users", uid);
 
     async function updatePresence(uid, active) {
@@ -574,7 +567,6 @@
         setupPresenceListeners(user.uid); 
       }
     });
-    // --- End Active User Presence Logic ---
 
     function showNotif(msg, opts = {}) {
       const c = document.getElementById('notif-container');
@@ -755,7 +747,7 @@
 
     async function handleLogin() {
       try {
-        const userCred = await signInWithEmailAndPassword(auth,
+        await signInWithEmailAndPassword(auth,
           document.getElementById("loginEmail").value,
           document.getElementById("loginPassword").value
         );
