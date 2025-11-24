@@ -8,6 +8,7 @@
   
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
      crossorigin="anonymous"></script>
+  
   <meta name="description" content="Dive into Sharky Chat: the #1 platform for free live chat rooms, meeting strangers, dating, and making new friends worldwide. Secure, real-time, and fun conversation on all devices. Start chatting now!" />
   
   <meta name="keywords" content="Sharky chat, sharkychat , text chat , free dating app , team sharky , random chat , chat rooms, live chat, strangers chat, talk to strangers, dating app, online dating, meet people, chat app, social network, free chat, real-time chat, fun, anonymous chat, video chat, group chat, make friends online, secure chat, best chat rooms, free dating, find love, casual chat, instant messaging" />
@@ -106,18 +107,21 @@
       user-select: text;
     }
     p#redirectMsg {
-      font-size: 1.1rem;
-      color: #8ab9ff;
+      font-size: 1.3rem;
+      color: #ff9900; 
       letter-spacing: 0.05em;
-      font-weight: 500;
+      font-weight: 700; 
       user-select: none;
       min-height: 28px;
-      opacity: 0.9;
-      font-style: italic;
+      opacity: 1;
+      font-style: normal;
+      cursor: pointer; 
+      text-shadow: 0 0 10px rgba(255,153,0,0.5); 
       transition: color 0.3s ease;
+      margin-top: 15px; 
     }
     p#redirectMsg:hover {
-      color: #4fc3f7;
+      color: #fce200;
     }
     .smoke {
       position: fixed;
@@ -182,7 +186,7 @@
       .container { max-width: 90vw; padding: 28px 20px 36px 20px; }
       h1 { font-size: 2.2rem; }
       p.tagline { font-size: 1.1rem; margin-bottom: 18px; }
-      p#redirectMsg { font-size: 1rem; }
+      p#redirectMsg { font-size: 1.2rem; }
     }
   </style>
 </head>
@@ -191,7 +195,7 @@
   <main class="container" role="main" aria-label="Welcome message and redirect notice">
     <h1>Welcome to Sharky Chat</h1>
     <p class="tagline">Dive into free live chat rooms, meet strangers, and find dates online.</p>
-    <p id="redirectMsg" aria-live="polite">Redirecting to login page in 10s...</p>
+    <p id="redirectMsg" aria-live="polite">Click here to enter the chat room instantly!</p>
     <section style="display:none;">
       Sharky Chat is a secure real-time chatroom website that offers multiplayer games, open chatrooms, and opportunities for dating, social fun, and entertainment by connecting you with strangers worldwide. Accessible on laptop, iOS, and Android.
     </section>
@@ -204,22 +208,16 @@
   </div>
   <div id="clickBubbles" aria-hidden="true"></div>
   <script>
-    let timeLeft = 10;
     const msg = document.getElementById("redirectMsg");
-    const timer = setInterval(() => {
-      timeLeft--;
-      if(timeLeft >= 0){ msg.textContent = `Redirecting to login page in ${timeLeft}s...`; }
-      if (timeLeft <= 0) {
-        clearInterval(timer);
-     window.location.href = "profile.html"; 
-      }
-    }, 1000);
+    msg.onclick = function() {
+        window.location.href = "profile.html"; 
+    };
+    
     const bubblesContainer = document.getElementById('clickBubbles');
     document.addEventListener('click', (e) => {
       const bubble = document.createElement('div');
       bubble.className = 'click-bubble';
-      bubble.style.left = (e.clientX - 14)
- + 'px';
+      bubble.style.left = (e.clientX - 14) + 'px';
       bubble.style.top = (e.clientY - 14) + 'px';
       bubblesContainer.appendChild(bubble);
       bubble.addEventListener('animationend', () => { bubble.remove(); });
