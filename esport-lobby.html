@@ -40,10 +40,11 @@
       "url": "https://sharkychat.com/esport-lobby.html"
     }
   </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
+     crossorigin="anonymous"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
   <style>
-    /* -------------------- START: CSS STYLES (GAMING THEME) -------------------- */
     html {
       scroll-behavior: smooth;
     }
@@ -51,14 +52,13 @@
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      /* Deep space dark background with neon grid effect */
       background: #1a1a1a;
       background-image: 
         linear-gradient(rgba(0, 150, 255, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 150, 255, 0.05) 1px, transparent 1px);
       background-size: 40px 40px;
-      color: #00ff99; /* Neon green text */
-      font-family: 'Share Tech Mono', monospace, sans-serif; /* Techy font */
+      color: #00ff99;
+      font-family: 'Share Tech Mono', monospace, sans-serif;
       overflow-x: hidden;
       display: flex;
       flex-direction: column;
@@ -70,7 +70,7 @@
     main {
       flex-grow: 1;
       width: 100vw;
-      max-width: 650px; /* Slightly wider main content */
+      max-width: 650px;
       padding: 90px 20px 20px;
       box-sizing: border-box;
       display: flex;
@@ -97,7 +97,7 @@
       letter-spacing: 3px;
       color: #00ff99;
       text-shadow:
-        0 0 10px #00ff99aa, /* Strong neon glow */
+        0 0 10px #00ff99aa,
         0 0 20px #00cc8844;
       text-align: center;
       margin: 0 0 10px;
@@ -112,13 +112,12 @@
       pointer-events: auto;
     }
     .room {
-      /* Futuristic, angular design */
       background: linear-gradient(135deg, #2a2a2a 0%, #151515 100%);
       border-radius: 6px;
-      border: 2px solid #00ff99; /* Neon border */
+      border: 2px solid #00ff99;
       box-shadow:
-        0 0 15px rgba(0, 255, 153, 0.3), /* Outer glow */
-        inset 0 0 8px rgba(0, 255, 153, 0.2); /* Inner glow */
+        0 0 15px rgba(0, 255, 153, 0.3),
+        inset 0 0 8px rgba(0, 255, 153, 0.2);
       padding: 16px 20px;
       cursor: pointer;
       display: flex;
@@ -136,10 +135,9 @@
       position: relative;
       will-change: transform;
     }
-    /* Hover/Active effects */
     .room:hover {
       transform: scale(1.03) translateY(-3px);
-      border-color: #ff00cc; /* Highlight color change */
+      border-color: #ff00cc;
       box-shadow:
         0 0 20px rgba(255, 0, 204, 0.5),
         inset 0 0 10px rgba(255, 0, 204, 0.3);
@@ -190,9 +188,7 @@
       text-shadow: 0 0 4px #00ff9977;
     }
     
-    /* Loader/Overlay */
     #loaderOverlay {
-      /* Same styles as chatrooms for consistency */
       position: fixed;
       z-index: 101;
       left: 0; top: 0; width: 100vw; height: 100vh;
@@ -222,7 +218,6 @@
       to { transform: rotate(360deg); }
     }
     
-    /* Back Button (lobby-btn) Styles */
     #extraNav {
         max-width: 580px;
         width: 100%;
@@ -246,8 +241,8 @@
         font-weight: 700;
         text-transform: uppercase;
         text-decoration: none;
-        color: #1a1a1a; /* Dark text for contrast */
-        background: linear-gradient(135deg, #00ff99 0%, #ccff00 100%); /* Bright gradient */
+        color: #1a1a1a;
+        background: linear-gradient(135deg, #00ff99 0%, #ccff00 100%);
         border: 2px solid #ccff00;
         box-shadow: 
           0 0 12px rgba(0, 255, 153, 0.8), 
@@ -301,7 +296,7 @@
     .lobby-btn svg {
         width: 18px;
         height: 18px;
-        stroke: #1a1a1a; /* Dark stroke to show up on bright background */
+        stroke: #1a1a1a;
         stroke-width: 2.5;
         filter: drop-shadow(0 0 1px #000);
     }
@@ -316,7 +311,6 @@
     }
 
 
-    /* Footer Styles */
     footer {
       text-align: center;
       font-size: 0.91rem;
@@ -331,7 +325,7 @@
       font-family: 'Share Tech Mono', monospace;
     }
     footer a {
-      color: #00ccff; /* secondary neon color */
+      color: #00ccff;
       margin: 0 14px;
       text-decoration: none;
       font-weight: 700;
@@ -343,7 +337,6 @@
       text-shadow: 0 0 8px #ffffff;
     }
 
-    /* Header styles (Copied from chatrooms.html - keeping consistent look) */
     header {
       background: #2e2e2e;
       position: fixed;
@@ -563,7 +556,6 @@
       filter: drop-shadow(0 2px 8px #fff4);
     }
 
-    /* Ad Banner Styling */
     #topBannerAd {
         width: 100%;
         max-width: 728px;
@@ -585,7 +577,6 @@
         }
     }
     
-    /* Animation effects (copied from chatrooms for click effect) */
     .room-animate-click {
       animation: roomClickAnim 0.7s ease forwards;
       pointer-events: none;
@@ -608,7 +599,6 @@
       }
     }
     .flower {
-      /* Explosion effect on click - changed colors to fit gaming theme */
       pointer-events: none;
       position: absolute;
       width: 16px;
@@ -650,7 +640,6 @@
         height: 16px;
       }
     }
-    /* -------------------- END: CSS STYLES (GAMING THEME) -------------------- */
   </style>
 </head>
 <body>
@@ -703,16 +692,6 @@
     <h1>eSport Lobby Access</h1>
 
     <div id="topBannerAd" role="presentation">
-        <script type="text/javascript">
-            atOptions = {
-                'key' : '6e8f26946b72e000fd5de12a16765f8d',
-                'format' : 'iframe',
-                'height' : 90,
-                'width' : 728,
-                'params' : {}
-            };
-        </script>
-        <script type="text/javascript" src="//charmingpoliteinjunction.com/6e8f26946b72e000fd5de12a16765f8d/invoke.js"></script>
     </div>
     <div id="loaderOverlay" role="alert" aria-live="assertive">
       <div class="rotator" aria-hidden="true"></div>
@@ -736,9 +715,11 @@
   <footer>
     <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
     <a href="tou.html" target="_blank" rel="noopener">Terms of Use</a>
-    <a href="contact-us.html" target="_blank" rel="noopener">Contact Us</a>
+    <a href="contact-us.
+html" target="_blank" rel="noopener">Contact Us</a>
   </footer>
-
+</body>
+</html>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -768,8 +749,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
-    
-    // --- Custom eSport Room Data (Updated with new rooms) ---
     const ESPORT_ROOM_DATA = [
         { 
             id: "esport_ff", 
@@ -789,14 +768,14 @@
             id: "esport_freestylers", 
             name: "FREESTYLERS - Montages & Fun", 
             file: "freestylers_lobby.html", 
-            icon: "dices", // New Icon
+            icon: "dices", 
             maxUsers: 120 
         },
         { 
             id: "esport_tournament", 
             name: "TOURNAMENT WARRIORS - Scrims", 
             file: "tournament_lobby.html", 
-            icon: "trophy", // New Icon
+            icon: "trophy", 
             maxUsers: 80 
         },
         { 
@@ -952,8 +931,6 @@
         updateWalletBadge(hasUnseen);
       });
     }
-
-    // --- Active User Presence Logic (Firestore) ---
     const userRef = (uid) => doc(db, "users", uid);
 
     async function updatePresence(uid, active) {
@@ -989,8 +966,6 @@
         
         setInterval(() => updatePresence(uid, true), 60000); 
     }
-
-    // --- Theme Toggle Logic ---
     const themeSwitch = document.getElementById("themeSwitch");
     function setTheme(theme) {
       if (theme === "light") {
@@ -1015,8 +990,6 @@
     });
     (() => {
       const savedTheme = localStorage.getItem("sharky-chat-theme");
-      // For esport lobby, we might default to dark or force a gaming theme, but 
-      // keeping the same theme toggle logic as chatrooms.html for consistency.
       if(savedTheme === "light") {
         setTheme("light");
       } else {
@@ -1024,8 +997,6 @@
       }
     })();
 
-
-    // --- Auth and Initialization ---
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "index.html";
@@ -1046,8 +1017,6 @@
 
       loadESportRooms();
     });
-
-    // --- Header Menu Logic ---
     const mainHeader = document.getElementById("mainHeader");
     document.getElementById("menuBtn").addEventListener("click", (e) => {
       mainHeader.classList.toggle("expanded");
@@ -1065,7 +1034,6 @@
     });
 
 
-    // --- Room Loading Logic ---
     function createFlowerAt(x, y, container) {
       const flower = document.createElement('span');
       flower.className = 'flower';
@@ -1075,21 +1043,18 @@
       flower.addEventListener('animationend', () => flower.remove());
     }
 
-    // Function to simulate a real-time user count listener
     function setupActiveUserListener(roomId, maxUsers) {
         const countEl = document.getElementById(`count-${roomId}`);
         if (!countEl) return;
         
         const userRef = collection(db, `roomActiveUsers/${roomId}/users`);
 
-        // This simulates the actual real-time connection
         return onSnapshot(userRef, userSnap => {
             const now = Date.now();
             let trueActive = 0;
             userSnap.forEach(userDoc => {
               const u = userDoc.data();
-              // Check if lastSeen is within the last 32 seconds (approx)
-              if(u && u.lastSeen && u.lastSeen.toMillis && (now - u.lastSeen.toMillis() < 32000)) {
+               if(u && u.lastSeen && u.lastSeen.toMillis && (now - u.lastSeen.toMillis() < 32000)) {
                 trueActive++;
               }
             });
@@ -1105,7 +1070,6 @@
       roomsLoaded = false;
       roomList.innerHTML = ""; 
       
-      // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 800));
 
       loaderOverlay.style.display = "none";
@@ -1146,18 +1110,17 @@
           }, 700); 
         });
 
-        // Animation for showing rooms sequentially
         div.style.opacity = '0';
         div.style.transform = 'translateY(15px)';
         setTimeout(() => {
           div.style.transition = 'opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1), transform 0.4s cubic-bezier(0.19, 1, 0.22, 1)';
           div.style.opacity = '1';
           div.style.transform = 'translateY(0)';
-        }, 80 * i); // Staggered animation
+        }, 80 * i); 
 
         roomList.appendChild(div);
 
-        // Start listening for active users for this specific eSport room
+       
         const unsub = setupActiveUserListener(room.id, room.maxUsers);
         userCountUnsubscribes.push(unsub);
       });
@@ -1168,9 +1131,7 @@
 
       lucide.createIcons();
     }
-    
-    // --- Back Button Click Animation ---
-    chatRoomsBtn.addEventListener('click', function(e) {
+   chatRoomsBtn.addEventListener('click', function(e) {
         e.preventDefault();
         
         this.classList.add('lobby-btn-anim');
@@ -1186,10 +1147,5 @@
     });
 
   </script>
-
-  <script type='text/javascript' src='//charmingpoliteinjunction.com/8c/81/93/8c81935dba237bd524ee7b49d4d6398a.js'></script>
-
-  <script type='text/javascript' src='//charmingpoliteinjunction.com/22/49/48/224948d8c4149a4d7c99d4253beac6ed.js'></script>
-
 </body>
 </html>
