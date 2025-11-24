@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <title>Sharky Chat — Search Users</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+  
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
+     crossorigin="anonymous"></script>
+
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;500;700&family=Poppins:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     html,
@@ -31,7 +35,7 @@
     }
 
     header {
-      background: #555555; /* full grey */
+      background: #555555;
       position: fixed;
       top: 0;
       left: 0;
@@ -41,10 +45,6 @@
       min-height: 50px;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
       border-radius: 0;
       transition: box-shadow 0.23s;
       color: #d1d1d1;
@@ -73,7 +73,7 @@
       animation: float 3.3s ease-in-out infinite;
       user-select: none;
       pointer-events: none;
-      filter: none; /* removed invert/brightness filter for clarity */
+      filter: none;
       image-rendering: crisp-edges;
     }
     @keyframes float {
@@ -434,37 +434,6 @@
       margin-top: 2px;
     }
 
-    .ad-banner-container {
-      display: flex;
-      justify-content: center;
-      margin: 20px auto;
-      max-width: 960px;
-      width: 100%;
-      height: 250px; /* Default height for 300x250 or 728x90 to prevent layout shift */
-      overflow: hidden;
-    }
-    
-    .ad-banner-desktop {
-        display: none; /* Hide 728x90 by default on small screens */
-    }
-    .ad-banner-mobile {
-        display: block; /* Show 300x250 by default on small screens */
-    }
-
-
-    @media (min-width: 768px) {
-        .ad-banner-desktop {
-            display: block; /* Show 728x90 on large screens */
-            height: 90px;
-        }
-        .ad-banner-mobile {
-            display: none; /* Hide 300x250 on large screens */
-        }
-        .ad-banner-container {
-            height: 90px; /* Adjust container height for 728x90 */
-        }
-    }
-
     @media (max-width: 768px) {
       .search-box {
         margin: 30px 12px 0 12px;
@@ -546,37 +515,6 @@
   </header>
 
 <main>
-    <div class="ad-banner-container ad-banner-mobile">
-        <div style="width:300px; height:250px;">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '3ec175937a06e144caa3b84bb80b76c5',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//charmingpoliteinjunction.com/3ec175937a06e144caa3b84bb80b76c5/invoke.js"></script>
-        </div>
-    </div>
-
-    <div class="ad-banner-container ad-banner-desktop">
-        <div style="width:728px; height:90px;">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '6e8f26946b72e000fd5de12a16765f8d',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//charmingpoliteinjunction.com/6e8f26946b72e000fd5de12a16765f8d/invoke.js"></script>
-        </div>
-    </div>
-
-
   <div class="search-box">
     <input
       type="text"
@@ -598,7 +536,8 @@
     </div>
   </div>
 </main>
-
+</body>
+</html>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
   import {
@@ -926,6 +865,5 @@
 
   window.addEventListener("DOMContentLoaded", renderAllUsersGrid);
 </script>
-
 </body>
 </html>
