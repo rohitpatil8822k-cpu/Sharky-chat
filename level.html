@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <title>Sharky Chat — Level & XP</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
+     crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after {
@@ -26,284 +28,49 @@
       transition: background 0.3s, color 0.3s;
     }
 
-    header {
-      background: #182338;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 2000;
-      width: 100vw;
-      box-shadow: 0 2px 17px #10162325;
-      min-height: 50px;
-      user-select: none;
-      transition: box-shadow 0.23s;
+    .top-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 2000;
+        width: 100%;
+        max-width: 480px;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        background: #182338;
+        box-shadow: 0 2px 17px #10162325;
+        transition: background 0.3s;
     }
 
-    .header-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 16px;
-      min-height: 50px;
-      position: relative;
-      z-index: 1;
-      font-family: "Poppins", Arial, sans-serif;
-      font-size: 1.02rem;
-      color: inherit;
+    .back-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        color: #60a5fa;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9px;
+        transition: background 0.16s, transform 0.2s;
+        outline: none;
     }
 
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .back-btn:active {
+        background: #20325c;
+        transform: scale(0.93);
     }
 
-    .logo-container img {
-      height: 25px;
-      animation: float 3.3s ease-in-out infinite;
-      user-select: none;
-      pointer-events: none;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-    }
-
-    .logo-text {
-      font-family: "Orbitron", Arial, Helvetica, sans-serif;
-      font-size: 1.02rem;
-      color: #60a5fa;
-      text-shadow: 0 0 7px #60a5fa74;
-      font-weight: 800;
-      letter-spacing: 0.055em;
-    }
-
-    .menu-btn {
-      font-size: 1.5rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      min-width: 38px;
-      height: 36px;
-      color: #80caff;
-      outline: none;
-      border: none;
-      background: none;
-      border-radius: 9px;
-      position: relative;
-      transition: background 0.16s, transform 0.2s;
-    }
-
-    .menu-btn:active {
-      background: #20325c;
-      transform: scale(0.93);
-    }
-
-    .menu-btn .notif-badge {
-      background: linear-gradient(105deg, #f87171 65%, #fb923c 110%);
-      color: white;
-      font-weight: 700;
-      font-family: "Orbitron", monospace;
-      min-width: 12px;
-      height: 12px;
-      padding: 0 6px;
-      font-size: 12px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      top: 1px;
-      right: 1px;
-      border: 1px solid #182338;
-      box-shadow: 0 2px 6px #ef444488;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    .menu-dropdown {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      height: 100vh;
-      width: 220px;
-      background: rgba(21, 33, 58, 0.97);
-      box-shadow: -4px 0 26px rgba(0, 0, 0, 0.77);
-      padding-top: 54px;
-      padding-bottom: 22px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      font-family: "Poppins", Arial, sans-serif;
-      font-weight: 600;
-      font-size: 0.85rem;
-      overflow-y: auto;
-      transition: right 0.31s cubic-bezier(0.65, 0.01, 0.32, 1.03);
-      z-index: 2500;
-      user-select: none;
-    }
-
-    header.expanded .menu-dropdown {
-      right: 0;
-    }
-
-    .menu-dropdown .close-btn {
-      position: absolute;
-      left: 11px;
-      top: 13px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      outline: none;
-      z-index: 2600;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s ease;
-      color: #60a5fa;
-      user-select: none;
-    }
-
-    .menu-dropdown .close-btn:hover,
-    .menu-dropdown .close-btn:focus {
-      color: #a78bfa;
-      transform: scale(1.22);
-    }
-
-    .menu-dropdown .close-btn svg {
-      width: 22px;
-      height: 22px;
-      stroke: currentColor;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      user-select: none;
-    }
-
-    .menu-dropdown a {
-      color: #60a5fa;
-      padding: 13px 17px 13px 46px;
-      text-decoration: none;
-      border-bottom: 2px solid #20325c;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      background: none;
-      transition: background 0.13s, color 0.13s, padding-left 0.11s, transform 0.16s;
-      letter-spacing: 0.02em;
-      user-select: none;
-      font-weight: 600;
-      font-size: 0.85rem;
-      will-change: transform;
-      position: relative;
-    }
-
-    .menu-dropdown a:hover,
-    .menu-dropdown a:focus {
-      background: #213967;
-      color: #fff;
-      padding-left: 51px;
-      outline: none;
-      transform: scale(1.05) translateX(-2px);
-    }
-
-    .menu-dropdown a:active {
-      background: #09196a;
-      color: #fbbf24;
-      transform: scale(0.97);
-    }
-
-    .menu-dropdown .notif-badge {
-      position: static;
-      margin-left: 7px;
-      box-shadow: none;
-      border: none;
-      font-weight: 700;
-      font-family: "Orbitron", monospace;
-      font-size: 13px;
-      min-width: 22px;
-      height: 18px;
-      background: linear-gradient(120deg, #fae024 70%, #f87171 100%);
-      color: #222b3a;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 7px;
-      user-select: none;
-    }
-
-    .menu-dropdown a .icon {
-      display: inline-flex;
-      width: 22px;
-      height: 22px;
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      fill: #60a5fa;
-      filter: drop-shadow(0 1px 6px #60a5fa66);
-      transition: fill 0.13s, filter 0.11s;
-      user-select: none;
-    }
-
-    .menu-dropdown a:hover .icon,
-    .menu-dropdown a:focus .icon {
-      fill: #fff;
-      filter: drop-shadow(0 2px 8px #fff4);
-    }
-
-    body.light-theme {
-      background: #f5f6fa;
-      color: #222c3b;
-    }
-
-    body.light-theme header {
-      background: #eaf0fb;
-      color: #222c3b;
-    }
-
-    body.light-theme .logo-text {
-      color: #1d4ed8;
-      text-shadow: 0 0 8px #60a5fa60;
-    }
-
-    body.light-theme .menu-btn {
-      color: #2563eb;
-    }
-
-    body.light-theme .menu-dropdown {
-      background: rgba(234, 240, 251, 0.94);
-      color: #1e293b;
-      box-shadow: -4px 0 24px rgba(16, 24, 39, 0.09);
-    }
-
-    body.light-theme .menu-dropdown a {
-      color: #2563eb;
-      border-bottom: 1px solid #bfdbfe;
-    }
-
-    body.light-theme .menu-dropdown a:hover,
-    body.light-theme .menu-dropdown a:focus {
-      background: #dbeafe;
-      color: #1e293b;
-    }
-
-    body.light-theme .menu-dropdown a:active {
-      background: #dbeafe;
-      color: #eab308;
-    }
-
-    body.light-theme .menu-dropdown .close-btn {
-      color: #2563eb;
-    }
-
-    body.light-theme .menu-dropdown .close-btn:hover,
-    body.light-theme .menu-dropdown .close-btn:focus {
-      color: #a78bfa;
+    .back-btn svg {
+        width: 24px;
+        height: 24px;
+        stroke: currentColor;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
 
     @keyframes notifpop {
@@ -318,7 +85,7 @@
       font-family: 'Orbitron', monospace;
       font-weight: 600;
       font-size: 1.9rem;
-      margin-top: 130px;
+      margin-top: 80px;
       margin-bottom: 36px;
       letter-spacing: 2px;
       user-select: text;
@@ -447,53 +214,6 @@
       animation: popupBounce 0.6s ease forwards;
     }
     
-    /* Ad Popup Styles */
-    #ad-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 300px;
-      padding: 20px;
-      background: #1e293b;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
-      text-align: center;
-      z-index: 9001;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s, visibility 0.3s;
-    }
-    #ad-popup.show {
-      opacity: 1;
-      visibility: visible;
-    }
-    #ad-popup h3 {
-      font-family: 'Orbitron', sans-serif;
-      color: #60a5fa;
-      margin-top: 0;
-      font-size: 1.2rem;
-    }
-    #ad-popup p {
-      color: #94a3b8;
-      margin-bottom: 20px;
-    }
-    #ad-popup button {
-      background: #3b82f6;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: background 0.2s;
-    }
-    #ad-popup button:hover {
-      background: #2563eb;
-    }
-
-
     @keyframes glowPulse {
       0%, 100% { filter: drop-shadow(0 0 4px #3b82f6aa); }
       50% { filter: drop-shadow(0 0 14px #60a5faee); }
@@ -504,54 +224,35 @@
       50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
       100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
+
+    body.light-theme {
+      background: #f5f6fa;
+      color: #222c3b;
+    }
+
+    body.light-theme .top-bar {
+      background: #eaf0fb;
+      box-shadow: 0 2px 17px #e0e5f0;
+    }
+
+    body.light-theme .back-btn {
+      color: #2563eb;
+    }
+
+    body.light-theme .back-btn:active {
+      background: #dbeafe;
+    }
   </style>
 </head>
 <body>
 
-  <header id="mainHeader">
-    <div class="header-inner">
-      <div class="logo-container">
-        <img src="https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/gc-logo.png?alt=media&token=ddfe6e46-7351-4a07-8140-ea702b1bd823" alt="Sharky Logo" />
-        <div class="logo-text">SHARKY CHAT</div>
-      </div>
-      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle menu" aria-expanded="false">
-        ☰
-        <span class="notif-badge" id="menuNotif" style="display:none;">0</span>
-      </button>
-    </div>
-    <nav class="menu-dropdown" role="menu" aria-label="Main Navigation">
-      <button class="close-btn" aria-label="Close menu" title="Close menu" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </button>
-      <a href="profile.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><circle cx="16" cy="12" r="7"/><ellipse cx="16" cy="23.5" rx="12" ry="6.5"/></svg></span>Profile</a>
-      <a href="chatrooms.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><rect x="2" y="8" width="28" height="16" rx="5"/><rect x="12" y="6" width="8" height="4" rx="2"/><circle cx="7" cy="12" r="2"/><circle cx="25" cy="12" r="2"/></svg></span>Chat Rooms</a>
-      <a href="friends.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><circle cx="10" cy="12" r="5"/><circle cx="22" cy="12" r="5"/><ellipse cx="16" cy="23" rx="12" ry="6"/></svg></span>Friends<span id="friends-notif" class="notif-badge" style="display:none;">0</span></a>
-      <a href="add-friends.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><circle cx="15" cy="13" r="7"/><rect x="23" y="19" width="9" height="3" rx="1.5"/><rect x="26" y="16" width="3" height="9" rx="1.5"/></svg></span>Add Friend</a>
-      <a href="inbox.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><rect x="4" y="8" width="24" height="16" rx="4"/><polyline points="4,8 16,18 28,8" fill="none" stroke="#60a5fa" stroke-width="2"/></svg></span>Messages<span id="messages-notif" class="notif-badge" style="display:none;">0</span></a>
-      <a href="wallet.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><rect x="4" y="10" width="24" height="12" rx="3"/><ellipse cx="24" cy="16" rx="2" ry="2"/><rect x="6" y="13" width="20" height="4" rx="2"/><circle cx="17" cy="16" r="2" fill="#fff"/></svg></span>Wallet<span id="wallet-notif" class="notif-badge" style="display:none;">0</span></a>
-      <a href="shop.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><rect x="6" y="13" width="20" height="9" rx="3"/><rect x="12" y="7" width="8" height="6" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><circle cx="10" cy="26" r="2"/><circle cx="22" cy="26" r="2"/></svg></span>Shop</a>
-      <a href="inventory.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><rect x="7" y="10" width="18" height="12" rx="3"/><rect x="11" y="6" width="10" height="4" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><path d="M7 22h18"/><circle cx="16" cy="18" r="2"/></svg></span>Inventory</a>
-      <a href="news.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="18" rx="4"/><rect x="9" y="11" width="14" height="2" rx="1"/><rect x="9" y="16" width="8" height="2" rx="1"/><circle cx="10" cy="21" r="2"/><rect x="14" y="20" width="7" height="2" rx="1"/></svg></span>News</a>
-      <a href="level.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><path d="M16 5v17" stroke="#6699ff" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="26" r="5" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><rect x="11" y="13" width="10" height="4" rx="2" fill="#bae6fd" /><rect x="13" y="8" width="6" height="3" rx="1.5" fill="#60a5fa"/></svg></span>Level</a>
-      <a href="refer.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#5eead4" /><path d="M22.5,14h-8.7l3-3m-2.8,8a3,3,0,1,0-3,-3" stroke="#262626" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Refer A Friend</a>
-      <a href="verify-email.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><rect x="5" y="8" width="22" height="16" rx="5"/><polyline points="5,8 16,18 27,8" fill="none" stroke="#2dd4bf" stroke-width="2"/><circle cx="16" cy="19" r="2.5"/></svg></span>Email Verification</a>
-      <a href="help.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="none" stroke="#fbbf24" stroke-width="2"/><text x="16" y="20" text-anchor="middle" fill="#fbbf24" font-size="8" font-family="Orbitron">?</text></svg></span>Help</a>
-      <a href="social-media.html" role="menuitem"><span class="icon"><svg viewBox="0 0 32 32"><circle cx="8" cy="12" r="3"/><circle cx="24" cy="12" r="3"/><circle cx="16" cy="22" r="3"/><line x1="8" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/><line x1="24" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/></svg></span>Social Media</a>
-      <a href="#" id="themeSwitch" role="menuitem" style="cursor:pointer;">
-        <span class="icon">
-          <svg viewBox="0 0 32 32">
-            <circle cx="16" cy="16" r="12"/>
-            <path d="M16 4v8"/>
-            <circle cx="16" cy="16" r="5" fill="#fff"/>
-          </svg>
-        </span>
-        Change Theme
-      </a>
-    </nav>
-  </header>
+  <div class="top-bar">
+    <button class="back-btn" id="backBtn" type="button" aria-label="Go back to previous page">
+      <svg viewBox="0 0 24 24">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+  </div>
 
   <h1>LEVEL PROGRESS</h1>
 
@@ -572,12 +273,6 @@
 
   <div class="popup" id="levelUpPopup" aria-live="assertive" aria-atomic="true" role="alert" aria-hidden="true">Level Up! Coins Added</div>
   
-  <div id="ad-popup">
-    <h3>Sponsored Content</h3>
-    <p id="ad-text">Get 5000 Coins FREE! Click here to claim your reward.</p>
-    <button id="close-ad-btn">Close Ad</button>
-  </div>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -593,8 +288,6 @@
       storageBucket: "sharky-chat-007.appspot.com",
       messagingSenderId: "637104796242",
       appId: "1:637104796242:web:74ac36b86af91be15ea58b"
-      // Note: The RTDB URL is typically not needed for the JS SDK if included in the config,
-      // but if the RTDB is not in the default location, you might need a "databaseURL" field.
     };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -621,25 +314,9 @@
     const rewardInfo = qp("#rewardInfo");
     const coinsInfo = qp("#coinsInfo");
     const popup = qp("#levelUpPopup");
-    const mainHeader = qp("#mainHeader");
-    const menuBtn = qp("#menuBtn");
-    const closeBtn = qp(".menu-dropdown .close-btn");
+    const backBtn = qp("#backBtn");
     const themeSwitch = qp('#themeSwitch');
     
-    // Ad Elements
-    const adPopup = document.getElementById("ad-popup");
-    const closeAdBtn = document.getElementById("close-ad-btn");
-    const adMessages = [
-        "Upgrade to Premium for an Ad-Free Experience!",
-        "Play 'Shark Attack' and earn FREE in-game currency!",
-        "Get 5000 Coins FREE! Click here to claim your reward.",
-        "Limited time offer: Double XP for the next 24 hours!",
-        "Need friends? Check out our suggested list now!"
-    ];
-
-
-    // --- Core Functions ---
-
     function updateUI(coins){
       const title = levelData[level]?.title || "MAXED OUT";
       const reward = levelData[level]?.reward || "Special Bonus";
@@ -673,7 +350,7 @@
         if(level > 100) {
             level = 100;
             xp = 0;
-            needed = 100 + 100 * 20; // Set needed high enough to stop leveling
+            needed = 2100;
         } else {
             needed = Math.floor(100 + level * 20);
         }
@@ -705,75 +382,45 @@
       },{merge:true});
     }
 
-    // --- Active User Presence (Combined Firestore/RTDB) ---
     async function setupUserPresence(uid) {
         const userStatusRef = doc(db, "users", uid);
         const rtdbRef = ref(rtdb, "status/" + uid);
 
-        // 1. Set user as online immediately
         await updateDoc(userStatusRef, {
             isOnline: true,
             lastSeen: serverTimestamp(),
             lastActive: serverTimestamp()
         }, { merge: true });
         
-        // 2. Setup RTDB onDisconnect to mark as offline
         await rset(rtdbRef, { state: "online", last_changed: serverTimestamp() });
-        onDisconnect(rtdbRef).set({ state: "offline", last_changed: serverTimestamp() })
-          .then(async () => {
-            // Optional: When RTDB registers the disconnect, update Firestore
-            // This is a backup for when the client side update fails (e.g., hard crash)
-            // But relying on RTDB's built-in behavior is primary.
-          });
-        
-        // 3. Setup Firestore activity listener (update lastActive on user interaction)
+        onDisconnect(rtdbRef).set({ state: "offline", last_changed: serverTimestamp() });
+          
         let activityTimer;
         const updateActivity = () => {
             clearTimeout(activityTimer);
             updateDoc(userStatusRef, { isOnline: true, lastActive: serverTimestamp() }, { merge: true });
             
             activityTimer = setTimeout(async () => {
-                // Consider user inactive after 5 minutes of no activity
                 await updateDoc(userStatusRef, { isOnline: false, lastSeen: serverTimestamp() }, { merge: true });
-                // Also update RTDB status, though onDisconnect should handle the rest
                 rset(rtdbRef, { state: "idle", last_changed: serverTimestamp() });
-            }, 300000); // 5 minutes
+            }, 300000);
         };
 
         ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'].forEach(event => 
             document.addEventListener(event, updateActivity, { passive: true })
         );
-        updateActivity(); // Initial call
+        updateActivity();
         
-        // Final cleanup listener for window unload (best effort)
         window.addEventListener('beforeunload', async () => {
              await updateDoc(userStatusRef, { isOnline: false, lastSeen: serverTimestamp() }, { merge: true });
         });
     }
 
 
-    // --- Menu, Theme, Notifications ---
-
     function bumpBadge(el){
         if(!el) return;
         el.style.animation = "";
         setTimeout(() => { el.style.animation = "notifpop .34s"; }, 25);
-    }
-    function bumpBadgeDropdown(el){
-        if(!el) return;
-        el.style.animation = "";
-        setTimeout(() => { el.style.animation = "notifpop .33s"; }, 30);
-    }
-    
-    // Function to close the menu
-    function closeMenu(shouldShowAd = false) {
-      if (mainHeader.classList.contains("expanded")) {
-          mainHeader.classList.remove("expanded");
-          menuBtn.setAttribute("aria-expanded", "false");
-          if (shouldShowAd) {
-              showAd();
-          }
-      }
     }
 
     function setupMenuNotifications(){
@@ -877,51 +524,17 @@
       if(show){
         walletNotif.textContent = "!";
         walletNotif.style.display = "inline-flex";
-        bumpBadgeDropdown(walletNotif);
+        bumpBadge(walletNotif);
       } else {
         walletNotif.style.display = "none";
         walletNotif.textContent = "0";
       }
     }
 
-
-    // --- Ad Logic ---
-
-    function showAd() {
-      if (Math.random() < 0.25) { // 25% chance to show an ad
-        const adText = document.getElementById("ad-text");
-        adText.textContent = adMessages[Math.floor(Math.random() * adMessages.length)];
-        adPopup.classList.add("show");
-      }
-    }
-
-    closeAdBtn.addEventListener("click", () => {
-      adPopup.classList.remove("show");
+    backBtn.addEventListener("click", () => {
+      window.history.back();
     });
 
-    // --- Event Listeners ---
-    
-    menuBtn.addEventListener("click", e => {
-      const expanded = mainHeader.classList.toggle("expanded");
-      menuBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
-      e.stopPropagation();
-    });
-
-    closeBtn.addEventListener("click", e => {
-      closeMenu(true);
-      menuBtn.focus();
-      e.stopPropagation();
-    });
-
-    document.addEventListener("click", e => {
-      if(!mainHeader.contains(e.target)) closeMenu();
-    });
-
-    document.querySelector(".menu-dropdown").addEventListener("click", e => {
-      if(e.target.tagName === "A" && e.target.id !== "themeSwitch") closeMenu(true);
-    });
-
-    // Theme Logic
     function setTheme(theme){
       if(theme === 'light'){
         document.body.classList.add('light-theme');
@@ -940,12 +553,6 @@
       }
     }
 
-    themeSwitch.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleTheme();
-      closeMenu(); 
-    });
-
     window.addEventListener('DOMContentLoaded', () => {
       const savedTheme = localStorage.getItem('theme');
       if(savedTheme === 'light'){
@@ -954,8 +561,6 @@
         setTheme('dark');
       }
     });
-
-    // --- Firebase Auth & Initialization ---
 
     onAuthStateChanged(auth, async user => {
       if(!user){
@@ -967,7 +572,6 @@
       const userDoc = await getDoc(doc(db,"users",uid));
       if(userDoc.exists()) myUsername = userDoc.data().username || "";
 
-      // Initialize/Load Level Data
       const docSnap = await getDoc(doc(db,"levels",uid));
       if(docSnap.exists()){
         const d = docSnap.data();
@@ -976,7 +580,6 @@
         needed = d.needed || 100;
       }
 
-      // Setup Listeners
       onSnapshot(doc(db,"wallets",uid), snap => {
         const coins = (snap.exists() && snap.data().sharkyCoin) ? snap.data().sharkyCoin : 0;
         updateUI(coins);

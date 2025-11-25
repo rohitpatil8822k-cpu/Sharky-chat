@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <title>Sharky Inventory</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
+     crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
     header {
@@ -414,53 +416,6 @@
       pointer-events: auto;
     }
 
-    /* Ad Popup Style */
-    #ad-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 300px;
-      padding: 20px;
-      background: #3a3a3a;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-      text-align: center;
-      z-index: 5000;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s, visibility 0.3s;
-    }
-    #ad-popup.show {
-      opacity: 1;
-      visibility: visible;
-    }
-    #ad-popup h3 {
-      font-family: 'Orbitron', sans-serif;
-      color: #fbbf24;
-      margin-top: 0;
-      font-size: 1.2rem;
-    }
-    #ad-popup p {
-      color: #ccc;
-      margin-bottom: 20px;
-    }
-    #ad-popup button {
-      background: #4f46e5;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: background 0.2s;
-    }
-    #ad-popup button:hover {
-      background: #4338ca;
-    }
-
-
     @media (max-width: 600px) {
       main { padding: 0 8px 18vw 8px; max-width: 100vw; font-size: 1rem; }
       .inv-items { gap: 12px; grid-template-columns: repeat(3, 1fr);}
@@ -479,7 +434,6 @@
       100% { transform: scale(1); }
     }
 
-    /* Light Theme CSS */
     .light-theme {
         background: #f4f4f4 !important;
         color: #333 !important;
@@ -694,14 +648,6 @@
     </div>
   </main>
   
-  <div id="popup" class="popup">Item Equipped</div>
-  
-  <div id="ad-popup">
-    <h3>Sponsored Content</h3>
-    <p id="ad-text">Get 5000 Coins FREE! Click here to claim your reward.</p>
-    <button id="close-ad-btn">Close Ad</button>
-  </div>
-
   <script type="module">
     import {initializeApp} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import {getAuth,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";

@@ -5,14 +5,15 @@
   <title>Email Verification — Sharky Chat</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Poppins:wght@400;500;600&family=Montserrat:wght@600;700&display=swap" rel="stylesheet" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
+     crossorigin="anonymous"></script>
   <style>
-    /* Classy Grey Base Theme */
     body {
       background: #f0f0f0;
       color: #333;
       font-family: 'Poppins', sans-serif;
       padding: 40px 20px 50px;
-      max-width: 600px; /* Increased max-width */
+      max-width: 600px;
       margin: 0 auto;
       box-sizing: border-box;
       -webkit-font-smoothing: antialiased;
@@ -21,7 +22,6 @@
       position: relative;
     }
 
-    /* Go Back Button Style */
     .back-btn {
       display: inline-flex;
       align-items: center;
@@ -51,12 +51,11 @@
       fill: currentColor;
     }
     
-    /* Verification Box and Title adjustments for Classy Grey */
     h1 {
       text-align: center;
       font-size: 2.4rem;
       margin-bottom: 30px;
-      color: #3b82f6; /* Subtle Blue accent */
+      color: #3b82f6;
       font-family: 'Montserrat', sans-serif;
       font-weight: 700;
       letter-spacing: 0.03em;
@@ -64,7 +63,7 @@
       text-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
     }
     .verify-box {
-      background: #ffffff; /* White/Light background */
+      background: #ffffff;
       border-radius: 16px;
       padding: 35px 30px 30px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -93,7 +92,7 @@
     }
     .icon-box ellipse { fill: #3b82f6; }
     .info {
-      color: #4b5563; /* Darker text */
+      color: #4b5563;
       font-size: 1.1rem;
       margin-bottom: 20px;
       text-align: center;
@@ -104,7 +103,7 @@
     .user-email {
       font-family: 'Montserrat', sans-serif;
       font-weight: 700;
-      color: #f59e0b; /* Accent yellow/gold */
+      color: #f59e0b;
       font-size: 1rem;
       letter-spacing: 0.05em;
       text-align: center;
@@ -113,7 +112,6 @@
       word-break: break-word;
     }
     
-    /* Button Styles */
     .verify-btn {
       background: linear-gradient(90deg, #3b82f6, #2563eb 75%, #4f46e5 120%);
       color: #fff;
@@ -157,7 +155,6 @@
       color: #f59e0b;
     }
 
-    /* Status Message */
     .status-message {
       min-height: 36px;
       font-size: 0.95rem;
@@ -179,7 +176,6 @@
       color: #b91c1c;
     }
     
-    /* Reward Box */
     .reward-box {
       background: #f8f8f8;
       border-radius: 16px;
@@ -292,7 +288,7 @@
     <div class="icon-box" aria-hidden="true">
       <svg viewBox="0 0 92 92" role="img" aria-label="Email verification icon"><ellipse rx="44" ry="44" cx="46" cy="46" fill="#3b82f6"/><path d="M27 46l15 15 23-24" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
     </div>
-    <div class="info">Verify your email to secure your account in <strong>Sharky Chat</strong>.</div>
+    <div class="info">Verify your email to secure your account in **Sharky Chat**.</div>
     <div class="user-email" id="userEmail">Loading...</div>
 
     <button class="verify-btn" id="sendLink" aria-live="polite" aria-label="Send verification email button">Send Verification Email</button>
@@ -346,6 +342,26 @@
       if(type) statusMsg.classList.add(type);
     }
 
+    async function claimRewardAndSetInventory() {
+        if (!user) return;
+        
+        showStatus("Congratulations! Reward claimed ✔️ Enjoy your badge and banner 🎉", "status-success");
+
+        const rewardsRef = doc(db, "rewards", user.uid);
+        await setDoc(rewardsRef, { emailVerifiedRewardClaimed: true }, { merge: true });
+
+        const invRef = doc(db, "inventories", user.uid);
+        const invSnap = await getDoc(invRef);
+
+        let invData = invSnap.exists() ? invSnap.data() : {};
+
+        invData["badge_email_verified"] = true;
+        invData["banner_verified_reward"] = true;
+        await setDoc(invRef, invData, { merge: true });
+
+        updateClaimButton(true);
+    }
+
     async function tryApplyActionCode(oobCode) {
       try {
         await applyActionCode(auth, oobCode);
@@ -390,9 +406,11 @@
       if(isClaimed){
         claimRewardBtn.classList.add("disabled");
         claimRewardBtn.disabled = true;
+        claimRewardBtn.textContent = "Reward Claimed";
       } else {
         claimRewardBtn.classList.remove("disabled");
         claimRewardBtn.disabled = false;
+        claimRewardBtn.textContent = "Claim Reward";
       }
     }
 
@@ -409,35 +427,42 @@
       const oobCode = urlParams.get('oobCode');
       const mode = urlParams.get('mode');
 
-      if(mode === 'verifyEmail' && oobCode){
-        showStatus("Processing email verification...", "");
-        const success = await tryApplyActionCode(oobCode);
-        if(success){
-          showStatus("Your email is verified! You can now claim your badge and banner.", "status-success");
-          window.history.replaceState({}, document.title, window.location.pathname);
-          updateClaimButton(false);
-          sendLinkBtn.style.display = "none";
-          resendBtn.style.display = "none";
-          return;
-        } else {
-          showStatus("Verification link is invalid or expired.", "status-error");
-          updateClaimButton(true);
-        }
-      }
-
       const rewardsRef = doc(db, "rewards", user.uid);
       const rewardsSnap = await getDoc(rewardsRef);
       const rewardsData = rewardsSnap.exists() ? rewardsSnap.data() : { emailVerifiedRewardClaimed: false };
 
+      if(mode === 'verifyEmail' && oobCode){
+        showStatus("Processing email verification...", "");
+        const success = await tryApplyActionCode(oobCode);
+        
+        // Reload user data after applying action code
+        await reload(user); 
+
+        if(success){
+          showStatus("Your email is verified! Claiming your badge and banner automatically.", "status-success");
+          window.history.replaceState({}, document.title, window.location.pathname);
+          sendLinkBtn.style.display = "none";
+          resendBtn.style.display = "none";
+          
+          // Automatically claim reward after successful verification via link
+          await claimRewardAndSetInventory(); 
+          return;
+        } else {
+          showStatus("Verification link is invalid or expired. Please request a new link.", "status-error");
+          updateClaimButton(true);
+        }
+      }
+
       if(user.emailVerified){
         showStatus("Email is already verified. Thanks!", "status-success");
+        sendLinkBtn.style.display = "none";
+        resendBtn.style.display = "none";
+
         if(rewardsData.emailVerifiedRewardClaimed){
           updateClaimButton(true);
         } else {
           updateClaimButton(false);
         }
-        sendLinkBtn.style.display = "none";
-        resendBtn.style.display = "none";
       } else {
         updateClaimButton(true);
         sendLinkBtn.style.display = "";
@@ -464,6 +489,7 @@
         await incrementSendCount(user.uid);
         showStatus("Verification link sent! Please check your inbox and spam folder.", "status-success");
         resendBtn.style.display = "";
+        sendLinkBtn.style.display = "none";
         setTimeout(()=>{
           sendLinkBtn.disabled = false;
           resendBtn.disabled = false;
@@ -475,30 +501,7 @@
       }
     }
 
-    claimRewardBtn.addEventListener("click", async () => {
-      if(claimRewardBtn.disabled) return;
-      claimRewardBtn.disabled = true;
-      claimRewardBtn.classList.add("disabled");
-
-      showStatus("Congratulations! Reward claimed ✔️ Enjoy your badge and banner 🎉", "status-success");
-
-      const rewardsRef = doc(db, "rewards", user.uid);
-      await setDoc(rewardsRef, { emailVerifiedRewardClaimed: true }, { merge: true });
-
-      const invRef = doc(db, "inventories", user.uid);
-      const invSnap = await getDoc(invRef);
-
-      let invData = invSnap.exists() ? invSnap.data() : {};
-
-      if(!invData["badge_email_verified"]){
-        invData["badge_email_verified"] = true;
-      }
-      if(!invData["banner_verified_reward"]){
-        invData["banner_verified_reward"] = true;
-      }
-      await setDoc(invRef, invData, { merge: true });
-    });
-
+    claimRewardBtn.addEventListener("click", claimRewardAndSetInventory);
     sendLinkBtn.addEventListener("click", sendVerification);
     resendBtn.addEventListener("click", sendVerification);
   </script>

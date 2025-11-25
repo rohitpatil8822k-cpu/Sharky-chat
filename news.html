@@ -5,6 +5,8 @@
   <title>Sharky News</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@600&display=swap" rel="stylesheet" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
+     crossorigin="anonymous"></script>
   <style>
     body {
       background: #0f172a;
@@ -42,6 +44,7 @@
       padding: 18px 22px;
       box-shadow: 0 3px 12px rgba(96, 165, 250, 0.2);
       word-break: break-word;
+      position: relative;
     }
 
     .post h3 {
@@ -59,6 +62,26 @@
       margin-top: 8px;
       font-size: 0.85rem;
       color: #94a3b8;
+    }
+    
+    .delete-post-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: none;
+    }
+
+    .delete-post-btn:hover {
+      background: #dc2626;
     }
 
     footer {
@@ -188,12 +211,28 @@
       margin-top: 6px;
       font-style: italic;
     }
+
+    /* Back Button Style */
+    #backButton {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        cursor: pointer;
+        width: 36px;
+        height: 36px;
+        filter: drop-shadow(0 0 2px #60a5fa);
+        z-index: 9999;
+        background: url('https://img.icons8.com/ios-filled/50/60a5fa/back.png') no-repeat center center;
+        background-size: contain;
+        border: none;
+    }
   </style>
 </head>
 <body>
+  <button id="backButton" title="Go Back"></button>
+
   <h1>📰 Sharky News</h1>
 
-  <!-- Admin panel (only show if user is admin) -->
   <div class="admin-box" id="adminPanel" style="display:none;">
     <h3 style="color:#60a5fa">➕ Add News Post</h3>
     <input type="text" id="newsTitle" placeholder="News title" maxlength="100" />
@@ -205,7 +244,6 @@
 
   <footer>&copy; 2025 Sharky Chat. All rights reserved.</footer>
 
-  <!-- Notifications Icon -->
   <img
     id="notificationBell"
     src="https://img.icons8.com/ios-filled/50/60a5fa/bell.png"
@@ -214,7 +252,6 @@
   />
   <div id="notificationCount">0</div>
 
-  <!-- Notifications Popup -->
   <div id="notificationsPopup"></div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -239,6 +276,7 @@
   const postList = document.getElementById("postList");
   const adminPanel = document.getElementById("adminPanel");
   const addBtn = document.getElementById("addPostBtn");
+  const backBtn = document.getElementById("backButton");
 
   const notifBell = document.getElementById("notificationBell");
   const notifCount = document.getElementById("notificationCount");
@@ -246,6 +284,7 @@
 
   let currentUser = null;
   let notifications = [];
+  let isAdmin = false;
 
   function escapeHtml(text) {
     const p = document.createElement("p");
@@ -253,12 +292,36 @@
     return p.innerHTML;
   }
 
+  async function deletePost(postId) {
+    if (!isAdmin || !confirm("Are you sure you want to delete this news post?")) {
+      return;
+    }
+    try {
+      await db.collection("updates").doc(postId).delete();
+      alert("News post deleted successfully!");
+    } catch (e) {
+      alert("Error deleting post: " + e.message);
+      console.error(e);
+    }
+  }
+
   function renderPost(doc) {
     const d = doc.data();
+    const postId = doc.id;
     const div = document.createElement("div");
     div.className = "post";
     const dateStr = d.date && d.date.toDate ? d.date.toDate().toLocaleString() : new Date().toLocaleString();
     div.innerHTML = `<h3>${escapeHtml(d.title)} ${d.emoji || ""}</h3><p>${escapeHtml(d.message)}</p><div class="date">📅 ${dateStr}</div>`;
+    
+    if (isAdmin) {
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-post-btn";
+        deleteButton.textContent = "✖";
+        deleteButton.style.display = "block";
+        deleteButton.onclick = () => deletePost(postId);
+        div.appendChild(deleteButton);
+    }
+
     postList.prepend(div);
   }
 
@@ -308,9 +371,7 @@
       div.onclick = async () => {
         try {
           await db.collection("notifications").doc(notif.id).update({ seen: true });
-          // Hide notification on click after marking seen
           div.style.display = "none";
-          // Refresh the count and popup content
           notifications = notifications.filter(n => n.id !== notif.id);
           renderNotifications();
         } catch (err) {
@@ -325,8 +386,12 @@
   notifBell.addEventListener("click", () => {
     notifPopup.style.display = notifPopup.style.display === "block" ? "none" : "block";
   });
+  
+  backBtn.addEventListener("click", () => {
+      window.history.back();
+  });
 
-  // Auth state listener
+
   auth.onAuthStateChanged(async (user) => {
     if (!user) {
       location.href = "login.html";
@@ -334,15 +399,15 @@
     }
     currentUser = user;
 
-    // Show or hide admin panel
     const userDoc = await db.collection("users").doc(user.uid).get();
-    if (userDoc.exists && userDoc.data()?.role === "admin") {
+    isAdmin = userDoc.exists && userDoc.data()?.role === "admin";
+    
+    if (isAdmin) {
       adminPanel.style.display = "block";
     } else {
       adminPanel.style.display = "none";
     }
 
-    // Load news posts realtime
     db.collection("updates").orderBy("date", "desc").onSnapshot((snap) => {
       postList.innerHTML = "";
       snap.forEach((doc) => {
@@ -350,7 +415,6 @@
       });
     });
 
-    // Load unseen notifications realtime
     db.collection("notifications")
       .where("to", "==", user.uid)
       .where("seen", "==", false)
@@ -366,7 +430,6 @@
       });
   });
 
-  // Admin post submission and notifications batch send
   addBtn.onclick = async () => {
     const title = document.getElementById("newsTitle").value.trim();
     const message = document.getElementById("newsMessage").value.trim();
@@ -377,7 +440,6 @@
     }
 
     try {
-      // Add news update
       await db.collection("updates").add({
         title,
         message,
@@ -385,7 +447,6 @@
         date: firebase.firestore.FieldValue.serverTimestamp(),
       });
 
-      // Send notifications batch to all users
       const usersSnapshot = await db.collection("users").get();
       const batch = db.batch();
 

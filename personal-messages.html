@@ -4,16 +4,14 @@
   <meta charset="UTF-8" />
   <title>Personal Chat - Sharky Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
+     crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Orbitron:wght@700&family=Poppins:wght@600;700&display=swap" rel="stylesheet"/>
   <style>
-    /* ----------------------------------
-     * BASE & BODY STYLES (Classy Grey)
-     * ---------------------------------- */
     html,body{
       width:100vw;height:100vh;padding:0;margin:0;
       min-height:100svh;min-width:100vw;
       overscroll-behavior:contain;
-      /* Deep Grey/Charcoal Gradient */
       background: linear-gradient(135deg, #0e0e11 0%, #1a1a20 100%);
       box-sizing:border-box;
       overflow-x: hidden; 
@@ -22,14 +20,8 @@
       min-height:100svh; min-width:100vw;
       width:100vw; height:100svh;
       display:flex; justify-content:center; align-items:flex-start;
-      /* Padding-top added for the new fixed main header */
       padding-top: 50px; 
     }
-    
-    /* ----------------------------------
-     * NEW COMMON HEADER STYLES (Copied)
-     * NOTE: It's fixed to the very top.
-     * ---------------------------------- */
     header {
       background: #555555; /* full grey */
       position: fixed;
@@ -268,11 +260,6 @@
     @keyframes notifpop {
       0%{transform: scale(1);} 50%{transform: scale(1.3);} 100%{transform: scale(1);}
     }
-    /* End of New Header Styles */
-
-    /* ----------------------------------
-     * CHAT WRAPPER STYLES 
-     * ---------------------------------- */
     .main-wrap {
       width:100vw;max-width:380px;min-width:290px;
       height:calc(100svh - 50px); /* Height reduced by new header height */
@@ -289,10 +276,6 @@
       margin-top: -50px; /* Pull it up to sit right under the new header */
     }
 
-    /* ----------------------------------
-     * CHAT HEADER STYLES (Adjusted Top Position)
-     * FIX: Top is now 50px (New Header Height)
-     * ---------------------------------- */
     .chat-header-sticky {
       flex-shrink:0;display:flex;align-items:center;gap:12px;
       padding:0 12px 0 4px;
@@ -303,8 +286,7 @@
       z-index:101;
       margin:0;
       
-      /* FIX: Fixed Position and Width Calculation */
-      position: fixed;
+     position: fixed;
       top: 50px; /* Adjusted: Below the new 50px header */
       left: 50%; /* Center the element */
       transform: translateX(-50%); /* Pull back half its width */
@@ -365,10 +347,6 @@
     .chat-header-sticky > .block-btn {margin-left:auto;}
     .chat-header-sticky > .block-btn {margin-left:5px;}
 
-    /* ----------------------------------
-     * CHAT BOX & MESSAGE STYLES (Adjusted Top Margin)
-     * FIX: Margin-top = New Header (50px) + Chat Header (60px) = 110px
-     * ---------------------------------- */
     .chat-box{
       flex:1 1 auto; /* Fill remaining space */
       overflow-y:auto; /* Only the chat area scrolls */
@@ -466,10 +444,6 @@
         background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><path d="M4 13.8L7.6 17L13.9 9.6" fill="none" stroke="%2360A5FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.6 17.2L17.6 8.5" fill="none" stroke="%2360A5FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>') center no-repeat;
         background-size: cover;
     }
-
-    /* ----------------------------------
-     * INPUT BAR & TOAST STYLES
-     * ---------------------------------- */
     .input-bar-gap{display: none;} /* Not needed now */
     .input-bar{
       /* FIX: Fixed Position and Width Calculation */
@@ -515,10 +489,6 @@
     }
     .toast{position:fixed;bottom:105px;left:50%;transform:translateX(-50%);background:#10b981;color:white;padding:10px 20px;border-radius:8px;font-weight:600;display:none;z-index:110;box-shadow:0 4px 12px rgba(0, 0, 0, 0.2);}
     .toast.err{background:#ef4444;}
-
-    /* ----------------------------------
-     * SHARKY CHAT FOOTER
-     * ---------------------------------- */
     .sharky-footer {
         /* FIX: Fixed Position and Width Calculation */
         position: fixed;
@@ -716,8 +686,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, collection, query, where, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    // Re-declare Firebase Config for module imports
     const firebaseConfig = {
       apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
       authDomain: "sharky-chat-007.firebaseapp.com",
@@ -769,7 +737,6 @@
     }
 
     async function setupMessageNotifications(uid, username) {
-      // NOTE: Using getDocs initially for faster setup, then relying on onSnapshot for updates
       const friendsSnap = await getDocs(query(collection(db, "friends"), where(uid, "!=", null)));
       let myFriends = [];
       friendsSnap.forEach((doc) => {
@@ -800,7 +767,6 @@
         const chatId = [username, friendUsername].sort().join("_");
         const msgRef = collection(db, "personalMessages", chatId, "messages");
         
-        // Setup listener for unread messages from this specific friend
         onSnapshot(
           query(msgRef, where("recipient", "==", username), where("seen", "==", false)),
           (snap) => {
@@ -837,7 +803,6 @@
       }
     }
     
-    // Menu toggle logic (Copied)
     const mainHeader = document.getElementById("mainHeader");
     const menuBtn = document.getElementById("menuBtn");
     const closeBtn = document.querySelector(".menu-dropdown .close-btn");
@@ -871,15 +836,11 @@
       });
     }
 
-    // Auth state change listener for New Header Logic
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        // window.location.href = "login.html"; // Commented out to prevent redirect loop in static context
         console.log("User not logged in. Notification listeners are skipped.");
       } else {
         myUID = user.uid;
-        // NOTE: Firestore `getDocs` uses `where('__name__', '==', myUID)` to fetch a single doc by UID,
-        // which is equivalent to `db.collection('users').doc(myUID).get()` in compat version.
         try {
           let snap = await getDocs(query(collection(db, "users"), where("__name__", "==", myUID)));
           snap.forEach((docSnap) => {
@@ -895,9 +856,6 @@
   </script>
   
   <script>
-    // ----------------------------------
-    // GENERAL UTILITIES
-    // ----------------------------------
     function closeAllMsgMenus() {
       document.querySelectorAll('.bubble-menu-pop').forEach(e=>{
         e.style.opacity="0";
@@ -918,12 +876,7 @@
       t.style.display = "block";
       setTimeout(() => t.style.display = "none", 2100);
     }
-
-    // ----------------------------------
-    // FIREBASE SETUP & INITIALIZATION (COMPAT VERSION)
-    // ----------------------------------
     const firebaseConfigCompat = {
-      // NOTE: Replace this with your actual Firebase config
       apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
       authDomain: "sharky-chat-007.firebaseapp.com",
       projectId: "sharky-chat-007",
@@ -946,10 +899,6 @@
     let blockBtn = document.getElementById("blockBtn");
     let inputBar = document.getElementById("inputBar");
     let partnerUIDLoaded = "";
-
-    // ----------------------------------
-    // 🔥 PRESENCE TRACKING FUNCTION (For use on ALL pages)
-    // ----------------------------------
     function setupUserPresenceTracking(userUID) {
         if (!userUID) return;
         const userRef = dbCompat.collection("users").doc(userUID);
@@ -997,10 +946,6 @@
         
         return 'Active long ago';
     }
-
-    // ----------------------------------
-    // UI & FIREBASE LOGIC
-    // ----------------------------------
     function updateInputBarState() {
       if (partnerBlockedMe) {
         inputBar.innerHTML = `<div class="input-bar-blocked">You are blocked and cannot message.</div>`;
@@ -1096,10 +1041,6 @@
         });
       });
     });
-
-    // ----------------------------------
-    // MESSAGE RENDERING AND ACTIONS
-    // ----------------------------------
     function formatDateTimeForMsg(ts) {
       let d = ts.seconds ? new Date(ts.seconds*1000) : (typeof ts==="object"&&ts.toDate?ts.toDate():new Date(ts));
       let h = d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
@@ -1229,8 +1170,6 @@
       bubble.appendChild(metaRow);
       msgRow.appendChild(bubble);
       chatBox.appendChild(msgRow);
-      
-      // FIX: Scroll the chatBox itself
       if(idx === lastIdx || isOwn) {
           setTimeout(()=>chatBox.scrollTop = chatBox.scrollHeight, 40);
       }
