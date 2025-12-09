@@ -6,7 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto&family=Poppins&family=Inter&display=swap" rel="stylesheet"/>
   <style>
-  /* --- Global Styles Start --- */
+:root {
+  --header-height: 45px;
+  --title-height: 38px;
+  --input-area-height: 56px;
+  --input-banner-height: 25px;
+  --total-footer-height: calc(var(--input-area-height) + var(--input-banner-height));
+  --content-top-offset: calc(var(--header-height) + var(--title-height));
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -17,7 +25,6 @@ html, body {
   font-size: 0.9rem;
   overflow-x: hidden;
   color: #444444;
-  /* Faint Background Change */
   background: linear-gradient(135deg, #e8e8e8, #c9c9c9);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -27,9 +34,7 @@ html, body {
   user-select: none;
   height: 100vh;
 }
-/* --- Global Styles End --- */
 
-/* --- Header Styles Start --- */
 header {
   background: #555555;
   position: fixed;
@@ -38,16 +43,9 @@ header {
   z-index: 8000;
   width: 100vw;
   box-shadow: 0 2px 17px #22222290;
-  /* Header Height Change */
-  min-height: 45px; 
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  min-height: var(--header-height); 
   user-select: none;
   border-radius: 0;
-  transition: box-shadow 0.23s;
   color: #d1d1d1;
   font-family: "Poppins", Arial, sans-serif;
   font-size: 1rem;
@@ -58,8 +56,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
-  /* Header Height Change */
-  min-height: 45px;
+  min-height: var(--header-height);
   position: relative;
   z-index: 1;
   cursor: default;
@@ -70,7 +67,6 @@ header {
   display: flex;
   align-items: center;
   gap: 8px;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .logo-container img {
@@ -116,8 +112,6 @@ header {
   background: none;
   border-radius: 9px;
   position: relative;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
   transition: background 0.16s, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   gap: 6px;
   z-index: 4005;
@@ -155,7 +149,7 @@ header {
   position: fixed;
   top: 2px;
   right: 0;
-  height: calc(98vh - 6px);
+  height: calc(98vh - 6px); 
   width: 220px;
   background: rgba(85, 85, 85, 0.97);
   box-shadow: -4px 0 26px rgba(0, 0, 0, 0.77);
@@ -199,21 +193,6 @@ header:not(.expanded) .menu-dropdown {
   color: #bbbbbb;
   user-select: none;
 }
-.menu-dropdown .close-btn:hover,
-.menu-dropdown .close-btn:focus {
-  color: #e0e0e0;
-  transform: scale(1.22);
-}
-
-.menu-dropdown .close-btn svg {
-  width: 22px;
-  height: 22px;
-  stroke: currentColor;
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  user-select: none;
-}
 
 .menu-dropdown a {
   color: #bbbbbb;
@@ -231,21 +210,6 @@ header:not(.expanded) .menu-dropdown {
   font-size: 0.85rem;
   will-change: transform;
   position: relative;
-}
-
-.menu-dropdown a:hover,
-.menu-dropdown a:focus {
-  background: #666666;
-  color: #ffffff;
-  padding-left: 51px;
-  outline: none;
-  transform: scale(1.05) translateX(-2px);
-}
-
-.menu-dropdown a:active {
-  background: #444444;
-  color: #fbbf24;
-  transform: scale(0.97);
 }
 
 .menu-dropdown .notif-badge {
@@ -286,41 +250,12 @@ header:not(.expanded) .menu-dropdown {
   user-select: none;
 }
 
-.menu-dropdown a:hover .icon,
-.menu-dropdown a:focus .icon {
-  fill: #fff;
-  filter: drop-shadow(0 2px 8px #fff4);
-}
-/* --- Header Styles End --- */
-
-/* --- Main Content & Chatroom Title Start --- */
-.main-content-wrapper {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden; 
-  background: transparent;
-  font-family: 'Poppins', 'Roboto', sans-serif;
-  font-size: 0.9rem;
-  color: #2f2f2f;
-  /* Adjusted padding/margin based on new header height 45px + title 38px + buffer */
-  padding: 4px 0 94px 0; 
-  margin-top: 83px;
-  box-sizing: border-box;
-  width: 100vw;
-  transition: padding-right 0.3s ease;
-  z-index: 1000;
-  position: relative;
-}
-
 .chatroom-title {
-  position: fixed;
-  /* Adjusted top position based on new header height */
-  top: 45px; 
+  position: fixed; 
+  top: var(--header-height); 
   left: 0;
   width: 100vw;
-  height: 38px;
+  height: var(--title-height);
   background: rgba(85, 85, 85, 0.1);
   border-bottom: 1px solid rgba(85, 85, 85, 0.25);
   user-select: none;
@@ -333,7 +268,6 @@ header:not(.expanded) .menu-dropdown {
   font-weight: 700;
   color: #2f2f2f;
   font-family: 'Poppins', 'Roboto', sans-serif;
-  position: fixed;
 }
 
 .chatroom-title-content {
@@ -353,9 +287,9 @@ header:not(.expanded) .menu-dropdown {
 }
 
 .back-btn {
-  position: fixed;
-  /* Adjusted top position based on new header height */
-  top: 52px; 
+  position: absolute;
+  top: 50%; 
+  transform: translateY(-50%);
   left: 14px;
   cursor: pointer;
   width: 26px;
@@ -371,9 +305,9 @@ header:not(.expanded) .menu-dropdown {
 }
 
 .active-users-icon-wrapper {
-  position: fixed;
-  /* Adjusted top position based on new header height */
-  top: 52px; 
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   right: 14px;
   display: flex;
   align-items: center;
@@ -410,9 +344,8 @@ header:not(.expanded) .menu-dropdown {
 
 .active-users-panel {
   position: fixed;
-  /* Adjusted top position based on new header height */
-  top: 47px; 
-  height: calc(97vh - 47px ); 
+  top: var(--header-height); 
+  height: calc(100vh - var(--header-height) - var(--input-banner-height)); 
   right: 0;
   width: 265px;
   background: rgba(240, 240, 240, 0.98);
@@ -468,19 +401,13 @@ header:not(.expanded) .menu-dropdown {
   user-select: none;
 }
 
-.active-users-header button:hover {
-  background: #333333cc;
-  box-shadow: 0 0 18px #555555cc;
-  transform: scale(1.12);
-}
-
 .active-users-list {
   margin-top: 14px;
   display: flex;
   flex-direction: column;
   gap: 14px;
   overflow-y: auto; 
-  max-height: calc(100% - 52px); 
+  max-height: calc(100% - 70px); 
   padding-right: 10px;
   scrollbar-width: thin;
   scrollbar-color: #888888 transparent;
@@ -508,11 +435,6 @@ header:not(.expanded) .menu-dropdown {
   transition: background 0.3s ease, box-shadow 0.35s ease;
   position: relative; 
   font-family: 'Poppins', 'Roboto', sans-serif;
-}
-
-.active-user-item:hover {
-  background: #c0c0c0dd;
-  box-shadow: 0 0 18px #888888cc;
 }
 
 .active-user-pic {
@@ -596,10 +518,6 @@ header:not(.expanded) .menu-dropdown {
   user-select: none;
 }
 
-.user-menu-btn:hover {
-  fill: #333333;
-}
-
 .user-menu-btn svg {
   width: 100%;
   height: 100%;
@@ -639,13 +557,18 @@ header:not(.expanded) .menu-dropdown {
   user-select: none;
 }
 
-.user-menu-dropdown button:hover {
-  background: #b0b0b0cc;
-  color: #1e1e1e;
+.main-content-wrapper {
+  position: fixed;
+  top: var(--content-top-offset); 
+  left: 0;
+  width: 100vw;
+  /* यह हाइट कैलकुलेशन सुनिश्चित करती है कि यह फिक्स्ड टाइटल और फिक्स्ड फुटर के बीच की पूरी जगह ले */
+  height: calc(100vh - var(--content-top-offset) - var(--total-footer-height));
+  box-sizing: border-box;
+  overflow: hidden; 
+  z-index: 1000;
 }
-/* --- Main Content & Chatroom Title End --- */
 
-/* --- Messages Area Start --- */
 #blockWarning {
   display: none;
   color: #7a1c1c;
@@ -656,7 +579,7 @@ header:not(.expanded) .menu-dropdown {
   font-size: 0.82rem;
   width: 100vw;
   box-sizing: border-box;
-  bottom: 48px;
+  bottom: calc(var(--total-footer-height) + 4px);
   left: 0;
   z-index: 1200;
   pointer-events: none;
@@ -665,6 +588,7 @@ header:not(.expanded) .menu-dropdown {
   text-shadow: 0 0 8px #7a1c1ccc;
   max-width: 620px;
   margin: 0 auto;
+  position: fixed;
 }
 
 #blockWarning.show {
@@ -673,15 +597,11 @@ header:not(.expanded) .menu-dropdown {
   opacity: 1;
 }
 
-#blockWarning.hide {
-  opacity: 0;
-  pointer-events: none;
-}
-
 .messages {
-  flex: 1 1 auto;
+  height: 100%;
   overflow-y: auto;
-  padding-bottom: 4px;
+  padding-bottom: 12px;
+  padding-top: 12px;
   width: 100%; 
   box-sizing: border-box;
   display: flex;
@@ -739,7 +659,6 @@ header:not(.expanded) .menu-dropdown {
 }
 
 .message img.userpic {
-  /* User Pic Size Increase: 37.8px -> 42px (approx 11% increase) */
   height: 42px; 
   width: 42px;
   border-radius: 50%;
@@ -768,7 +687,6 @@ header:not(.expanded) .menu-dropdown {
   min-width: 0;
   position: relative;
   user-select: text;
-  /* Message Body Font Size Increase: 0.85rem -> 0.95rem */
   font-size: 0.95rem !important;
   word-break: break-word;
   display: flex;
@@ -779,7 +697,6 @@ header:not(.expanded) .menu-dropdown {
 
 .message-header {
   font-weight: 700;
-  /* Message Header Font Size Increase: 0.9rem -> 1.0rem */
   font-size: 1.0rem;
   color: #333333cc;
   white-space: nowrap;
@@ -800,9 +717,19 @@ header:not(.expanded) .menu-dropdown {
 .message-header .username:hover {
   text-decoration: underline;
 }
-/* --- Messages Area End --- */
 
-/* --- Input Area Start --- */
+.chat-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 7000;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  height: var(--total-footer-height);
+}
+
 .input-area {
   display: flex;
   border-top: none;
@@ -811,21 +738,16 @@ header:not(.expanded) .menu-dropdown {
   width: 100vw;
   max-width: 100vw;
   font-size: 0.9rem;
-  position: fixed;
-  /* Adjusted top position based on new banner height (30px -> 25px) */
-  bottom: 25px; 
-  left: 0;
-  animation: slideUpInput 0.5s ease forwards;
   box-shadow: inset 0 -4px 18px 0 #f1ec67aa, 0 -2px 16px 0 #f1ec67bb;
   font-family: 'Poppins', 'Roboto', sans-serif;
   font-weight: 600;
   user-select: none;
-  z-index: 7000;
-  height: 56px;
+  height: var(--input-area-height);
   padding: 6px 10px;
   gap: 8px;
   box-sizing: border-box;
   align-items: center;
+  position: relative;
 }
 
 #messageInput {
@@ -897,10 +819,6 @@ header:not(.expanded) .menu-dropdown {
   box-shadow: 0 8px 22px #666666cc;
 }
 
-.input-area-bottom {
-  display: none;
-}
-
 .tagged {
   background-color: #cfcfcf;
   color: #555565;
@@ -915,12 +833,11 @@ header:not(.expanded) .menu-dropdown {
 }
 
 .input-banner {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  position: relative;
+  bottom: auto;
+  left: auto;
   width: 100vw;
-  /* Banner Height Change: 30px -> 25px */
-  height: 25px; 
+  height: var(--input-banner-height); 
   background: transparent;
   border-radius: 4px;
   box-sizing: border-box;
@@ -929,7 +846,6 @@ header:not(.expanded) .menu-dropdown {
   align-items: center;
   justify-content: center;
   font-family: 'Orbitron', 'Poppins', sans-serif;
-  /* Banner Font Size Change: 1.1rem -> 0.85rem */
   font-weight: 800;
   font-size: 0.85rem; 
   color: #f1ec67cc;
@@ -954,13 +870,8 @@ header:not(.expanded) .menu-dropdown {
 .input-banner span {
   display: inline-block;
   white-space: nowrap;
-  /* Animation Removed for Static Text */
-  /* animation: slideText 12s linear infinite; */
-  padding: 0 10px; /* Center the text */
+  padding: 0 10px;
 }
-
-/* @keyframes slideText removed as requested */
-/* --- Input Area End --- */
   </style>
 </head>
 <body>
@@ -1080,20 +991,20 @@ header:not(.expanded) .menu-dropdown {
     <div id="messages" class="messages"></div>
   </div>
 
-  <div class="input-area" role="region" aria-label="Message input area">
-    <textarea id="messageInput" placeholder="Type your message..." rows="1" aria-label="Message input" tabindex="0"></textarea>
-    <button id="sendBtn" type="button" aria-label="Send message">Send</button>
+  <div class="chat-footer">
+    <div class="input-area" role="region" aria-label="Message input area">
+      <textarea id="messageInput" placeholder="Type your message..." rows="1" aria-label="Message input" tabindex="0"></textarea>
+      <button id="sendBtn" type="button" aria-label="Send message">Send</button>
+    </div>
+    <div class="input-banner"><span>SHARKY CHAT</span></div>
   </div>
-
-  <div class="input-banner"><span>SHARKY CHAT</span></div>
 
   <div id="blockWarning" role="alert" aria-live="polite"></div>
 
   <div class="active-users-panel" id="activeUsersPanel" aria-hidden="true" tabindex="-1" role="region" aria-label="Active users list">
     <div class="active-users-header">
       Active Users
-      <button id="closeActiveUsers" aria-label="Close Active Users
- Panel">✕</button>
+      <button id="closeActiveUsers" aria-label="Close Active Users Panel">✕</button>
     </div>
     <div class="active-users-list" id="activeUsersList" role="list"></div>
   </div>
