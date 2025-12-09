@@ -6,7 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto&family=Poppins&family=Inter&display=swap" rel="stylesheet"/>
   <style>
-  header {
+  /* --- Global Styles Start --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Poppins', 'Roboto', sans-serif;
+  font-size: 0.9rem;
+  overflow-x: hidden;
+  color: #444444;
+  /* Faint Background Change */
+  background: linear-gradient(135deg, #e8e8e8, #c9c9c9);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+  max-width: 100vw;
+  user-select: none;
+  height: 100vh;
+}
+/* --- Global Styles End --- */
+
+/* --- Header Styles Start --- */
+header {
   background: #555555;
   position: fixed;
   top: 0;
@@ -14,7 +38,8 @@
   z-index: 8000;
   width: 100vw;
   box-shadow: 0 2px 17px #22222290;
-  min-height: auto;
+  /* Header Height Change */
+  min-height: 45px; 
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
@@ -33,7 +58,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
-  min-height: 50px;
+  /* Header Height Change */
+  min-height: 45px;
   position: relative;
   z-index: 1;
   cursor: default;
@@ -265,39 +291,22 @@ header:not(.expanded) .menu-dropdown {
   fill: #fff;
   filter: drop-shadow(0 2px 8px #fff4);
 }
+/* --- Header Styles End --- */
 
-html, body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  width: 100%; /* Changed from 100vw to 100% to prevent horizontal scroll issues when panel opens */
-  min-height: 100vh;
-  font-family: 'Poppins', 'Roboto', sans-serif;
-  font-size: 0.9rem;
-  overflow-x: hidden;
-  color: #444444;
-  background: linear-gradient(135deg, #d0d0d0, #a0a0a0);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  flex-direction: column;
-  max-width: 100vw;
-  user-select: none;
-  height: 100vh;
-}
-
+/* --- Main Content & Chatroom Title Start --- */
 .main-content-wrapper {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   min-height: 0;
-  overflow: hidden; /* Main fix for messages spreading: ensures content respects its boundaries */
+  overflow: hidden; 
   background: transparent;
   font-family: 'Poppins', 'Roboto', sans-serif;
   font-size: 0.9rem;
   color: #2f2f2f;
+  /* Adjusted padding/margin based on new header height 45px + title 38px + buffer */
   padding: 4px 0 94px 0; 
-  margin-top: 88px;
+  margin-top: 83px;
   box-sizing: border-box;
   width: 100vw;
   transition: padding-right 0.3s ease;
@@ -307,7 +316,8 @@ html, body {
 
 .chatroom-title {
   position: fixed;
-  top: 50px;
+  /* Adjusted top position based on new header height */
+  top: 45px; 
   left: 0;
   width: 100vw;
   height: 38px;
@@ -344,7 +354,8 @@ html, body {
 
 .back-btn {
   position: fixed;
-  top: 57px;
+  /* Adjusted top position based on new header height */
+  top: 52px; 
   left: 14px;
   cursor: pointer;
   width: 26px;
@@ -361,7 +372,8 @@ html, body {
 
 .active-users-icon-wrapper {
   position: fixed;
-  top: 57px;
+  /* Adjusted top position based on new header height */
+  top: 52px; 
   right: 14px;
   display: flex;
   align-items: center;
@@ -398,10 +410,11 @@ html, body {
 
 .active-users-panel {
   position: fixed;
-  top: 52px;
+  /* Adjusted top position based on new header height */
+  top: 47px; 
+  height: calc(97vh - 47px ); 
   right: 0;
   width: 265px;
-  height: calc(97vh - 52px ); 
   background: rgba(240, 240, 240, 0.98);
   backdrop-filter: blur(12px);
   box-shadow: -6px 0 24px #66666699;
@@ -412,7 +425,7 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow-y: auto; 
-  z-index: 8000;
+  z-index: 7000;
   padding: 20px 18px 26px 18px;
   font-size: 0.9rem;
   user-select: none;
@@ -479,7 +492,6 @@ html, body {
 .active-users-list::-webkit-scrollbar {
   width: 8px;
 }
-
 .active-users-list::-webkit-scrollbar-thumb {
   background-color: #888888;
   border-radius: 10px;
@@ -494,7 +506,7 @@ html, body {
   padding: 8px 15px;
   box-shadow: 1px 1px 12px #b0b0b0aa;
   transition: background 0.3s ease, box-shadow 0.35s ease;
-  position: relative; /* FIX: Added position: relative to properly contain the user menu dropdown */
+  position: relative; 
   font-family: 'Poppins', 'Roboto', sans-serif;
 }
 
@@ -631,7 +643,9 @@ html, body {
   background: #b0b0b0cc;
   color: #1e1e1e;
 }
+/* --- Main Content & Chatroom Title End --- */
 
+/* --- Messages Area Start --- */
 #blockWarning {
   display: none;
   color: #7a1c1c;
@@ -642,7 +656,6 @@ html, body {
   font-size: 0.82rem;
   width: 100vw;
   box-sizing: border-box;
-  position: fixed;
   bottom: 48px;
   left: 0;
   z-index: 1200;
@@ -669,7 +682,7 @@ html, body {
   flex: 1 1 auto;
   overflow-y: auto;
   padding-bottom: 4px;
-  width: 100%; /* Changed from 100vw to 100% to respect parent's width */
+  width: 100%; 
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -685,14 +698,13 @@ html, body {
   position: relative;
   z-index: 100;
 }
-
 .message {
   display: flex;
   gap: 12px;
   font-size: 0.85rem;
   align-items: flex-start;
   margin-bottom: 9px;
-  max-width: 100%; /* Ensures message wraps within the main content area */
+  max-width: 100%; 
   border-bottom: 1.7px solid #b0b0b0aa;
   padding-bottom: 8px;
   color: #444444cc;
@@ -727,8 +739,9 @@ html, body {
 }
 
 .message img.userpic {
-  height: 37.8px;
-  width: 37.8px;
+  /* User Pic Size Increase: 37.8px -> 42px (approx 11% increase) */
+  height: 42px; 
+  width: 42px;
   border-radius: 50%;
   border: 2.5px solid #999999cc;
   flex-shrink: 0;
@@ -755,7 +768,8 @@ html, body {
   min-width: 0;
   position: relative;
   user-select: text;
-  font-size: 0.85rem !important;
+  /* Message Body Font Size Increase: 0.85rem -> 0.95rem */
+  font-size: 0.95rem !important;
   word-break: break-word;
   display: flex;
   flex-direction: column;
@@ -765,7 +779,8 @@ html, body {
 
 .message-header {
   font-weight: 700;
-  font-size: 0.9rem;
+  /* Message Header Font Size Increase: 0.9rem -> 1.0rem */
+  font-size: 1.0rem;
   color: #333333cc;
   white-space: nowrap;
   display: flex;
@@ -785,7 +800,9 @@ html, body {
 .message-header .username:hover {
   text-decoration: underline;
 }
+/* --- Messages Area End --- */
 
+/* --- Input Area Start --- */
 .input-area {
   display: flex;
   border-top: none;
@@ -795,7 +812,8 @@ html, body {
   max-width: 100vw;
   font-size: 0.9rem;
   position: fixed;
-  bottom: 30px; 
+  /* Adjusted top position based on new banner height (30px -> 25px) */
+  bottom: 25px; 
   left: 0;
   animation: slideUpInput 0.5s ease forwards;
   box-shadow: inset 0 -4px 18px 0 #f1ec67aa, 0 -2px 16px 0 #f1ec67bb;
@@ -895,12 +913,14 @@ html, body {
   color: #991c1c;
   user-select: none;
 }
+
 .input-banner {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100vw;
-  height: 30px; 
+  /* Banner Height Change: 30px -> 25px */
+  height: 25px; 
   background: transparent;
   border-radius: 4px;
   box-sizing: border-box;
@@ -909,8 +929,9 @@ html, body {
   align-items: center;
   justify-content: center;
   font-family: 'Orbitron', 'Poppins', sans-serif;
+  /* Banner Font Size Change: 1.1rem -> 0.85rem */
   font-weight: 800;
-  font-size: 1.1rem;
+  font-size: 0.85rem; 
   color: #f1ec67cc;
   user-select: none;
   overflow: hidden;
@@ -933,18 +954,13 @@ html, body {
 .input-banner span {
   display: inline-block;
   white-space: nowrap;
-  animation: slideText 12s linear infinite;
-  padding-left: 100%;
+  /* Animation Removed for Static Text */
+  /* animation: slideText 12s linear infinite; */
+  padding: 0 10px; /* Center the text */
 }
 
-@keyframes slideText {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
+/* @keyframes slideText removed as requested */
+/* --- Input Area End --- */
   </style>
 </head>
 <body>
@@ -1069,22 +1085,24 @@ html, body {
     <button id="sendBtn" type="button" aria-label="Send message">Send</button>
   </div>
 
-  <div class="input-banner"><span>🐬 SHARKY CHATROOM 🐬</span></div>
+  <div class="input-banner"><span>SHARKY CHAT</span></div>
 
   <div id="blockWarning" role="alert" aria-live="polite"></div>
 
   <div class="active-users-panel" id="activeUsersPanel" aria-hidden="true" tabindex="-1" role="region" aria-label="Active users list">
     <div class="active-users-header">
       Active Users
-      <button id="closeActiveUsers" aria-label="Close Active Users Panel">✕</button>
+      <button id="closeActiveUsers" aria-label="Close Active Users
+ Panel">✕</button>
     </div>
     <div class="active-users-list" id="activeUsersList" role="list"></div>
   </div>
-
+</body>
+</html>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>     
+<script>
    const PERFECT_UNKNOWN_USERPIC = "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/b40d9349-ee30-44de-b8c0-9ed7de65afc4.png";
 
 const firebaseConfig = {
@@ -1124,6 +1142,9 @@ const activeUsersListEl = document.getElementById("activeUsersList");
 const messagesEl = document.getElementById("messages");
 const blockWarningEl = document.getElementById("blockWarning");
 const mainContentWrapper = document.getElementById("mainContentWrapper");
+const messageInputEl = document.getElementById("messageInput"); 
+const sendBtnEl = document.getElementById("sendBtn"); 
+const blockTimerEl = document.getElementById("blockTimer"); 
 
 let usersMap = new Map();
 let equippedMap = new Map();
@@ -1142,12 +1163,15 @@ let blockMap = new Map();
 let banSet = new Set();
 let currentlyActiveUserUids = [];
 let lastTaggedUser = null;
+let userIpAddress = 'unknown'; 
 
-// To count consecutive messages from user for warning
-let userConsecutiveMsgCount = 0;
-let lastMessageUserUid = null;
+let userConsecutiveMsgData = {
+    count: 0,
+    resetTime: null
+};
 
 const MAX_CONSECUTIVE_MSGS = 6;
+const CONSECUTIVE_MSG_TIMEOUT = 2 * 60 * 1000; 
 
 const BAD_WORDS = [
   "bitch","fuck","fucking","fuk","asshole","chutiya","mc","bc","bhenchod","madarchod","lund",
@@ -1169,10 +1193,11 @@ function escapeRegexp(string) {
 }
 
 function formatDuration(ms) {
+  if (ms < 0) ms = 0;
   const totalSeconds = Math.floor(ms / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  return `${minutes}m ${seconds}s`;
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 activeUsersToggle && activeUsersToggle.addEventListener("click", () => {
@@ -1262,17 +1287,18 @@ function setupUserMenus() {
       const userDiv = btn.closest(".active-user-item");
       if (!userDiv) return;
       const uid = userDiv.getAttribute("data-uid");
+      
       if (mutedUsers.includes(uid)) {
         mutedUsers = mutedUsers.filter(m => m !== uid);
-        alert("Unmuted user.");
+        alert("Unmuted user. Their messages are now visible.");
         btn.textContent = "Mute";
       } else {
         mutedUsers.push(uid);
-        alert("Muted user.");
+        alert("Muted user. Their messages are now hidden.");
         btn.textContent = "Unmute";
       }
       localStorage.setItem("mutedUsers", JSON.stringify(mutedUsers));
-      renderMessagesFilteredByMute();
+      listenMessages(true); 
       renderActiveUsersRealTime();
       closeAllUserMenus();
     };
@@ -1343,7 +1369,8 @@ function setupUserMenus() {
         return;
       }
       if (!confirm("Permanently ban this user?")) return;
-      await banUser(uid);
+      const ip = (presenceMap[uid] && presenceMap[uid].ip) || 'unknown'; 
+      await banUser(uid, ip);
       closeAllUserMenus();
     };
   });
@@ -1365,10 +1392,14 @@ async function kickUser(uid, minutes) {
     by: userUid,
     until: firebase.firestore.Timestamp.fromDate(until),
     at: firebase.firestore.FieldValue.serverTimestamp(),
-    reason: "Moderator kick"
+    reason: `Kicked from all rooms for ${minutes} minutes.`
   });
   alert(`User kicked for ${minutes} minutes.`);
   await fetchKickBlockBanData();
+  if (uid === userUid) {
+      alert("You have been kicked.");
+      window.location.href = "profile.html";
+  }
 }
 
 async function blockUser(uid, minutes) {
@@ -1380,19 +1411,23 @@ async function blockUser(uid, minutes) {
     reason: "Moderator block"
   });
   alert(`User blocked for ${minutes} minutes.`);
-  if (uid === userUid) showBlockWarning(`You are blocked for ${minutes} minutes.`);
   await fetchKickBlockBanData();
 }
 
-async function banUser(uid) {
+async function banUser(uid, ip) {
   await db.collection("bannedUsers").doc(uid).set({
     by: userUid,
     at: firebase.firestore.FieldValue.serverTimestamp(),
-    reason: "Admin ban"
+    reason: "Admin ban",
+    ipAddress: ip 
   });
   alert("User banned permanently.");
-  if (uid === userUid) alert("You are banned by admin, cannot access chat.");
   await fetchKickBlockBanData();
+  if (uid === userUid) {
+      alert("You are banned by admin, cannot access chat. Logging out.");
+      await auth.signOut();
+      window.location.href = "profile.html";
+  }
 }
 
 async function deleteUserMessages(uid) {
@@ -1405,6 +1440,8 @@ async function deleteUserMessages(uid) {
 
 async function fetchKickBlockBanData() {
   const now = Date.now();
+  let mustRedirect = false;
+
   const snapK = await db.collection("kickedUsers").get();
   kickMap.clear();
   snapK.forEach(d => {
@@ -1426,21 +1463,85 @@ async function fetchKickBlockBanData() {
   const snapBan = await db.collection("bannedUsers").get();
   banSet.clear();
   snapBan.forEach(d => banSet.add(d.id));
+  
+  if (banSet.has(userUid)) {
+      alert("You are permanently banned.");
+      mustRedirect = true;
+  }
+  if (kickMap.has(userUid)) {
+      alert("You are temporarily kicked from all chat rooms.");
+      mustRedirect = true;
+  }
+  
+  if (mustRedirect) {
+       window.location.href = "profile.html";
+       return;
+  }
 
   if (blockMap.has(userUid)) {
-    showBlockWarning(`You are blocked for ${formatDuration(blockMap.get(userUid) - now)}.`);
+    const untilTime = blockMap.get(userUid);
+    const timeLeft = untilTime - now;
+    if (timeLeft > 0) {
+        showBlockWarning(`You are blocked by admin. Time left:`);
+        updateBlockTimer(untilTime);
+    } else {
+        hideBlockWarning();
+    }
   } else {
     hideBlockWarning();
   }
+  
+  listenMessages(true); 
+}
+
+let blockTimerInterval = null;
+
+function updateBlockTimer(untilTime) {
+    if (blockTimerInterval) clearInterval(blockTimerInterval);
+
+    const tick = () => {
+        const now = Date.now();
+        const timeLeft = untilTime - now;
+        
+        if (timeLeft <= 0) {
+            clearInterval(blockTimerInterval);
+            hideBlockWarning();
+            fetchKickBlockBanData(); 
+            messageInputEl.disabled = false;
+            sendBtnEl.disabled = false;
+            messageInputEl.placeholder = "Type your message...";
+            return;
+        }
+
+        const timerSpan = document.getElementById("blockTimer");
+        if (timerSpan) timerSpan.textContent = formatDuration(timeLeft);
+        
+        messageInputEl.disabled = true;
+        sendBtnEl.disabled = true;
+        messageInputEl.placeholder = "BLOCKED: Cannot send messages.";
+    };
+
+    blockTimerInterval = setInterval(tick, 1000);
+    tick(); 
 }
 
 function showBlockWarning(text) {
   blockWarningEl.textContent = text;
+  blockWarningEl.innerHTML = `${text} <span id="blockTimer">00:00</span>`; 
   blockWarningEl.classList.add("show");
+  messageInputEl.classList.add('blocked');
 }
 
 function hideBlockWarning() {
+  if (blockTimerInterval) clearInterval(blockTimerInterval);
   blockWarningEl.classList.remove("show");
+  blockWarningEl.innerHTML = "";
+  messageInputEl.classList.remove('blocked');
+  if (!userConsecutiveMsgData.resetTime || userConsecutiveMsgData.resetTime <= Date.now()) {
+      messageInputEl.disabled = false;
+      sendBtnEl.disabled = false;
+      messageInputEl.placeholder = "Type your message...";
+  }
 }
 
 async function pulsePresence() {
@@ -1449,11 +1550,13 @@ async function pulsePresence() {
       active: true,
       lastActive: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge: true });
+    
     await db.collection("roomActiveUsers").doc(roomId).collection("users").doc(userUid).set({
       uid: userUid,
       username: currentUser,
       userPic,
-      lastSeen: firebase.firestore.Timestamp.now()
+      lastSeen: firebase.firestore.Timestamp.now(),
+      ip: userIpAddress 
     });
   } catch (e) {
     console.error(e);
@@ -1481,38 +1584,24 @@ function renderActiveUsersRealTime() {
       if (u.lastSeen && (now - u.lastSeen.toDate().getTime()) < 32000) {
         list.push(u);
         if (u.uid) uids.push(u.uid);
+        presenceMap[u.uid] = { ip: u.ip || 'unknown' }; 
       }
     });
     activeUsersMap.clear();
     list.forEach(u => activeUsersMap.set(u.uid, u));
     renderActiveUsersList(list);
-    subscribeUserPresence(uids);
   }, err => {
     console.error("Active users snapshot error:", err);
-  });
-}
-
-function subscribeUserPresence(uids) {
-  uids.forEach(uid => {
-    if (!uid || typeof uid !== "string") return;
-    db.collection("users").doc(uid).onSnapshot(doc => {
-      const d = doc.data();
-      if (!d) return;
-      presenceMap[uid] = !!(d.active && d.lastActive && d.lastActive.toDate().getTime() > Date.now() - 42000);
-      document.querySelectorAll(`[data-presence="${uid}"]`).forEach(d => {
-        if (presenceMap[uid]) d.classList.remove("inactive");
-        else d.classList.add("inactive");
-      });
-    });
   });
 }
 
 async function cleanOldMessages() {
   const snapshot = await db.collection(roomId).orderBy("createdAt", "asc").get();
   const totalMessages = snapshot.size;
-  if (totalMessages > 50) {
+  const MAX_MESSAGES = 50;
+  if (totalMessages > MAX_MESSAGES) {
     const batch = db.batch();
-    const messagesToDelete = totalMessages - 50;
+    const messagesToDelete = totalMessages - MAX_MESSAGES;
     let count = 0;
     snapshot.forEach(doc => {
       if (count < messagesToDelete) {
@@ -1520,27 +1609,72 @@ async function cleanOldMessages() {
         count++;
       }
     });
-await batch.commit();
+    await batch.commit();
   }
 }
 
-function renderMessagesFilteredByMute() {
-  listenMessages();
+let initialLoadComplete = false;
+function listenMessages(forceRerender = false) {
+    
+  if (forceRerender) {
+      messagesEl.innerHTML = "";
+      initialLoadComplete = false; 
+  }
+  
+  db.collection(roomId).orderBy("createdAt", "asc").limitToLast(50)
+    .onSnapshot(snapshot => {
+        
+        if (!initialLoadComplete || forceRerender) {
+            messagesEl.innerHTML = ""; 
+            snapshot.forEach(doc => {
+                const d = doc.data();
+                if (!shouldFilterMessage(d)) {
+                    appendMessage(doc);
+                }
+            });
+            smoothScrollToBottom();
+            initialLoadComplete = true;
+            return;
+        }
+
+        snapshot.docChanges().forEach(change => {
+            const doc = change.doc;
+            const d = doc.data();
+            
+            if (shouldFilterMessage(d)) {
+                const existing = messagesEl.querySelector(`[data-message-id="${doc.id}"]`);
+                if (existing) existing.remove();
+                return;
+            }
+
+            if (change.type === 'added') {
+                appendMessageWithAnimation(doc);
+            } else if (change.type === 'removed') {
+                const element = messagesEl.querySelector(`[data-message-id="${doc.id}"]`);
+                if (element) element.remove();
+            }
+        });
+    }, err => {
+      console.error("Messages listener error:", err);
+    });
+}
+
+function shouldFilterMessage(d) {
+    if (!d || !d.uid) return true;
+    if (mutedUsers.includes(d.uid)) return true;
+    const now = Date.now();
+    if (kickMap.get(d.uid) && kickMap.get(d.uid) > now) return true;
+    if (blockMap.get(d.uid) && blockMap.get(d.uid) > now) return true;
+    if (banSet.has(d.uid)) return true;
+    return false;
 }
 
 function appendMessage(doc) {
   const d = doc.data();
-  if (!d) return;
-
-  if (mutedUsers.includes(d.uid)) return;
-  const now = Date.now();
-  if (kickMap.get(d.uid) && kickMap.get(d.uid) > now) return;
-  if (blockMap.get(d.uid) && blockMap.get(d.uid) > now) return;
-  if (banSet.has(d.uid)) return;
-
   const div = document.createElement("div");
   div.className = "message";
   div.dataset.uid = d.uid;
+  div.dataset.messageId = doc.id; 
 
   let userinfo = usersMap.get(d.uid);
   if (!userinfo) {
@@ -1593,97 +1727,66 @@ function appendMessage(doc) {
       tagUser(userinfo.username);
     }
   });
-
-  smoothScrollToBottom();
 }
 
-function listenMessages() {
-  db.collection(roomId).orderBy("createdAt", "asc").limitToLast(50)
-    .onSnapshot(snapshot => {
-      // Instead of clearing all messages, we'll only add new ones and animate last message
+function checkConsecutiveMsgStatus() {
+  const now = Date.now();
+  const resetTime = userConsecutiveMsgData.resetTime;
 
-      // We want to reset messages only once per full reload or initial load
-      if (messagesEl.children.length === 0) {
-        messagesEl.innerHTML = "";
-        snapshot.forEach(doc => {
-          const d = doc.data();
-          if (!d) return;
-          if (mutedUsers.includes(d.uid)) return;
-          if (kickMap.get(d.uid) && kickMap.get(d.uid) > Date.now()) return;
-          if (blockMap.get(d.uid) && blockMap.get(d.uid) > Date.now()) return;
-          if (banSet.has(d.uid)) return;
-          appendMessage(doc);
-          lastMessageUserUid = d.uid;
-          userConsecutiveMsgCount = 1;
-        });
-        smoothScrollToBottom();
-      } else {
-        // Append only new messages if any
-        const existingIds = new Set();
-        Array.from(messagesEl.children).forEach(c => {
-          if (c.dataset && c.dataset.uid) existingIds.add(c.dataset.uid);
-        });
+  if (blockMap.has(userUid) && blockMap.get(userUid) > now) {
+      return; 
+  }
 
-        let newMessages = [];
-        snapshot.forEach(doc => {
-          const d = doc.data();
-          if (!d) return;
-          if (mutedUsers.includes(d.uid)) return;
-          if (kickMap.get(d.uid) && kickMap.get(d.uid) > Date.now()) return;
-          if (blockMap.get(d.uid) && blockMap.get(d.uid) > Date.now()) return;
-          if (banSet.has(d.uid)) return;
-          // Push new message refs to array if not in existing messages
-          // Instead of message id, we use createdAt timestamp or firestore doc id uniquely
-          // Firestore doc id is unique, but dataset.uid is user id not message id
-          // So we must check differently, here we assume snapshot is ordered by createdAt.
-          newMessages.push(doc);
-        });
+  if (resetTime && resetTime > now) {
+    const timeLeft = resetTime - now;
+    messageInputEl.disabled = true;
+    sendBtnEl.disabled = true;
+    
+    messageInputEl.placeholder = `Flood Restriction: ${formatDuration(timeLeft)} remaining.`;
 
-        if (newMessages.length > 0) {
-          // Only append the last new message with animation as per requirement
-          const lastMsgDoc = newMessages[newMessages.length - 1];
-          const d = lastMsgDoc.data();
-
-          if (d.uid === lastMessageUserUid) {
-            userConsecutiveMsgCount++;
-          } else {
-            userConsecutiveMsgCount = 1;
-            lastMessageUserUid = d.uid;
-          }
-
-          // Check consecutive message limit
-          if (userConsecutiveMsgCount > MAX_CONSECUTIVE_MSGS) {
-            alert("Please wait for someone to reply.");
-            // Do not append this message to chat
-            return;
-          }
-
-          // Append last message with animation
-          appendMessageWithAnimation(lastMsgDoc);
-
-          // Scroll smoothly to bottom
-          smoothScrollToBottom();
+    setTimeout(checkConsecutiveMsgStatus, 1000);
+  } else {
+    if (messageInputEl.disabled && !blockMap.has(userUid)) {
+        if (userUid) {
+            db.collection("userStats").doc(userUid).set({
+                consecutiveMsgCount: 0,
+                consecutiveMsgResetTime: null,
+            }, { merge: true }).catch(console.error);
         }
-      }
-    }, err => {
-      console.error("Messages listener error:", err);
-    });
+    }
+    
+    userConsecutiveMsgData.count = 0;
+    userConsecutiveMsgData.resetTime = null;
+    messageInputEl.disabled = false;
+    sendBtnEl.disabled = false;
+    messageInputEl.placeholder = "Type your message...";
+  }
 }
 
-// Append message with smooth push-up animation for new messages
+function listenUserConsecutiveData() {
+    if (!userUid) return;
+    db.collection("userStats").doc(userUid).onSnapshot(doc => {
+        const d = doc.data();
+        if (d) {
+            userConsecutiveMsgData.count = d.consecutiveMsgCount || 0;
+            userConsecutiveMsgData.resetTime = d.consecutiveMsgResetTime && d.consecutiveMsgResetTime.toDate() ? d.consecutiveMsgResetTime.toDate().getTime() : null;
+        } else {
+            userConsecutiveMsgData.count = 0;
+            userConsecutiveMsgData.resetTime = null;
+        }
+        checkConsecutiveMsgStatus();
+    }, err => console.error("Error listening to userStats:", err));
+}
+
 function appendMessageWithAnimation(doc) {
   const d = doc.data();
-  if (!d) return;
-
-  if (mutedUsers.includes(d.uid)) return;
-  const now = Date.now();
-  if (kickMap.get(d.uid) && kickMap.get(d.uid) > now) return;
-  if (blockMap.get(d.uid) && blockMap.get(d.uid) > now) return;
-  if (banSet.has(d.uid)) return;
+  
+  if (messagesEl.querySelector(`[data-message-id="${doc.id}"]`)) return;
 
   const div = document.createElement("div");
-  div.className = "message new-message-anim";
+  div.className = "message new-message-anim"; 
   div.dataset.uid = d.uid;
+  div.dataset.messageId = doc.id; 
 
   let userinfo = usersMap.get(d.uid);
   if (!userinfo) {
@@ -1726,17 +1829,18 @@ function appendMessageWithAnimation(doc) {
       <div>${safeText.replace(/(@\\w+)/g, '<span class="tagged">$1</span>')}</div>
     </div>`;
 
-  // Add initial styles for animation
+  // Enhanced Push-up animation logic
   div.style.opacity = 0;
-  div.style.transform = "translateY(15px)";
-  div.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+  // Start 20px below its final position (more visible push)
+  div.style.transform = "translateY(20px)"; 
+  div.style.transition = "opacity 0.4s ease-out, transform 0.4s ease-out"; // Slightly longer/smoother transition
 
   messagesEl.appendChild(div);
 
-  // Animate in
+  // Animate to full opacity and original position
   setTimeout(() => {
     div.style.opacity = 1;
-    div.style.transform = "translateY(0)";
+    div.style.transform = "translateY(0)"; 
   }, 50);
 
   const usernameSpan = div.querySelector('.username');
@@ -1747,6 +1851,7 @@ function appendMessageWithAnimation(doc) {
       tagUser(userinfo.username);
     }
   });
+  smoothScrollToBottom();
 }
 
 function smoothScrollToBottom() {
@@ -1757,20 +1862,24 @@ function smoothScrollToBottom() {
   }
 }
 
-document.getElementById("sendBtn").onclick = async () => {
-  if (blockMap.get(userUid) && blockMap.get(userUid) > Date.now()) {
-    alert("You are blocked from sending messages.");
+sendBtnEl.onclick = async () => {
+  const now = Date.now();
+  if ((blockMap.get(userUid) && blockMap.get(userUid) > now) || 
+      (userConsecutiveMsgData.resetTime && userConsecutiveMsgData.resetTime > now)) {
+    alert("You are restricted from sending messages.");
     return;
   }
   await sendMessage();
   setTypingStatus(false);
 };
 
-document.getElementById("messageInput").addEventListener("keydown", async e => {
+messageInputEl.addEventListener("keydown", async e => {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
-    if (blockMap.get(userUid) && blockMap.get(userUid) > Date.now()) {
-      alert("You are blocked from sending messages.");
+    const now = Date.now();
+    if ((blockMap.get(userUid) && blockMap.get(userUid) > now) || 
+        (userConsecutiveMsgData.resetTime && userConsecutiveMsgData.resetTime > now)) {
+      alert("You are restricted from sending messages.");
       return;
     }
     await sendMessage();
@@ -1778,11 +1887,11 @@ document.getElementById("messageInput").addEventListener("keydown", async e => {
   }
 });
 
-document.getElementById("messageInput").addEventListener("input", () => {
-  let val = document.getElementById("messageInput").value;
+messageInputEl.addEventListener("input", () => {
+  let val = messageInputEl.value;
   setTypingStatus(!!val.trim());
   if (val.length > 250) {
-    document.getElementById("messageInput").value = val.slice(0, 250);
+    messageInputEl.value = val.slice(0, 250);
   }
 });
 
@@ -1791,31 +1900,51 @@ async function sendMessage() {
     alert("Refresh your page please");
     return;
   }
-  if (userConsecutiveMsgCount >= MAX_CONSECUTIVE_MSGS) {
-    alert("Please wait for someone to reply.");
-    return;
+
+  const now = Date.now();
+  if ((blockMap.get(userUid) && blockMap.get(userUid) > now) || 
+      (userConsecutiveMsgData.resetTime && userConsecutiveMsgData.resetTime > now)) {
+      alert("You are restricted from sending messages.");
+      return;
   }
-  const input = document.getElementById("messageInput");
-  let txt = input.value.trim();
+  
+  let txt = messageInputEl.value.trim();
   if (!txt) return;
   if (txt.length > 250) {
     alert("Maximum message length is 250 characters.");
-    input.value = "";
+    messageInputEl.value = "";
     return;
   }
   if (hasBadWords(txt)) {
     alert("Message contains inappropriate language.");
-    input.value = "";
+    messageInputEl.value = "";
     return;
   }
-  input.value = "";
-  const now = new Date();
+  messageInputEl.value = "";
+  
+  const msgTime = new Date();
+  
+  let newCount = userConsecutiveMsgData.count + 1;
+  let newResetTime = null;
+
+  if (newCount >= MAX_CONSECUTIVE_MSGS) {
+      const resetDate = new Date(Date.now() + CONSECUTIVE_MSG_TIMEOUT);
+      newResetTime = firebase.firestore.Timestamp.fromDate(resetDate);
+      alert(`You've reached the message limit. Cannot send messages for ${formatDuration(CONSECUTIVE_MSG_TIMEOUT)}.`);
+      newCount = MAX_CONSECUTIVE_MSGS; 
+  }
+
+  await db.collection("userStats").doc(userUid).set({
+      consecutiveMsgCount: newCount, 
+      consecutiveMsgResetTime: newResetTime,
+      lastMessageAt: firebase.firestore.FieldValue.serverTimestamp()
+  }, { merge: true }).catch(console.error);
+
   await db.collection(roomId).add({
     uid: userUid,
     text: txt,
-    createdAt: firebase.firestore.Timestamp.fromDate(now)
+    createdAt: firebase.firestore.Timestamp.fromDate(msgTime)
   });
-  await cleanOldMessages();
 }
 
 function tagUser(username) {
@@ -1960,7 +2089,9 @@ function renderActiveUsersList(activeUsers) {
 }
 
 auth.onAuthStateChanged(async user => {
-  if (!user) return;
+  if (!user) {
+    return;
+  }
   userUid = user.uid;
 
   const selfDoc = await db.collection("users").doc(userUid).get();
@@ -1972,21 +2103,23 @@ auth.onAuthStateChanged(async user => {
 
   await loadUsersData();
   await loadEquippedData();
+  
+  await fetchKickBlockBanData(); 
 
   startPresenceUpdater();
-  await pulsePresence();
 
   renderActiveUsersRealTime();
-  await fetchKickBlockBanData();
+  
+  listenUserConsecutiveData(); 
 
   listenMessages();
+  
+  setInterval(cleanOldMessages, 5 * 60 * 1000); 
 
-  setInterval(pulsePresence, 12000);
   setInterval(fetchKickBlockBanData, 60000);
 
   setupTypingIndicatorRealtime();
 });
-
   </script>
 </body>
 </html>
@@ -2114,7 +2247,6 @@ const app = initializeApp(firebaseConfig);
       }
     });
 
-    // Menu toggle logic
     const mainHeader = document.getElementById("mainHeader");
     const menuBtn = document.getElementById("menuBtn");
     const closeBtn = document.querySelector(".menu-dropdown .close-btn");
@@ -2138,7 +2270,6 @@ const app = initializeApp(firebaseConfig);
       if (e.target.tagName === "A") mainHeader.classList.remove("expanded");
     });
 
-    // Theme switch handling (optional)
     const themeSwitch = document.getElementById("themeSwitch");
     if (themeSwitch) {
       themeSwitch.addEventListener("click", function () {
