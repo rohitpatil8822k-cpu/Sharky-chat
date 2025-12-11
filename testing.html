@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Uploader</title>
+    <title>Media Uploader (Cloudinary)</title>
     <style>
         body { font-family: sans-serif; padding: 20px; background-color: #f4f4f9; }
         .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
@@ -15,13 +15,11 @@
         .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
     </style>
     
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
 </head>
 <body>
 
     <div class="container">
-        <h2>📷 Audio/Image Upload to Firebase Storage</h2>
+        <h2>📷 Audio/Image Upload to Cloudinary</h2>
         
         <p>सिर्फ **इमेज** (`.jpg`, `.png`) या **ऑडियो** (`.mp3`, `.wav`) फाइल चुनें।</p>
         
@@ -37,20 +35,12 @@
     </div>
 
     <script>
-        // 1. आपकी Firebase कॉन्फ़िगरेशन
-        const firebaseConfig = {
-            apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
-            authDomain: "sharky-chat-007.firebaseapp.com",
-            projectId: "sharky-chat-007",
-            storageBucket: "sharky-chat-007.appspot.com",
-            messagingSenderId: "637104796242",
-            appId: "1:637104796242:web:74ac36b86af91be15ea58b",
-            // measurementId: "G-HT9T3P9KST", // Measurement ID स्टोरेज के लिए ज़रूरी नहीं है
-        };
+        // *** 1. Cloudinary डिटेल्स: अब पूरी तरह से कॉन्फ़िगर हैं ***
+        const YOUR_CLOUD_NAME = "dlqvchjl3"; 
+        const YOUR_UPLOAD_PRESET = "media_uploads"; 
 
-        // Firebase को इनिशियलाइज़ करें (compat version)
-        const app = firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage();
+        // Cloudinary API URL
+        const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${YOUR_CLOUD_NAME}/upload`;
         
         // DOM एलिमेंट्स
         const statusElement = document.getElementById('uploadStatus');
@@ -58,7 +48,7 @@
 
         function updateStatus(message, isError = false) {
             statusElement.textContent = message;
-            statusElement.className = isError ? 'error' : (message.includes('%') ? '' : 'success');
+            statusElement.className = isError ? 'error' : 'success';
         }
 
         function uploadMedia() {
@@ -70,52 +60,51 @@
                 return;
             }
 
-            // फ़ाइल के MIME टाइप के आधार पर फ़ोल्डर तय करें
-            let folderName = 'others';
-            if (file.type.startsWith('image/')) {
-                folderName = 'images';
-            } else if (file.type.startsWith('audio/')) {
-                folderName = 'audio';
-            }
-
-            // Storage में फाइल का पाथ: [folderName]/[timestamp]_[filename]
-            const timestamp = Date.now();
-            const storageRef = storage.ref(`${folderName}/${timestamp}_${file.name}`);
-
-            // अपलोड शुरू करें
-            const uploadTask = storageRef.put(file);
-
-            // अपलोड की प्रगति को ट्रैक करें
-            uploadTask.on('state_changed',
-                (snapshot) => {
-                    // प्रगति (Progress)
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    updateStatus(`🚀 Uploading: ${progress.toFixed(1)}% done`);
-                },
-                (error) => {
-                    // त्रुटि (Error)
-                    console.error("Upload failed", error);
-                    updateStatus(`❌ Upload Failed: ${error.message}`, true);
-                },
-                () => {
-                    // सफलता (Completion)
-                    updateStatus('✅ File uploaded successfully!');
-                    
-                    // डाउनलोड URL प्राप्त करें
-                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                        console.log('File available at', downloadURL);
-                        
-                        // URL को लिस्ट में जोड़ें
-                        const listItem = document.createElement('li');
-                        const link = document.createElement('a');
-                        link.href = downloadURL;
-                        link.target = "_blank";
-                        link.textContent = `${folderName}: ${file.name}`;
-                        listItem.appendChild(link);
-                        linksElement.appendChild(listItem);
-                    });
+            updateStatus("🚀 Uploading... Please wait.");
+            
+            // डेटा को FormData ऑब्जेक्ट में तैयार करें
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', YOUR_UPLOAD_PRESET);
+            
+            // Cloudinary को API रिक्वेस्ट भेजें
+            fetch(CLOUDINARY_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                // HTTP एरर चेक करें (जैसे 400, 500)
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            );
+                return response.json();
+            })
+            .then(data => {
+                // Cloudinary से सफलता का जवाब (Success Response)
+                if (data.secure_url) {
+                    updateStatus('✅ File uploaded successfully!');
+                    console.log('File available at', data.secure_url);
+                    
+                    // URL को लिस्ट में जोड़ें
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = data.secure_url;
+                    link.target = "_blank";
+                    link.textContent = file.name;
+                    listItem.appendChild(link);
+                    linksElement.appendChild(listItem);
+                } else {
+                    // Cloudinary ने एरर भेजी (जैसे Upload Preset गलत है)
+                    // यह अक्सर तब होता है जब आपने Unsigned Preset नहीं बनाया होता।
+                    updateStatus(`❌ Upload Failed: ${data.error.message || 'Unknown error'}`, true);
+                    console.error('Cloudinary Error Data:', data);
+                }
+            })
+            .catch(error => {
+                // नेटवर्क या HTTP एरर
+                console.error('Upload Error:', error);
+                updateStatus(`❌ Upload Failed: ${error.message}`, true);
+            });
         }
     </script>
 
