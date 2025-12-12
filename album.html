@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📸 My Album</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #2c3e50; 
+            margin: 0; 
+            padding: 0; 
+            color: #ecf0f1; 
+            overflow-x: hidden; 
+        }
+        .container { 
+            max-width: 1100px; 
+            margin: 30px auto; 
+            padding: 30px; 
+            background: #34495e; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+        }
+        h1 { 
+            color: #3498db; 
+            font-weight: 800; 
+            font-size: 2.0em; 
+            border-bottom: 3px solid #3498db; 
+            padding-bottom: 10px; 
+            margin-bottom: 25px; 
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: fadeInDown 0.8s ease-out;
+            flex-grow: 1;
+            min-width: 0;
+        }
+        h2 {
+            font-size: 1.8em; 
+            font-weight: 600;
+            color: #bdc3c7;
+            margin-top: 30px;
+        }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 25px; 
+            flex-wrap: wrap; 
+        }
+        
+        .back-button { 
+            padding: 8px 18px;
+            background-color: #7f8c8d; 
+            color: #fff; 
+            text-decoration: none; 
+            border-radius: 25px; 
+            font-weight: 700; 
+            font-size: 1.1em; 
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0; 
+            white-space: nowrap; 
+            width: fit-content;
+            margin-left: 15px; 
+        }
+        .back-button:hover { 
+            background-color: #95a5a6; 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+        }
+        
+        .upload-section { 
+            background-color: #4e6e81; 
+            padding: 25px; 
+            border-radius: 10px; 
+            margin-bottom: 30px; 
+            border: 1px solid #7f8c8d; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.5s ease-out;
+        }
+        .upload-section p {
+            font-size: 0.95em;
+            color: #bdc3c7;
+        }
+        .upload-controls { 
+            display: flex; 
+            gap: 15px; 
+            align-items: center; 
+            margin-top: 15px; 
+            flex-wrap: wrap; 
+        }
+        input[type="file"] {
+            color: #ecf0f1;
+            padding: 10px;
+            border: 1px solid #7f8c8d;
+            border-radius: 8px;
+            background-color: #34495e;
+            flex-grow: 1;
+            font-size: 0.9em; 
+            min-width: 150px; 
+        }
+        .upload-button { 
+            padding: 12px 30px; 
+            background-color: #2ecc71; 
+            color: #fff; 
+            border-radius: 30px; 
+            font-size: 1em; 
+            font-weight: 700; 
+            flex-shrink: 0;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s, transform 0.2s; 
+        }
+        .upload-button:hover { 
+            background-color: #27ae60; 
+            transform: scale(1.03); 
+        }
+        #uploadStatus { 
+            margin-top: 15px; 
+            padding: 15px; 
+            border-radius: 8px; 
+            font-size: 1.05em; 
+            width: 100%;
+            box-sizing: border-box; 
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .success { background-color: #1abc9c; color: #fff; border: 1px solid #16a085; }
+        .error { background-color: #e74c3c; color: #fff; border: 1px solid #c0392b; }
+        
+        .admin-notice { 
+            background-color: #f1c40f; 
+            color: #2c3e50; 
+            padding: 15px; 
+            border-left: 5px solid #f39c12; 
+            border-radius: 8px; 
+            margin-bottom: 25px; 
+            font-size: 1em; 
+            font-weight: 500; 
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .admin-notice strong { 
+            font-weight: 700;
+        }
+        .admin-notice i {
+            flex-shrink: 0;
+            font-size: 1.8em; 
+            color: #e67e22; 
+        }
+
+        .image-gallery { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 30px; 
+        }
+        .image-item { 
+            background: #34495e; 
+            border-radius: 12px; 
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); 
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid #5d7890;
+            display: flex; 
+            flex-direction: column;
+        }
+        .image-item:hover {
+             transform: scale(1.02);
+             box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+        }
+        .image-item img { 
+            width: 100%; 
+            height: 250px; 
+            object-fit: cover; 
+            display: block; 
+            border-bottom: 2px solid #5d7890;
+        }
+        .item-footer { 
+            padding: 15px; 
+            display: flex; 
+            flex-direction: column;
+            gap: 10px; 
+            align-items: flex-start; 
+            flex-grow: 1; 
+        }
+        .item-footer span {
+            color: #bdc3c7;
+            font-size: 0.9em; 
+        }
+        .item-footer span strong {
+            color: #ecf0f1;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            font-size: 0.95em;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        .status-pending {
+            color: #f1c40f; 
+            background-color: #4e4a36;
+        }
+        .dot-pending { background-color: #f1c40f; animation-name: pulse-yellow; } 
+
+        .status-approved {
+            color: #2ecc71; 
+            background-color: #364e3f;
+        }
+        .dot-approved { background-color: #2ecc71; animation: none; } 
+
+        .status-rejected {
+            color: #e74c3c; 
+            background-color: #4e3636;
+        }
+        .dot-rejected { background-color: #e74c3c; animation: none; } 
+        
+        .rejection-reason {
+            font-size: 0.85em;
+            color: #e74c3c;
+            background-color: #3e3333;
+            padding: 8px;
+            border-radius: 5px;
+            margin-top: 5px;
+            border-left: 3px solid #e74c3c;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+        .button-group { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            width: 100%;
+            margin-top: 10px;
+        }
+        .action-button {
+            width: 100%;
+            padding: 10px 15px; 
+            border: none;
+            border-radius: 25px; 
+            font-weight: 700; 
+            font-size: 0.9em; 
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+        .action-button:active {
+            transform: translateY(1px);
+        }
+        .use-button { background-color: #3498db; color: white; }
+        .use-button:hover { background-color: #2980b9; }
+        .delete-button { background-color: #e74c3c; color: white; }
+        .delete-button:hover { background-color: #c0392b; }
+        
+        .in-use-button {
+            background-color: #27ae60; 
+            color: white;
+            cursor: default;
+        }
+        .in-use-button:hover {
+            background-color: #27ae60; 
+            transform: none;
+        }
+        .remove-button {
+            background-color: #f39c12; 
+            color: white;
+        }
+        .remove-button:hover {
+            background-color: #e67e22;
+        }
+        
+        #noImagesMessage { 
+            grid-column: 1 / -1; 
+            text-align: center; 
+            color: #95a5a6; 
+            padding: 50px; 
+            font-size: 1.3em; 
+            border: 3px dashed #7f8c8d; 
+            border-radius: 10px;
+            background-color: #34495e;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes pulse-yellow {
+            0% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(241, 196, 15, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); }
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                padding: 15px; 
+                border-radius: 0;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .back-button {
+                width: 100%;
+                margin-left: 0;
+            }
+            .upload-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            input[type="file"],
+            .upload-button {
+                width: 100%;
+            }
+            #uploadStatus {
+                width: 100%;
+            }
+            .image-gallery {
+                grid-template-columns: 1fr; 
+                gap: 20px;
+            }
+            .image-item img {
+                height: 200px; 
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-image"></i> My Album</h1>
+            <a href="profile.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Profile
+            </a>
+        </div>
+        
+        <div class="admin-notice">
+            <i class="fas fa-lock"></i>
+            <p><strong>Security Notice:</strong> Uploaded images must receive Administrator Approval before they can be set as your profile picture. Images currently under review or rejected cannot be used.</p>
+        </div>
+
+        <div class="upload-section">
+            <h2><i class="fas fa-cloud-upload-alt"></i> Upload New Image</h2>
+            <p>Select a file to upload. It will be sent for review and approval.</p>
+            
+            <div class="upload-controls">
+                <input type="file" id="imageInput" accept="image/*">
+                <button class="upload-button" onclick="uploadImage()">
+                    <i class="fas fa-upload"></i> Upload Image
+                </button>
+            </div>
+            <div id="uploadStatus" class="error">... Waiting for file selection ...</div>
+        </div>
+
+        <h2><i class="fas fa-th-large"></i> Image Gallery</h2>
+        <div class="image-gallery" id="imageGallery">
+            <p id="noImagesMessage"><i class="fas fa-camera"></i> No images uploaded yet. Start uploading your awesome pictures!</p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script> 
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+            authDomain: "sharky-chat-007.firebaseapp.com",
+            projectId: "sharky-chat-007",
+            storageBucket: "sharky-chat-007.appspot.com",
+            messagingSenderId: "637104796242",
+            appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+            measurementId: "G-HT9T3P9KST",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth(); 
+
+        let currentUserId = null; 
+        let currentProfilePicUrl = null; 
+
+        const adminApprovalCollection = db.collection("pending_profile_pics");
+        const usersCollection = db.collection("users");
+
+        let uploadedImages = JSON.parse(localStorage.getItem('userAlbumImages') || '[]').map(img => ({
+            ...img,
+            status: img.status || 'Pending' 
+        }));
+
+        async function checkApprovalStatus() {
+            if (!currentUserId || uploadedImages.length === 0) return;
+
+            try {
+                const snapshot = await adminApprovalCollection
+                    .where('userId', '==', currentUserId)
+                    .where('status', 'in', ['Pending', 'Rejected'])
+                    .get();
+
+                const activeRequests = new Map();
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    activeRequests.set(data.url, {
+                        status: data.status,
+                        rejectionReason: data.rejectionReason,
+                        firestoreDocId: doc.id
+                    });
+                });
+
+                let statusUpdated = false;
+                
+                uploadedImages = uploadedImages.map(img => {
+                    const request = activeRequests.get(img.url);
+                    
+                    if (request) {
+                        if (img.status !== request.status || img.rejectionReason !== request.rejectionReason) {
+                            img.status = request.status;
+                            img.rejectionReason = request.rejectionReason || null;
+                            img.firestoreDocId = request.firestoreDocId;
+                            statusUpdated = true;
+                        }
+                    } else if (img.status !== 'Approved') {
+                        img.status = 'Approved';
+                        img.rejectionReason = null;
+                        img.firestoreDocId = null; 
+                        statusUpdated = true;
+                    }
+                    return img;
+                });
+
+                if (statusUpdated) {
+                    saveImagesToLocalStorage();
+                    updateStatus('Status updated: Check your gallery for approvals/rejections.', false);
+                }
+
+            } catch (error) {
+                console.error("Error syncing approval status:", error);
+            }
+        }
+
+
+        auth.onAuthStateChanged(async user => {
+            if (user) {
+                currentUserId = user.uid;
+                try {
+                    const doc = await usersCollection.doc(currentUserId).get();
+                    if (doc.exists) {
+                        currentProfilePicUrl = doc.data().profilePic || null;
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                }
+                await checkApprovalStatus();
+            } else {
+                currentUserId = null;
+                currentProfilePicUrl = null;
+                alert("⚠️ Error: Please log in first to use the profile picture features.");
+            }
+            renderGallery();
+        });
+        
+        const YOUR_CLOUD_NAME = "dlqvchjl3"; 
+        const YOUR_UPLOAD_PRESET = "media_uploads"; 
+        const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${YOUR_CLOUD_NAME}/upload`;
+        
+        const statusElement = document.getElementById('uploadStatus');
+        const galleryElement = document.getElementById('imageGallery');
+
+
+        function updateStatus(message, isError = false) {
+            statusElement.textContent = message;
+            statusElement.className = isError ? 'error' : 'success';
+        }
+
+        function saveImagesToLocalStorage() {
+            localStorage.setItem('userAlbumImages', JSON.stringify(uploadedImages));
+            renderGallery();
+        }
+
+        async function uploadImage() {
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0];
+            if (!file) { updateStatus("❌ Please select an image file to upload.", true); return; }
+            if (!file.type.startsWith('image/')) { updateStatus("❌ Only image files are allowed.", true); return; }
+            if (!currentUserId) { updateStatus("❌ User not logged in.", true); return; }
+
+            updateStatus("🚀 Uploading... Please wait.", false);
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', YOUR_UPLOAD_PRESET);
+            
+            try {
+                const response = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
+                if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
+                const data = await response.json();
+
+                if (data.secure_url) {
+                    const newImage = {
+                        id: data.public_id, 
+                        url: data.secure_url,
+                        filename: file.name,
+                        uploadDate: Date.now(),
+                        status: 'Pending', 
+                        userId: currentUserId,
+                        rejectionReason: null
+                    };
+
+                    const docRef = await adminApprovalCollection.add(newImage);
+                    newImage.firestoreDocId = docRef.id;
+
+                    uploadedImages.unshift(newImage);
+                    saveImagesToLocalStorage();
+                    document.getElementById('imageInput').value = '';
+
+                    updateStatus('✅ Image uploaded successfully! Status: Pending Approval', false);
+                } else {
+                    updateStatus(`❌ Upload Failed: ${data.error.message || 'Unknown error'}`, true);
+                }
+            } catch (error) {
+                console.error('Upload Error:', error);
+                updateStatus(`❌ Upload Failed: ${error.message}`, true);
+            }
+        }
+        
+        async function useAsProfilePic(index) {
+            const image = uploadedImages[index];
+            const profilePicUrl = image.url;
+
+            if (image.status !== 'Approved') {
+                alert("❌ This image is not yet approved by the administrator. Status: " + image.status);
+                return;
+            }
+
+            if (!currentUserId) {
+                alert("❌ You are not logged in. Please log in to set a profile picture.");
+                return;
+            }
+            
+            try {
+                await usersCollection.doc(currentUserId).update({
+                    profilePic: profilePicUrl,
+                    profilePicUpdateTimestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                currentProfilePicUrl = profilePicUrl;
+                renderGallery(); 
+                
+                updateStatus(`✅ Profile picture URL set successfully!`, false);
+                
+            } catch (error) {
+                console.error("Error updating profile picture in Firestore: ", error);
+                alert(`❌ Failed to update profile picture: ${error.message}.`);
+            }
+        }
+
+        async function removeProfilePic() {
+            if (!currentUserId) {
+                alert("❌ You are not logged in.");
+                return;
+            }
+             if (!confirm("Are you sure you want to remove your current profile picture?")) {
+                return;
+            }
+            
+            try {
+                await usersCollection.doc(currentUserId).update({
+                    profilePic: firebase.firestore.FieldValue.delete(),
+                    profilePicUpdateTimestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                currentProfilePicUrl = null; 
+                renderGallery(); 
+                
+                updateStatus(`✅ Profile picture removed successfully.`, false);
+                
+            } catch (error) {
+                console.error("Error removing profile picture in Firestore: ", error);
+                alert(`❌ Failed to remove profile picture: ${error.message}.`);
+            }
+        }
+        
+        async function deleteImage(index) {
+            const image = uploadedImages[index];
+            
+            if (image.url === currentProfilePicUrl) {
+                alert("❌ Cannot delete image: It is currently set as your profile picture. Please remove it first.");
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to delete '${image.filename}' from your gallery?`)) {
+                return;
+            }
+            
+            try {
+                if (image.firestoreDocId) {
+                    await adminApprovalCollection.doc(image.firestoreDocId).delete();
+                }
+            } catch (error) {
+                 console.error("Error deleting image request from Firestore:", error);
+                 alert("Warning: Could not remove the request from the server, but the image is deleted locally.");
+            }
+            
+
+            uploadedImages.splice(index, 1);
+            saveImagesToLocalStorage();
+
+            updateStatus(`🗑️ Image '${image.filename}' removed from your local gallery.`, false);
+        }
+
+        function checkAndDeleteOldImages() {
+            const sevenDays = 7 * 24 * 60 * 60 * 1000;
+            const now = Date.now();
+            
+            const initialCount = uploadedImages.length;
+            
+            const filteredImages = uploadedImages.filter(image => {
+                if (image.url === currentProfilePicUrl) return true;
+                if (now - image.uploadDate > sevenDays) {
+                    return false; 
+                }
+                return true;
+            });
+
+            if (filteredImages.length !== initialCount) {
+                uploadedImages = filteredImages;
+                saveImagesToLocalStorage();
+            }
+        }
+        
+        function renderGallery() {
+            checkAndDeleteOldImages();
+
+            if (uploadedImages.length === 0) {
+                galleryElement.innerHTML = `<p id="noImagesMessage"><i class="fas fa-camera"></i> No images uploaded yet. Start uploading your awesome pictures!</p>`;
+                return;
+            }
+            
+            let html = '';
+            uploadedImages.forEach((image, index) => {
+                const isInUse = image.url === currentProfilePicUrl;
+                const status = image.status;
+                
+                let statusClass, dotClass, statusText, rejectionHtml = '';
+
+                if (status === 'Approved') {
+                    statusClass = 'status-approved';
+                    dotClass = 'dot-approved';
+                    statusText = 'Approved';
+                } else if (status === 'Rejected') {
+                    statusClass = 'status-rejected';
+                    dotClass = 'dot-rejected';
+                    statusText = 'Rejected';
+                    if (image.rejectionReason) {
+                        rejectionHtml = `<div class="rejection-reason"><strong>Reason:</strong> ${image.rejectionReason}</div>`;
+                    }
+                } else {
+                    statusClass = 'status-pending';
+                    dotClass = 'dot-pending';
+                    statusText = 'Pending Review';
+                }
+
+                html += `
+                    <div class="image-item">
+                        <img src="${image.url}" alt="${image.filename}" loading="lazy">
+                        <div class="item-footer">
+                            <span><strong>File:</strong> ${image.filename}</span>
+                            <span><strong>Uploaded:</strong> ${new Date(image.uploadDate).toLocaleDateString()}</span>
+                            
+                            <span class="${statusClass} status-badge">
+                                <span class="${dotClass} status-dot"></span>
+                                ${statusText}
+                            </span>
+                            
+                            ${rejectionHtml}
+
+                            <div class="button-group">
+                                ${status === 'Approved' 
+                                    ? (isInUse 
+                                        ? `
+                                            <button class="action-button in-use-button" disabled>
+                                                <i class="fas fa-check-double"></i> Currently In Use
+                                            </button>
+                                            <button class="action-button remove-button" onclick="removeProfilePic()">
+                                                <i class="fas fa-times"></i> Remove Profile Pic
+                                            </button>
+                                        `
+                                        : `
+                                            <button class="action-button use-button" 
+                                                onclick="useAsProfilePic(${index})" 
+                                                title="Set as profile picture">
+                                                <i class="fas fa-user-check"></i> Use as Profile Pic
+                                            </button>
+                                        `)
+                                    : ''
+                                }
+                                <button class="action-button delete-button" 
+                                    onclick="deleteImage(${index})" 
+                                    title="Delete this image from your album">
+                                    <i class="fas fa-trash-alt"></i> Delete Image
+                                </button>
+                                </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            galleryElement.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStatus("... Waiting for file selection ...", true);
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔒 Admin Profile Approval Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #2b3e50; 
+            margin: 0; 
+            padding: 0; 
+            color: #ecf0f1; 
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 30px auto; 
+            padding: 30px; 
+            background: #34495e; 
+            border-radius: 15px; 
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); 
+        }
+        h1 { 
+            color: #e67e22; 
+            font-weight: 700; 
+            font-size: 2.8em; 
+            border-bottom: 4px solid #e67e22; 
+            padding-bottom: 15px; 
+            margin-bottom: 30px; 
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        h2 {
+            font-size: 1.8em; 
+            font-weight: 600;
+            color: #bdc3c7;
+            margin-bottom: 25px;
+        }
+        
+        #pendingList {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .pending-item {
+            background: #2c3e50;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #5d7890;
+            transition: transform 0.3s;
+        }
+        .pending-item:hover {
+            transform: translateY(-5px);
+            border-color: #3498db;
+        }
+        .pending-item img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-bottom: 2px solid #5d7890;
+        }
+        .item-info {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-grow: 1;
+        }
+        .item-info span {
+            font-size: 0.95em;
+            color: #bdc3c7;
+        }
+        .item-info strong {
+            color: #ecf0f1;
+            font-weight: 600;
+        }
+        
+        .admin-actions {
+            padding: 18px;
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid #5d7890;
+        }
+        .action-button {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .action-button:active {
+            transform: translateY(1px);
+        }
+        .approve-button {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .approve-button:hover {
+            background-color: #27ae60;
+        }
+        .reject-button {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .reject-button:hover {
+            background-color: #c0392b;
+        }
+
+        #statusMessage {
+            padding: 20px;
+            background-color: #f1c40f;
+            color: #2c3e50;
+            border-radius: 8px;
+            font-size: 1.2em;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                padding: 15px;
+                border-radius: 0;
+            }
+            h1 {
+                font-size: 2.2em;
+            }
+            #pendingList {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <h1><i class="fas fa-user-shield"></i> Admin Approval Dashboard</h1>
+        
+        <div id="authStatus">
+            <p id="statusMessage">Checking User Authentication and Role...</p>
+        </div>
+
+        <div id="adminContent" style="display:none;">
+            <h2><i class="fas fa-list-alt"></i> Pending Profile Picture Requests</h2>
+            <div id="pendingList">
+            </div>
+            <p id="noPending" style="text-align: center; margin-top: 50px; padding: 20px; font-size: 1.4em; color: #7f8c8d; border: 1px dashed #7f8c8d; border-radius: 10px; display: none;">
+                <i class="fas fa-clipboard-check"></i> No pending images at the moment. All clear!
+            </p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script> 
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+            authDomain: "sharky-chat-007.firebaseapp.com",
+            projectId: "sharky-chat-007",
+            storageBucket: "sharky-chat-007.appspot.com",
+            messagingSenderId: "637104796242",
+            appId: "1:637104796242:web:74ac36b86af91be15ea58b",
+            measurementId: "G-HT9T3P9KST",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth(); 
+
+        const pendingListElement = document.getElementById('pendingList');
+        const statusMessageElement = document.getElementById('statusMessage');
+        const adminContentElement = document.getElementById('adminContent');
+        const noPendingElement = document.getElementById('noPending');
+
+        const adminApprovalCollection = db.collection("pending_profile_pics");
+        const usersCollection = db.collection("users"); 
+
+        function updateStatus(message, isError = false) {
+            statusMessageElement.textContent = message;
+            statusMessageElement.style.backgroundColor = isError ? '#e74c3c' : '#f1c40f';
+        }
+        
+        async function getUsername(userId) {
+            try {
+                const userDoc = await usersCollection.doc(userId).get();
+                if (userDoc.exists) {
+                    return userDoc.data().username || userId; 
+                }
+                return userId; 
+            } catch (error) {
+                console.error("Error fetching username:", error);
+                return userId;
+            }
+        }
+        
+        function getImageResolution(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    resolve(`${img.naturalWidth}x${img.naturalHeight} px`);
+                };
+                img.onerror = () => {
+                    resolve("Error fetching resolution");
+                };
+                img.src = url;
+            });
+        }
+
+        async function fetchPendingImages() {
+            try {
+                pendingListElement.innerHTML = '';
+                updateStatus("Fetching pending images...", false);
+
+                // Fetch only images with 'Pending' status
+                const snapshot = await adminApprovalCollection.where('status', '==', 'Pending').get();
+                
+                if (snapshot.empty) {
+                    noPendingElement.style.display = 'block';
+                    updateStatus("All clear! No pending approvals.", false);
+                    return;
+                }
+
+                noPendingElement.style.display = 'none';
+
+                const pendingItems = [];
+                const fetchPromises = [];
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const docId = doc.id;
+                    
+                    const promise = Promise.all([
+                        getUsername(data.userId),
+                        getImageResolution(data.url) 
+                    ]).then(([username, resolution]) => {
+                        const item = document.createElement('div');
+                        item.className = 'pending-item';
+                        item.innerHTML = `
+                            <img src="${data.url}" alt="Pending Image for ${data.userId}">
+                            <div class="item-info">
+                                <span><strong>User:</strong> ${username}</span>
+                                <span><strong>File:</strong> ${data.filename}</span>
+                                <span><strong>Resolution:</strong> ${resolution}</span>
+                                <span><strong>Uploaded:</strong> ${new Date(data.uploadDate).toLocaleDateString()}</span>
+                            </div>
+                            <div class="admin-actions">
+                                <button class="action-button approve-button" onclick="handleApproval('${docId}', '${data.userId}', '${data.url}', true)">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button class="action-button reject-button" onclick="handleApproval('${docId}', '${data.userId}', '${data.url}', false)">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            </div>
+                        `;
+                        pendingItems.push(item);
+                    });
+                    fetchPromises.push(promise);
+                });
+                
+                await Promise.all(fetchPromises);
+                
+                pendingItems.forEach(item => pendingListElement.appendChild(item));
+                
+                updateStatus(`Found ${snapshot.size} image(s) awaiting approval.`, false);
+
+            } catch (error) {
+                console.error("Error fetching pending images:", error);
+                updateStatus(`Error fetching images: ${error.message}`, true);
+            }
+        }
+
+        async function handleApproval(docId, userId, imageUrl, isApproved) {
+            try {
+                if (isApproved) {
+                    // Approval: 1. Set as user's primary Pic, 2. Delete request from queue
+                    await usersCollection.doc(userId).update({
+                        profilePic: imageUrl,
+                        profilePicStatus: 'Approved',
+                        profilePicUpdateTimestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    
+                    await adminApprovalCollection.doc(docId).delete();
+                    updateStatus(`✅ Image Approved and set for User ${userId}.`, false);
+
+                } else {
+                    // Rejection: 1. Prompt for reason, 2. Update request status
+                    const reason = prompt("Enter the rejection reason for the user (e.g., 'Inappropriate content', 'Low resolution'):");
+                    
+                    if (reason === null || reason.trim() === "") {
+                        alert("Rejection cancelled. Reason is required to reject an image.");
+                        return;
+                    }
+
+                    await adminApprovalCollection.doc(docId).update({
+                        status: 'Rejected',
+                        rejectionReason: reason.trim()
+                    });
+
+                    updateStatus(`❌ Image Rejected for User ${userId}. Reason: ${reason.trim()}`, true);
+                }
+                
+                fetchPendingImages();
+
+            } catch (error) {
+                console.error(`Error processing image ${docId}:`, error);
+                updateStatus(`Error processing request: ${error.message}`, true);
+            }
+        }
+        
+        auth.onAuthStateChanged(async user => {
+            if (user) {
+                try {
+                    const doc = await usersCollection.doc(user.uid).get();
+                    
+                    if (doc.exists && doc.data().role === 'admin') {
+                        adminContentElement.style.display = 'block';
+                        updateStatus("Admin privileges granted. Welcome to the dashboard!", false);
+                        fetchPendingImages();
+                    } else {
+                        console.log("Access Denied: User role is not 'admin'.");
+                        updateStatus("Access Denied. Redirecting to profile...", true);
+                        setTimeout(() => {
+                            window.location.href = 'profile.html';
+                        }, 2000);
+                    }
+                } catch (error) {
+                    console.error("Error checking admin role:", error);
+                    updateStatus("Error checking role. Redirecting...", true);
+                    setTimeout(() => {
+                        window.location.href = 'profile.html';
+                    }, 2000);
+                }
+            } else {
+                updateStatus("Not logged in. Redirecting to profile...", true);
+                setTimeout(() => {
+                    window.location.href = 'profile.html';
+                }, 2000);
+            }
+        });
+
+        window.handleApproval = handleApproval;
+        
+    </script>
+
+</body>
+</html>
