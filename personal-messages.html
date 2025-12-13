@@ -20,18 +20,18 @@
       min-height:100svh; min-width:100vw;
       width:100vw; height:100svh;
       display:flex; justify-content:center; align-items:flex-start;
-      padding-top: 50px; 
+      padding-top: 45px; 
     }
     header {
-      background: #555555; /* full grey */
+      background: #555555;
       position: fixed;
       top: 0;
       left: 0;
       z-index: 2000;
       width: 100vw;
-      box-shadow: 0 2px 17px #22222290;
-      min-height: 50px;
-      height: 50px; /* Fixed height for calculations */
+      box-shadow: 0 2px 14px #22222280;
+      min-height: 45px;
+      height: 45px;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
@@ -41,15 +41,15 @@
       transition: box-shadow 0.23s;
       color: #d1d1d1;
       font-family: "Poppins", Arial, sans-serif;
-      font-size: 1rem;
+      font-size: 0.95rem; 
     }
     .header-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 16px;
-      min-height: 50px;
-      height: 50px;
+      min-height: 45px;
+      height: 45px;
       position: relative;
       z-index: 1;
       cursor: default;
@@ -58,11 +58,11 @@
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       -webkit-tap-highlight-color: transparent;
     }
     .logo-container img {
-      height: 30px;
+      height: 26px;
       animation: float 3.3s ease-in-out infinite;
       user-select: none;
       pointer-events: none;
@@ -71,31 +71,31 @@
     }
     @keyframes float {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
+      50% { transform: translateY(-3px); }
     }
     .logo-text {
       font-family: "Orbitron", Arial, Helvetica, sans-serif;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: #bbbbbb;
       text-shadow: 0 0 5px #88888888;
       font-weight: 800;
-      letter-spacing: 0.055em;
+      letter-spacing: 0.05em;
       margin-left: 2px;
       user-select: none;
       white-space: nowrap;
     }
     .menu-btn {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       cursor: pointer;
       display: flex;
       align-items: center;
-      min-width: 38px;
-      height: 36px;
+      min-width: 36px;
+      height: 34px;
       color: #d0d0d0;
       outline: none;
       border: none;
       background: none;
-      border-radius: 9px;
+      border-radius: 8px;
       position: relative;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
@@ -111,19 +111,19 @@
       color: white;
       font-weight: 700;
       font-family: "Orbitron", sans-serif;
-      min-width: 14px;
-      height: 14px;
-      padding: 0 6px;
-      font-size: 12px;
+      min-width: 13px;
+      height: 13px;
+      padding: 0 5px;
+      font-size: 11px;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
       position: absolute;
-      top: -4px;
-      right: -4px;
+      top: -3px;
+      right: -3px;
       border: 1px solid #555555;
-      box-shadow: 0 2px 6px #ef444488;
+      box-shadow: 0 1px 5px #ef444488;
       pointer-events: none;
       z-index: 10;
       user-select: none;
@@ -136,8 +136,8 @@
       width: 220px;
       background: rgba(85, 85, 85, 0.97);
       box-shadow: -4px 0 26px rgba(0, 0, 0, 0.77);
-      padding-top: 54px;
-      padding-bottom: 22px;
+      padding-top: 50px; 
+      padding-bottom: 20px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -156,7 +156,7 @@
     .menu-dropdown .close-btn {
       position: absolute;
       left: 11px;
-      top: 13px;
+      top: 10px;
       background: transparent;
       border: none;
       cursor: pointer;
@@ -178,8 +178,8 @@
       transform: scale(1.22);
     }
     .menu-dropdown .close-btn svg {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       stroke: currentColor;
       stroke-width: 2.5;
       stroke-linecap: round;
@@ -188,9 +188,9 @@
     }
     .menu-dropdown a {
       color: #bbbbbb;
-      padding: 13px 17px 13px 46px;
+      padding: 11px 17px 11px 44px;
       text-decoration: none;
-      border-bottom: 2px solid #444444;
+      border-bottom: 1px solid #444444;
       display: flex;
       align-items: center;
       gap: 15px;
@@ -199,7 +199,7 @@
       letter-spacing: 0.02em;
       user-select: none;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       will-change: transform;
       position: relative;
     }
@@ -207,9 +207,9 @@
     .menu-dropdown a:focus {
       background: #666666;
       color: #ffffff;
-      padding-left: 51px;
+      padding-left: 49px;
       outline: none;
-      transform: scale(1.05) translateX(-2px);
+      transform: scale(1.03) translateX(-1px);
     }
     .menu-dropdown a:active {
       background: #444444;
@@ -224,46 +224,46 @@
       box-shadow: none;
       border: none;
       font-weight: 700;
-      font-size: 13px;
-      min-width: 22px;
-      height: 18px;
+      font-size: 12px;
+      min-width: 20px;
+      height: 17px;
       background: linear-gradient(120deg, #fae024 70%, #f87171 100%);
       color: #222b3a;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-family: "Orbitron", sans-serif;
-      border-radius: 7px;
+      border-radius: 6px;
       user-select: none;
-      padding: 0 6px;
-      line-height: 18px;
+      padding: 0 5px;
+      line-height: 17px;
       white-space: nowrap;
     }
     .menu-dropdown a .icon {
       display: inline-flex;
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       position: absolute;
-      left: 15px;
+      left: 13px;
       top: 50%;
       transform: translateY(-50%);
       fill: #bbbbbb;
-      filter: drop-shadow(0 1px 6px #bbbbbb66);
+      filter: drop-shadow(0 1px 5px #bbbbbb66);
       transition: fill 0.13s, filter 0.11s;
       user-select: none;
     }
     .menu-dropdown a:hover .icon,
     .menu-dropdown a:focus .icon {
       fill: #fff;
-      filter: drop-shadow(0 2px 8px #fff4);
+      filter: drop-shadow(0 1px 6px #fff4);
     }
     @keyframes notifpop {
-      0%{transform: scale(1);} 50%{transform: scale(1.3);} 100%{transform: scale(1);}
+      0%{transform: scale(1) translateY(-50%);} 50%{transform: scale(1.3) translateY(-50%);} 100%{transform: scale(1) translateY(-50%);}
     }
     .main-wrap {
       width:100vw;max-width:380px;min-width:290px;
-      height:calc(100svh - 50px); /* Height reduced by new header height */
-      max-height:calc(100svh - 50px);
+      height:calc(100svh - 45px);
+      max-height:calc(100svh - 45px);
       min-height:350px;
       background:rgba(18, 18, 22, 0.98);
       margin:0 auto;
@@ -273,7 +273,7 @@
       position:relative;
       overflow:hidden; 
       justify-content:flex-start;
-      margin-top: -50px; /* Pull it up to sit right under the new header */
+      margin-top: -45px;
     }
 
     .chat-header-sticky {
@@ -281,35 +281,35 @@
       padding:0 12px 0 4px;
       border-bottom:1px solid #282830;
       background:#1d1d23;
-      height:60px;
-      min-height:60px;
+      height:55px;
+      min-height:55px;
       z-index:101;
       margin:0;
       
      position: fixed;
-      top: 50px; /* Adjusted: Below the new 50px header */
-      left: 50%; /* Center the element */
-      transform: translateX(-50%); /* Pull back half its width */
+      top: 45px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 100%;
-      max-width: 380px; /* Same as main-wrap */
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      border-top-left-radius: 0; /* Corner already covered by main header */
+      max-width: 380px;
+      box-shadow: 0 1px 7px rgba(0, 0, 0, 0.2);
+      border-top-left-radius: 0;
       border-top-right-radius: 0;
     }
     @media (max-width:480px){ 
         .chat-header-sticky { 
-            top: 50px; /* Adjusted for mobile view */
-            height: 55px; min-height: 55px; max-width: 100vw; border-radius: 0; 
+            top: 45px;
+            height: 50px; min-height: 50px; max-width: 100vw; border-radius: 0; 
         } 
     }
     
     .back-btn {background:none;border:none;cursor:pointer;padding:8px;display:flex;align-items:center;border-radius:12px;margin-right:6px;transition:background .15s;font-size:1.04rem; color: #a0a0a8;}
     .back-btn:focus,.back-btn:hover {background:#2e2e34;}
-    .back-icon {width:22px;height:22px;}
+    .back-icon {width:20px;height:20px;}
     .back-icon path{stroke: #bfbfcc;}
 
     .chat-part-pic {
-      width:38px; height:38px; min-width:38px; min-height:38px; border-radius:50%;
+      width:36px; height:36px; min-width:36px; min-height:36px; border-radius:50%;
       border:2px solid #60a5fa;
       object-fit:cover; background:#212128;
       box-shadow:0 0 0 1px #60a5fa20; 
@@ -319,12 +319,12 @@
     .chat-part-name{
       font-family:'Inter',sans-serif;
       color:#e0e0e8;
-      font-size:1.08rem;
+      font-size:1.0rem;
       font-weight:700;
       max-width:44vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     }
     .user-status{
-      font-size:.85rem;
+      font-size:.8rem;
       font-family:'Roboto',sans-serif;
       margin-top:2px;
       line-height: 1.2;
@@ -334,10 +334,10 @@
 
     .header-action-btn{
       background:#374151;
-      color:#f3f4f6;border:none;border-radius:10px;
-      padding:6px 10px;font-weight:600;cursor:pointer;
-      font-size:.77rem;margin-right:2px;
-      min-width:30px; margin-left:5px;
+      color:#f3f4f6;border:none;border-radius:8px;
+      padding:5px 9px;font-weight:600;cursor:pointer;
+      font-size:.7rem;margin-right:2px;
+      min-width:28px; margin-left:5px;
       transition: background .2s, transform .1s;
     }
     .header-action-btn:hover{background:#4b5563; transform: translateY(-1px);}
@@ -348,15 +348,13 @@
     .chat-header-sticky > .block-btn {margin-left:5px;}
 
     .chat-box{
-      flex:1 1 auto; /* Fill remaining space */
-      overflow-y:auto; /* Only the chat area scrolls */
+      flex:1 1 auto;
+      overflow-y:auto;
       display:flex;flex-direction:column;gap:10px;
       padding:15px 12px;
       width:100%;background:none;scroll-behavior:smooth;margin:0;
-      /* FIX: Added top margin for two fixed headers */
-      margin-top: 110px; /* New Header (50px) + Chat Header (60px) */
-      /* FIX: Added bottom margin for fixed input bar + footer */
-      margin-bottom: 95px; /* Input Bar (~55px) + Footer (30px) + Gap (~10px) */
+      margin-top: 100px; 
+      margin-bottom: 90px; 
     }
     .message-row{display:flex;align-items:flex-end;width:100%;margin-bottom:0;z-index:1;}
     .message-row.own{justify-content:flex-end;}
@@ -364,13 +362,13 @@
       font-family:'Roboto',Arial,sans-serif;
       background:#374151;
       color:#e5e7eb;
-      padding:11px 16px;
-      border-radius:16px;
+      padding:10px 15px;
+      border-radius:15px;
       max-width:calc(75% - 20px);
-      word-break:break-word;position:relative;font-size:1rem;font-weight:400;
+      word-break:break-word;position:relative;font-size:0.95rem;font-weight:400;
       box-shadow:0 1px 4px rgba(0, 0, 0, 0.1);
       border:none;
-      min-width:27px;letter-spacing:.01em;
+      min-width:25px;letter-spacing:.01em;
       transition:transform .15s, background .15s, box-shadow .15s;
       animation:bubbleUp .22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       cursor:pointer;z-index:10;display:flex;flex-direction:column;
@@ -383,6 +381,50 @@
       align-self:flex-end;
     }
     .message-row.own .message-bubble:hover{ box-shadow:0 2px 8px rgba(59, 130, 246, 0.6); }
+
+    .message-bubble.media {
+        padding: 6px;
+        max-width: 200px;
+        min-width: unset;
+        background: #1f2937;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    }
+    .message-row.own .message-bubble.media {
+        background: #3b82f6;
+        box-shadow: 0 1px 4px rgba(59, 130, 246, 0.6);
+    }
+    .message-bubble.media img {
+        display: block;
+        max-width: 100%;
+        border-radius: 10px;
+        object-fit: contain;
+    }
+    .message-bubble.media audio {
+        width: 100%;
+        max-width: 190px;
+        display: block;
+        margin-top: 4px;
+        border-radius: 8px;
+    }
+    .message-bubble.sticker img {
+        width: 100px;
+        height: 100px;
+        border-radius: 0;
+        margin: 0;
+        padding: 0;
+        background: none;
+    }
+    .message-bubble.sticker {
+        padding: 0;
+        background: none;
+        box-shadow: none;
+        min-width: unset;
+        max-width: 110px;
+    }
+    .message-row.own .message-bubble.sticker {
+        background: none;
+        box-shadow: none;
+    }
     
     .bubble-menu-btn{
       background:none;border:none;outline:none;position:absolute;
@@ -412,7 +454,7 @@
     .bubble-menu-pop button:hover{background:#374151;}
 
     .bubble-edit-input{
-        font-size:1rem;border-radius:8px;border:1px solid #3b82f6;
+        font-size:0.95rem;border-radius:8px;border:1px solid #3b82f6;
         padding:7px 12px;background:#1f2937;color:#e4eaf0;
         width:98%;margin-bottom:4px;font-family:inherit;font-weight:400;
         outline: none;
@@ -422,8 +464,12 @@
       display:flex; align-items:center; gap:6px; margin-top:4px;
       align-self: flex-end;
     }
+    .message-bubble.media .msg-meta-line, .message-bubble.sticker .msg-meta-line {
+        margin-top: 0;
+        padding-right: 2px;
+    }
     .msg-timestamp {
-      font-size:.75rem;
+      font-size:.7rem;
       color:#a0a0a8;
       font-family:'Inter',sans-serif;
       user-select:text;
@@ -432,38 +478,36 @@
     }
     .message-row.own .msg-timestamp { color: #d1e5ff; }
     
-    .tick-ic{margin-left:7px;vertical-align:middle;width:14px;height:14px;display:inline-block;opacity:.9;}
+    .tick-ic{margin-left:5px;vertical-align:middle;width:13px;height:13px;display:inline-block;opacity:.9;}
     .tick-ic svg{width:100%;height:100%;}
-    /* Single Tick (Sent) - light grey */
+    
     .tick-ic.gray svg{
         background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><path d="M6 12.6L9.4 16L16 8.6" fill="none" stroke="%239CA3AF" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>') center no-repeat;
         background-size: cover;
     }
-    /* Double Tick (Seen) - clean blue */
+    
     .tick-ic.blue svg{
         background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><path d="M4 13.8L7.6 17L13.9 9.6" fill="none" stroke="%2360A5FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.6 17.2L17.6 8.5" fill="none" stroke="%2360A5FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>') center no-repeat;
         background-size: cover;
     }
-    .input-bar-gap{display: none;} /* Not needed now */
     .input-bar{
-      /* FIX: Fixed Position and Width Calculation */
       position: fixed; 
-      bottom: 30px; /* Above the footer */
-      left: 50%; /* Center the element */
-      transform: translateX(-50%); /* Pull back half its width */
+      bottom: 30px; 
+      left: 50%; 
+      transform: translateX(-50%); 
       width: 100%;
-      max-width:380px; /* Same as main-wrap */
+      max-width:380px; 
       display:flex;
-      padding:10px 12px;
+      padding:8px 10px;
       background:#1d1d23;
       gap:8px;align-items:center;z-index:111;
-      box-shadow:0 -4px 15px rgba(0, 0, 0, 0.2);
+      box-shadow:0 -3px 12px rgba(0, 0, 0, 0.2);
     }
     .input-bar input[type="text"]{
-        flex:1;padding:12px 16px;border-radius:10px;border:none;
+        flex:1;padding:10px 14px;border-radius:9px;border:none;
         background:#282830;
         color:#e5eef7;
-        font-size:1rem;
+        font-size:0.95rem;
         font-family: 'Roboto', sans-serif;
         outline: none;
         transition: box-shadow .2s;
@@ -474,29 +518,29 @@
     .input-bar button{
       background:#3b82f6;
       color:#fff;
-      padding:12px 18px;
-      border:none;border-radius:10px;
+      padding:10px 16px;
+      border:none;border-radius:9px;
       font-weight:600;cursor:pointer;
-      font-size:1rem;
+      font-size:0.95rem;
       transition: background .2s, transform .1s;
+      flex-shrink: 0;
     }
     .input-bar button:hover{background:#2563eb; transform: translateY(-1px);}
     .input-bar-blocked{
-        flex:1;padding:12px 16px;border-radius:10px;border:none;
+        flex:1;padding:10px 14px;border-radius:9px;border:none;
         background:#282830;
-        color:#f87171;font-size:1rem;text-align:center;
+        color:#f87171;font-size:0.95rem;text-align:center;
         pointer-events:none;font-weight:500;
     }
-    .toast{position:fixed;bottom:105px;left:50%;transform:translateX(-50%);background:#10b981;color:white;padding:10px 20px;border-radius:8px;font-weight:600;display:none;z-index:110;box-shadow:0 4px 12px rgba(0, 0, 0, 0.2);}
+    .toast{position:fixed;bottom:95px;left:50%;transform:translateX(-50%);background:#10b981;color:white;padding:9px 18px;border-radius:7px;font-weight:600;display:none;z-index:110;box-shadow:0 3px 10px rgba(0, 0, 0, 0.2);}
     .toast.err{background:#ef4444;}
     .sharky-footer {
-        /* FIX: Fixed Position and Width Calculation */
         position: fixed;
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
         width: 100%;
-        max-width: 380px; /* Same as main-wrap */
+        max-width: 380px;
         height: 30px;
         min-height: 30px;
         background: #1d1d23; 
@@ -516,20 +560,226 @@
         letter-spacing: 0.05em;
         text-transform: uppercase;
     }
+
+    /* New Attachment Button & Popup */
+    .attach-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #9ca3af;
+        padding: 8px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s, color 0.15s;
+        flex-shrink: 0;
+        width: 38px;
+        height: 38px;
+    }
+    .attach-btn:hover {
+        background: #374151;
+        color: #e5e7eb;
+    }
+    .attach-btn svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+    }
+    .attach-popup {
+        position: absolute;
+        bottom: 50px;
+        left: 10px;
+        background: #282830;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        padding: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        z-index: 112;
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+        transition: opacity 0.2s, transform 0.2s;
+    }
+    .attach-popup.open {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    .attach-popup button {
+        background: #374151;
+        color: #e5e7eb;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 9px;
+        cursor: pointer;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: background 0.1s;
+    }
+    .attach-popup button:hover {
+        background: #4b5563;
+    }
+    .attach-popup button svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+    }
     
-    /* ----------------------------------
-     * MEDIA QUERIES & ANIMATIONS
-     * ---------------------------------- */
+    .sticker-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 10000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .sticker-modal-overlay.open {
+        display: flex;
+        opacity: 1;
+    }
+    .sticker-modal {
+        background: #1f2937;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 340px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        transform: scale(0.9);
+        transition: transform 0.3s;
+    }
+    .sticker-modal-overlay.open .sticker-modal {
+        transform: scale(1);
+    }
+    .sticker-modal-header {
+        padding: 15px;
+        border-bottom: 1px solid #374151;
+        color: #e5e7eb;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .sticker-modal-close {
+        background: none;
+        border: none;
+        color: #9ca3af;
+        cursor: pointer;
+        font-size: 1.2rem;
+        padding: 5px;
+        border-radius: 50%;
+        transition: color 0.15s, background 0.15s;
+    }
+    .sticker-modal-close:hover {
+        color: #fff;
+        background: #374151;
+    }
+    .sticker-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        padding: 15px;
+        max-height: 400px;
+        overflow-y: auto;
+        justify-items: center;
+    }
+    .sticker-item {
+        position: relative;
+        cursor: pointer;
+        border: 3px solid transparent;
+        border-radius: 12px;
+        transition: border-color 0.15s, transform 0.1s;
+        padding: 5px;
+    }
+    .sticker-item:hover {
+        border-color: #4b5563;
+        transform: scale(1.03);
+    }
+    .sticker-item.selected {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 2px #3b82f640;
+    }
+    .sticker-item img {
+        width: 100%;
+        height: auto;
+        max-width: 100px;
+        display: block;
+        pointer-events: none;
+    }
+    .sticker-selected-tick {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: #3b82f6;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        font-weight: 700;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    }
+    .sticker-item.selected .sticker-selected-tick {
+        display: flex;
+    }
+    .sticker-modal-footer {
+        padding: 15px;
+        border-top: 1px solid #374151;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .sticker-send-btn {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 9px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: background 0.2s, transform 0.1s;
+    }
+    .sticker-send-btn:hover {
+        background: #059669;
+        transform: translateY(-1px);
+    }
+    .sticker-send-btn:disabled {
+        background: #4b5563;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+
     @media (max-width:480px){
-      body { padding-top: 50px; }
+      body { padding-top: 45px; }
       .main-wrap{max-width:100vw; margin-top:0; border-radius: 0; height:100svh;}
       .chat-box{padding:10px 8px; 
-        margin-top: 105px; /* New Header (50px) + Chat Header (55px) */
-        margin-bottom: 85px;
+        margin-top: 95px; 
+        margin-bottom: 80px;
       }
-      .input-bar{max-width:100vw; padding: 8px 10px;}
+      .input-bar{max-width:100vw; padding: 6px 8px;}
       .sharky-footer{max-width:100vw; border-radius: 0;}
       .chat-header-sticky { max-width: 100vw; }
+      .attach-popup { bottom: 45px; left: 8px;}
+      .sticker-modal { width: 95%; }
     }
     @keyframes bubbleUp{
         from{opacity:0;transform:translateY(10px) scale(0.95);}
@@ -669,6 +919,31 @@
     <div class="toast" id="toast"></div>
 
     <div id="inputBar" class="input-bar">
+      <button class="attach-btn" id="attachBtn" type="button" aria-label="Attach File">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 15a4 4 0 01-8 0v-4a2 2 0 014 0v4a.5.5 0 001 0v-4a.5.5 0 00-1 0v4a.5.5 0 01-1 0V9a2 2 0 014 0v4a4 4 0 008 0v-4a.5.5 0 00-1 0v4a.5.5 0 01-1 0v-4a2 2 0 00-4 0v4a.5.5 0 011 0v-4a.5.5 0 00-1 0v6a4 4 0 01-8 0v-4a.5.5 0 001 0v4a.5.5 0 01-1 0v-4a2 2 0 00-4 0v4a4 4 0 008 0z" fill="currentColor"/>
+            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" fill="currentColor" fill-opacity="0.2"/>
+        </svg>
+      </button>
+      <div class="attach-popup" id="attachPopup">
+        <button id="sendImageBtn" type="button">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 5v14H6V5h12zm0-2H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2zM9 13.5l3 3 3-3.75V15a2 2 0 002 2H7a2 2 0 002-2v-1.5zM15.5 9.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
+            Send Image
+        </button>
+        <input type="file" id="imageInput" accept="image/*" style="display:none;"/>
+        
+        <button id="sendAudioBtn" type="button">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 14.5a3.5 3.5 0 003.5-3.5V6a3.5 3.5 0 00-7 0v5a3.5 3.5 0 003.5 3.5zM12 17c-2.3 0-4.3-.9-5.7-2.3L4 16.5a8 8 0 008 4c4.4 0 8-3.6 8-8h-2c0 3.3-2.7 6-6 6zM15 10v1a3 3 0 01-6 0v-1h2v1a1 1 0 002 0v-1h2z"/></svg>
+            Send Audio
+        </button>
+        <input type="file" id="audioInput" accept="audio/*" style="display:none;"/>
+        
+        <button id="sendStickerBtn" type="button">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 5v14H6V5h12zm0-2H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2zM8 10a1 1 0 11-2 0 1 1 0 012 0zm10 0a1 1 0 11-2 0 1 1 0 012 0zm-7 7.5a4 4 0 01-4-4h2a2 2 0 004 0h2a4 4 0 01-4 4z"/></svg>
+            Stickers
+        </button>
+      </div>
+
       <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off"/>
       <button id="sendBtn" onclick="sendMessage()">Send</button>
     </div>
@@ -677,6 +952,22 @@
         <span>Sharky Chat</span>
     </div>
   </div>
+
+  <div class="sticker-modal-overlay" id="stickerModalOverlay">
+      <div class="sticker-modal">
+          <div class="sticker-modal-header">
+              Select a Sticker
+              <button class="sticker-modal-close" id="closeStickerModal">&times;</button>
+          </div>
+          <div class="sticker-grid" id="stickerGrid">
+             
+          </div>
+          <div class="sticker-modal-footer">
+              <button class="sticker-send-btn" id="sendSelectedStickerBtn" disabled>Send Sticker in Chat</button>
+          </div>
+      </div>
+  </div>
+
 
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -779,7 +1070,6 @@
           }
         );
       }
-
       function updateMessagesBadge() {
         let totalUnseen = Object.values(unseenTracker).reduce((a, b) => a + b, 0);
         messagesNotif.dataset.count = totalUnseen;
@@ -813,6 +1103,11 @@
     });
 
     closeBtn.addEventListener("click", (e) => {
+mainHeader.classList.remove("expanded");
+      menuBtn.focus();
+      e.stopPropagation();
+    });
+   closeBtn.addEventListener("click", (e) => {
       mainHeader.classList.remove("expanded");
       menuBtn.focus();
       e.stopPropagation();
@@ -856,6 +1151,10 @@
   </script>
   
   <script>
+    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dlqvchjl3/image/upload";
+    const CLOUDINARY_UPLOAD_PRESET = "YOUR_CLOUDINARY_UPLOAD_PRESET"; 
+    const CHAT_FOLDER = "personal_chat";
+
     function closeAllMsgMenus() {
       document.querySelectorAll('.bubble-menu-pop').forEach(e=>{
         e.style.opacity="0";
@@ -865,8 +1164,9 @@
     }
     window.addEventListener('keydown', e=>{ if(e.key==="Escape") closeAllMsgMenus(); });
     window.addEventListener('click', (e)=>{
-      if(!e.target.closest('.bubble-menu-pop') && !e.target.closest('.bubble-menu-btn')){
+      if(!e.target.closest('.bubble-menu-pop') && !e.target.closest('.bubble-menu-btn') && !e.target.closest('#attachPopup') && !e.target.closest('#attachBtn') && !e.target.closest('.sticker-modal-overlay')){
         closeAllMsgMenus();
+        document.getElementById('attachPopup').classList.remove('open');
       }
     });
     function showToast(msg, err) {
@@ -899,6 +1199,7 @@
     let blockBtn = document.getElementById("blockBtn");
     let inputBar = document.getElementById("inputBar");
     let partnerUIDLoaded = "";
+
     function setupUserPresenceTracking(userUID) {
         if (!userUID) return;
         const userRef = dbCompat.collection("users").doc(userUID);
@@ -930,7 +1231,7 @@
         const now = Date.now();
         const seconds = Math.floor((now - timestampMs) / 1000);
 
-        if (seconds < 60) return 'Active just now';
+        if (seconds < 60) return '● Active just now';
         
         const minutes = Math.floor(seconds / 60);
         if (minutes < 60) return `Active ${minutes}m ago`;
@@ -955,12 +1256,37 @@
         inputBar.innerHTML = `<div class="input-bar-blocked">You can only chat with friends.</div>`;
       } else {
         inputBar.innerHTML = `
+          <button class="attach-btn" id="attachBtn" type="button" aria-label="Attach File">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 15a4 4 0 01-8 0v-4a2 2 0 014 0v4a.5.5 0 001 0v-4a.5.5 0 00-1 0v4a.5.5 0 01-1 0V9a2 2 0 014 0v4a4 4 0 008 0v-4a.5.5 0 00-1 0v4a.5.5 0 01-1 0v-4a2 2 0 00-4 0v4a.5.5 0 011 0v-4a.5.5 0 00-1 0v6a4 4 0 01-8 0v-4a.5.5 0 001 0v4a.5.5 0 01-1 0v-4a2 2 0 00-4 0v4a4 4 0 008 0z" fill="currentColor"/>
+                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" fill="currentColor" fill-opacity="0.2"/>
+            </svg>
+          </button>
+          <div class="attach-popup" id="attachPopup">
+            <button id="sendImageBtn" type="button">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 5v14H6V5h12zm0-2H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2zM9 13.5l3 3 3-3.75V15a2 2 0 002 2H7a2 2 0 002-2v-1.5zM15.5 9.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
+                Send Image
+            </button>
+            <input type="file" id="imageInput" accept="image/*" style="display:none;"/>
+            
+            <button id="sendAudioBtn" type="button">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 14.5a3.5 3.5 0 003.5-3.5V6a3.5 3.5 0 00-7 0v5a3.5 3.5 0 003.5 3.5zM12 17c-2.3 0-4.3-.9-5.7-2.3L4 16.5a8 8 0 008 4c4.4 0 8-3.6 8-8h-2c0 3.3-2.7 6-6 6zM15 10v1a3 3 0 01-6 0v-1h2v1a1 1 0 002 0v-1h2z"/></svg>
+                Send Audio
+            </button>
+            <input type="file" id="audioInput" accept="audio/*" style="display:none;"/>
+            
+            <button id="sendStickerBtn" type="button">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 5v14H6V5h12zm0-2H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2zM8 10a1 1 0 11-2 0 1 1 0 012 0zm10 0a1 1 0 11-2 0 1 1 0 012 0zm-7 7.5a4 4 0 01-4-4h2a2 2 0 004 0h2a4 4 0 01-4 4z"/></svg>
+                Stickers
+            </button>
+          </div>
           <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off"/>
           <button id="sendBtn" onclick="sendMessage()">Send</button>
         `;
         document.getElementById("messageInput").addEventListener("keydown", function(e){
           if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); sendMessage();}
         });
+        setupAttachmentListeners();
       }
     }
 
@@ -997,7 +1323,6 @@
         userStatus.textContent = "Offline";
       }
     }
-
     authCompat.onAuthStateChanged(async function(user) {
       if (!user) return console.log("User not logged in in compat script. Chat logic skipped.");
 
@@ -1048,20 +1373,21 @@
     }
 
     let sending = false;
-    window.sendMessage = async () => {
+    window.sendMessage = async (type = "text", content = null) => {
       const input = document.getElementById("messageInput");
-      if (!input) { showToast('Input field not available.', 1); return; }
+      let text = (type === "text" && input) ? input.value.trim() : "";
+      
+      if (type === "text" && (!text || sending)) return;
+      if (type !== "text" && (!content || sending)) return;
       
       if (partnerBlockedMe || iBlockedPartner || !areFriends) {
          showToast(partnerBlockedMe ? 'You are blocked.' : iBlockedPartner ? 'Unblock to send messages.' : 'You can only message friends.', 1);
          return;
       }
       
-      const text = input.value.trim();
-      if (!text || sending) return;
-      
       sending = true;
-      input.value = "";
+      if (input) input.value = "";
+      
       try {
         const msgCol = dbCompat.collection(`personalMessages`).doc(chatId).collection('messages');
         
@@ -1074,18 +1400,39 @@
           await deleteBatch.commit();
         }
         
-        await msgCol.add({
+        const msgData = {
           sender: currentUsername,
           recipient: otherUsername,
-          type: "text",
-          text,
+          type: type,
           seen: false,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           edited: false
-        });
-      } catch (e) { showToast("❌ Send failed",1); }
+        };
+
+        if (type === "text") {
+            msgData.text = text;
+        } else if (type === "image" || type === "audio") {
+            msgData.url = content.url;
+            msgData.caption = content.caption || "";
+        } else if (type === "sticker") {
+            msgData.stickerId = content;
+            msgData.url = getStickerUrl(content); 
+        }
+
+        await msgCol.add(msgData);
+      } catch (e) { showToast("❌ Send failed",1); console.error(e); }
       sending = false;
     };
+    
+    const STICKER_LINKS = {
+        "sharky-love": "https://res.cloudinary.com/dlqvchjl3/image/upload/v1700000000/personal_chat/sharky_love_sticker.gif",
+        "sticker-1": "https://user-gen-media-assets.s3.amazonaws.com/seedream_images/7a737310-46e6-4b22-bafe-6eb47a6d0075.png",
+        "sticker-2": "https://user-gen-media-assets.s3.amazonaws.com/seedream_images/65d87776-b276-4c0a-9e73-836ce149f4ef.png"
+    };
+
+    function getStickerUrl(id) {
+        return STICKER_LINKS[id] || "";
+    }
 
     let lastMsgStates = {};
     function addMessageToUI(m, docRef, idx,lastIdx) {
@@ -1095,52 +1442,80 @@
       const bubble = document.createElement("div");
       bubble.className = "message-bubble";
       
-      if (isOwn) {
-        const btn = document.createElement("button");
-        btn.className = "bubble-menu-btn";
-        btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
-        </svg>`;
-        const menuPopup = document.createElement("div");
-        menuPopup.className = "bubble-menu-pop";
-        const bEdit = document.createElement("button");
-        bEdit.innerHTML = '✏️';
-        bEdit.title = "Edit";
-        bEdit.onclick = function(e){ e.stopPropagation(); closeAllMsgMenus(); startEditMessage(docRef); };
-        const bDel = document.createElement("button");
-        bDel.innerHTML = '🗑️';
-        bDel.title = "Delete";
-        bDel.onclick = function(e){ e.stopPropagation(); closeAllMsgMenus(); deleteMessage(docRef); };
-        menuPopup.appendChild(bEdit); menuPopup.appendChild(bDel);
-        bubble.appendChild(btn); bubble.appendChild(menuPopup);
-
-        btn.addEventListener('click', function(e){
-          e.stopPropagation();
-          document.querySelectorAll('.bubble-menu-pop.menu-open').forEach(pp=>{
-            if(pp!==menuPopup){ pp.classList.remove('menu-open'); pp.style.opacity="0"; }
-          });
-          if(menuPopup.classList.contains('menu-open')){
-            menuPopup.classList.remove('menu-open');
-            menuPopup.style.opacity="0";
-          } else {
-            menuPopup.style.display = "flex";
-            setTimeout(()=>{ menuPopup.classList.add("menu-open"); menuPopup.style.opacity="1"; }, 1);
+      if (m.type === "image") {
+          bubble.classList.add("media");
+          const img = document.createElement("img");
+          img.src = m.url;
+          img.alt = "Sent Image";
+          bubble.appendChild(img);
+          if (m.caption) {
+              const caption = document.createElement("div");
+              caption.textContent = m.caption;
+              caption.style.marginTop = "5px";
+              caption.style.fontSize = "0.85rem";
+              caption.style.color = isOwn ? "#f0f8ff" : "#d1d5db";
+              bubble.appendChild(caption);
           }
-        });
-      }
-      
-      if (isOwn && m.editing) {
-        const input = document.createElement("input");
-        input.className = "bubble-edit-input";
-        input.value = m.text;
-        input.onkeydown = function(e){
-          if(e.key==="Enter") confirmEditMessage(docRef, input.value);
-          if(e.key==="Escape") cancelEditMessage(docRef);
-        };
-        bubble.appendChild(input);
-        setTimeout(()=>input.focus(),30);
-      } else {
-        bubble.appendChild(document.createTextNode(m.text || ""));
+      } else if (m.type === "audio") {
+          bubble.classList.add("media");
+          const audio = document.createElement("audio");
+          audio.src = m.url;
+          audio.controls = true;
+          bubble.appendChild(audio);
+      } else if (m.type === "sticker") {
+          bubble.classList.add("sticker");
+          const stickerImg = document.createElement("img");
+          stickerImg.src = m.url;
+          stickerImg.alt = "Sticker";
+          bubble.appendChild(stickerImg);
+      } else if (m.type === "text") {
+        if (isOwn) {
+          const btn = document.createElement("button");
+          btn.className = "bubble-menu-btn";
+          btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
+          </svg>`;
+          const menuPopup = document.createElement("div");
+          menuPopup.className = "bubble-menu-pop";
+          const bEdit = document.createElement("button");
+          bEdit.innerHTML = '✏️';
+          bEdit.title = "Edit";
+          bEdit.onclick = function(e){ e.stopPropagation(); closeAllMsgMenus(); startEditMessage(docRef); };
+          const bDel = document.createElement("button");
+          bDel.innerHTML = '🗑️';
+          bDel.title = "Delete";
+          bDel.onclick = function(e){ e.stopPropagation(); closeAllMsgMenus(); deleteMessage(docRef); };
+          menuPopup.appendChild(bEdit); menuPopup.appendChild(bDel);
+          bubble.appendChild(btn); bubble.appendChild(menuPopup);
+  
+          btn.addEventListener('click', function(e){
+            e.stopPropagation();
+            document.querySelectorAll('.bubble-menu-pop.menu-open').forEach(pp=>{
+              if(pp!==menuPopup){ pp.classList.remove('menu-open'); pp.style.opacity="0"; }
+            });
+            if(menuPopup.classList.contains('menu-open')){
+              menuPopup.classList.remove('menu-open');
+              menuPopup.style.opacity="0";
+            } else {
+              menuPopup.style.display = "flex";
+              setTimeout(()=>{ menuPopup.classList.add("menu-open"); menuPopup.style.opacity="1"; }, 1);
+            }
+          });
+        }
+        
+        if (isOwn && m.editing) {
+          const input = document.createElement("input");
+          input.className = "bubble-edit-input";
+          input.value = m.text;
+          input.onkeydown = function(e){
+            if(e.key==="Enter") confirmEditMessage(docRef, input.value);
+            if(e.key==="Escape") cancelEditMessage(docRef);
+          };
+          bubble.appendChild(input);
+          setTimeout(()=>input.focus(),30);
+        } else {
+          bubble.appendChild(document.createTextNode(m.text || ""));
+        }
       }
       
       let metaRow = document.createElement("div");
@@ -1148,7 +1523,7 @@
       const ts = m.timestamp ? formatDateTimeForMsg(m.timestamp) : {h:"",dt:""};
       const tspan = document.createElement("span");
       tspan.className = "msg-timestamp";
-      tspan.textContent = ts.h;
+      tspan.textContent = ts.h + (m.edited && m.type==='text' ? ' (edited)' : '');
       metaRow.appendChild(tspan);
       
       if (isOwn) {
@@ -1203,7 +1578,8 @@
     function startEditMessage(ref) { ref.update({editing:true}); }
     function cancelEditMessage(ref) { ref.update({editing:false}); }
     function confirmEditMessage(ref, text) {
-      ref.update({text, editing:false, edited:true });
+      if (!text.trim()) return showToast("Message cannot be empty", 1);
+      ref.update({text:text.trim(), editing:false, edited:true });
       showToast("Message updated");
     }
     function deleteMessage(ref) {
@@ -1239,6 +1615,137 @@
       
       showToast("All messages cleared");
     };
+    
+    let selectedStickerId = null;
+    const stickerModalOverlay = document.getElementById('stickerModalOverlay');
+    const stickerGrid = document.getElementById('stickerGrid');
+    const sendSelectedStickerBtn = document.getElementById('sendSelectedStickerBtn');
+
+    function openStickerModal() {
+        stickerModalOverlay.classList.add('open');
+        selectedStickerId = null;
+        sendSelectedStickerBtn.disabled = true;
+        renderStickerGrid();
+    }
+    function closeStickerModal() {
+        stickerModalOverlay.classList.remove('open');
+    }
+
+    function renderStickerGrid() {
+        stickerGrid.innerHTML = "";
+        
+        Object.entries(STICKER_LINKS).forEach(([id, url]) => {
+            const item = document.createElement('div');
+            item.className = 'sticker-item';
+            item.dataset.stickerId = id;
+            item.innerHTML = `
+                <img src="${url}" alt="${id.replace('-', ' ')} sticker" loading="lazy"/>
+                <span class="sticker-selected-tick">✓</span>
+            `;
+            item.onclick = () => selectSticker(id, item);
+            stickerGrid.appendChild(item);
+        });
+    }
+
+    function selectSticker(id, element) {
+        document.querySelectorAll('.sticker-item').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        selectedStickerId = id;
+        sendSelectedStickerBtn.disabled = false;
+    }
+
+    function setupAttachmentListeners() {
+        const attachBtn = document.getElementById('attachBtn');
+        const attachPopup = document.getElementById('attachPopup');
+        const imageInput = document.getElementById('imageInput');
+        const sendImageBtn = document.getElementById('sendImageBtn');
+        const audioInput = document.getElementById('audioInput');
+        const sendAudioBtn = document.getElementById('sendAudioBtn');
+        const sendStickerBtn = document.getElementById('sendStickerBtn');
+        const closeStickerModalBtn = document.getElementById('closeStickerModal');
+
+        attachBtn.onclick = function(e) {
+            e.stopPropagation();
+            attachPopup.classList.toggle('open');
+        };
+
+        sendImageBtn.onclick = function() {
+            imageInput.click();
+            attachPopup.classList.remove('open');
+        };
+
+        sendAudioBtn.onclick = function() {
+            audioInput.click();
+            attachPopup.classList.remove('open');
+        };
+        
+        sendStickerBtn.onclick = function() {
+            openStickerModal();
+            attachPopup.classList.remove('open');
+        };
+
+        imageInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                uploadFileToCloudinary(file, "image");
+            }
+            imageInput.value = '';
+        };
+
+        audioInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                uploadFileToCloudinary(file, "audio");
+            }
+            audioInput.value = '';
+        };
+
+        closeStickerModalBtn.onclick = closeStickerModal;
+        stickerModalOverlay.onclick = function(e) {
+            if (e.target.id === 'stickerModalOverlay') closeStickerModal();
+        };
+
+        sendSelectedStickerBtn.onclick = async function() {
+            if (selectedStickerId) {
+                await sendMessage("sticker", selectedStickerId);
+                closeStickerModal();
+                showToast("Sticker Sent! 🦈");
+            }
+        };
+    }
+
+    async function uploadFileToCloudinary(file, type) {
+      if (!file) return;
+      if (CLOUDINARY_UPLOAD_PRESET === "YOUR_CLOUDINARY_UPLOAD_PRESET") {
+        return showToast("⚠️ Cloudinary Upload Preset is not configured.", 1);
+      }
+      
+      showToast(`Uploading ${type}...`, 0);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      formData.append('folder', CHAT_FOLDER);
+      
+      try {
+        const response = await fetch(CLOUDINARY_URL, {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        if (data.secure_url) {
+          const content = { url: data.secure_url, caption: (type === 'image' ? prompt("Add a caption (optional):") : null) };
+          await sendMessage(type, content);
+          showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} sent successfully!`, 0);
+        } else {
+          showToast(`Cloudinary upload failed: ${data.error ? data.error.message : 'Unknown error'}`, 1);
+          console.error("Cloudinary Error:", data);
+        }
+      } catch (e) {
+        showToast("Network error during upload.", 1);
+        console.error("Upload Error:", e);
+      }
+    }
   </script>
 </body>
 </html>
