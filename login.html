@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  
   <title>Sharky Chat | Global Chat & Earn Rewards</title>
   <meta name="description" content="Join Sharky Chat to connect with friends globally. Secure messaging, earn coins, and explore premium chat features. Sign up today!">
   <meta name="keywords" content="Sharky Chat, Global Messaging, Earn Coins, Secure Chat, SharkyChat Login">
   <meta name="robots" content="index, follow">
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --primary-bg: #050714;
@@ -22,9 +19,7 @@
       --text-color: #f1f5f9;
       --card-radius: 20px;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
     body {
       font-family: 'Poppins', sans-serif;
       background: radial-gradient(circle at top right, #1a2344, #050714);
@@ -36,8 +31,6 @@
       justify-content: center;
       padding: 15px;
     }
-
-    /* Header Styling */
     header { margin-bottom: 25px; text-align: center; animation: fadeInDown 0.8s ease; }
     header h1 {
       font-family: 'Montserrat', sans-serif;
@@ -48,8 +41,6 @@
       -webkit-text-fill-color: transparent;
       filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.3));
     }
-
-    /* Main Container */
     .container {
       width: 100%;
       max-width: 420px;
@@ -62,8 +53,6 @@
       box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
       animation: fadeInUp 0.8s ease;
     }
-
-    /* Tabs */
     .tabs {
       display: flex;
       background: rgba(0,0,0,0.4);
@@ -86,11 +75,8 @@
       background: linear-gradient(135deg, var(--accent-color), var(--secondary-accent));
       color: white;
     }
-
-    /* Forms */
     form { display: none; flex-direction: column; gap: 15px; }
     form.active { display: flex; animation: fadeIn 0.4s ease; }
-
     .input-group { position: relative; width: 100%; }
     .input-group i {
       position: absolute;
@@ -115,7 +101,6 @@
       border-color: var(--accent-color);
       background: rgba(255,255,255,0.1);
     }
-
     .pw-wrap {
       display: flex;
       align-items: center;
@@ -127,7 +112,6 @@
       padding-right: 5px;
     }
     .pw-wrap input { width: auto; height: auto; padding: 0; cursor: pointer; }
-
     .submit-btn {
       background: linear-gradient(135deg, var(--accent-color), var(--secondary-accent));
       color: white;
@@ -144,7 +128,6 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(0, 210, 255, 0.3);
     }
-
     .google-btn {
       background: white;
       color: #1e293b;
@@ -159,8 +142,6 @@
       cursor: pointer;
       transition: 0.3s;
     }
-
-    /* Modal */
     .modal-overlay {
       position: fixed; top:0; left:0; width:100%; height:100%;
       background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
@@ -171,25 +152,20 @@
       max-width: 380px; width: 90%; text-align: center; border: 1px solid var(--accent-color);
     }
     .modal-content label { display: block; text-align: left; margin: 12px 0; font-size: 0.85rem; }
-
-    /* Animations */
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
-
   <header>
     <h1>SHARKY CHAT</h1>
   </header>
-
   <div class="container">
     <div class="tabs">
       <button class="tab-btn active" id="btn-login" onclick="switchTab('login')">LOGIN</button>
       <button class="tab-btn" id="btn-register" onclick="switchTab('register')">REGISTER</button>
     </div>
-
     <form id="loginForm" class="active">
       <div class="input-group">
         <i class="fas fa-envelope"></i>
@@ -208,7 +184,6 @@
         <img src="https://img.icons8.com/color/20/google-logo.png" alt="google"> Continue with Google
       </button>
     </form>
-
     <form id="registerForm">
       <div class="input-group">
         <i class="fas fa-user"></i>
@@ -242,7 +217,6 @@
       <button type="submit" class="submit-btn">CREATE ACCOUNT</button>
     </form>
   </div>
-
   <div id="agreementModal" class="modal-overlay">
     <div class="modal-content">
       <h3 style="color: var(--accent-color); margin-bottom: 15px;">Final Step</h3>
@@ -252,14 +226,11 @@
       <button class="submit-btn" id="acceptBtn" style="width:100%" disabled>I AGREE</button>
     </div>
   </div>
-
   <div id="notif-container" style="position:fixed; bottom:20px; right:20px; z-index:1000;"></div>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
     const firebaseConfig = {
       apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
       authDomain: "sharky-chat-007.firebaseapp.com",
@@ -268,17 +239,14 @@
       messagingSenderId: "637104796242",
       appId: "1:637104796242:web:74ac36b86af91be15ea58b"
     };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
-
     window.togglePassword = (id) => {
       const x = document.getElementById(id);
       x.type = x.type === "password" ? "text" : "password";
     };
-
     window.showNotif = (msg) => {
       const container = document.getElementById('notif-container');
       const div = document.createElement('div');
@@ -287,29 +255,24 @@
       container.appendChild(div);
       setTimeout(() => div.remove(), 4000);
     };
-
     window.switchTab = (tab) => {
       document.getElementById('loginForm').classList.toggle('active', tab === 'login');
       document.getElementById('registerForm').classList.toggle('active', tab === 'register');
       document.getElementById('btn-login').classList.toggle('active', tab === 'login');
       document.getElementById('btn-register').classList.toggle('active', tab === 'register');
     };
-
     const modal = document.getElementById('agreementModal');
     const acceptBtn = document.getElementById('acceptBtn');
     let action = null;
-
     const toggleBtn = () => {
       acceptBtn.disabled = !(document.getElementById('privacyCheck').checked && document.getElementById('termsCheck').checked);
     };
     document.getElementById('privacyCheck').onchange = toggleBtn;
     document.getElementById('termsCheck').onchange = toggleBtn;
-
     acceptBtn.onclick = () => {
       modal.style.display = 'none';
       if(action) action();
     };
-
     document.getElementById('registerForm').onsubmit = (e) => {
       e.preventDefault();
       if(document.getElementById('regAge').value < 18) return showNotif("Must be 18+ to join!");
@@ -320,14 +283,14 @@
             username: document.getElementById('regUsername').value,
             age: document.getElementById('regAge').value,
             gender: document.getElementById('regGender').value,
-            coins: 0
+            coins: 0,
+            profilePic: ""
           });
           window.location.href = "profile.html";
         } catch(err) { showNotif("Error: " + err.message); }
       };
       modal.style.display = 'flex';
     };
-
     document.getElementById('loginForm').onsubmit = async (e) => {
       e.preventDefault();
       try {
@@ -335,10 +298,24 @@
         window.location.href = "profile.html";
       } catch(err) { showNotif("Invalid Credentials"); }
     };
-
     document.getElementById('googleLogin').onclick = async () => {
-      try { await signInWithPopup(auth, provider); window.location.href = "profile.html"; }
-      catch(err) { showNotif("Google Login Failed"); }
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        const userDocRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(userDocRef);
+        if (!docSnap.exists()) {
+          await setDoc(userDocRef, {
+            username: user.displayName || "User",
+            email: user.email,
+            age: 18,
+            gender: "Not Specified",
+            coins: 0,
+            profilePic: user.photoURL || ""
+          });
+        }
+        window.location.href = "profile.html";
+      } catch(err) { showNotif("Google Login Failed"); }
     };
   </script>
 </body>
