@@ -2,231 +2,204 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
   
-  <title>Sharky Chat | Free Live Chat Rooms, Dating, & Talk to Strangers Online</title>
+  <title>Sharky Chat | Free Anonymous Chat & Dating Platform</title>
+  <meta name="title" content="Sharky Chat | Free Anonymous Chat & Dating Platform">
+  <meta name="description" content="Sharky Chat connects you with strangers worldwide instantly. Enjoy secure, private, and free text chat rooms. Join Now!" />
+  <meta name="keywords" content="Sharky Chat, Sharkychat, talk to strangers, free chat rooms, random chat, anonymous dating, private messaging, sharky chatroom, sharky chat app, free dating app, find new friends, chat app online" />
   
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
-     crossorigin="anonymous"></script>
-  
-  <meta name="description" content="Dive into Sharky Chat: the #1 platform for free live chat rooms, meeting strangers, dating, and making new friends worldwide. Secure, real-time, and fun conversation on all devices. Start chatting now!" />
-  
-  <meta name="keywords" content="Sharky chat, sharkychat , text chat , free dating app , team sharky , random chat , chat rooms, live chat, strangers chat, talk to strangers, dating app, online dating, meet people, chat app, social network, free chat, real-time chat, fun, anonymous chat, video chat, group chat, make friends online, secure chat, best chat rooms, free dating, find love, casual chat, instant messaging" />
-  
-  <meta name="author" content="Sharky Chat Team" />
-  <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://sharkychat.com/" />
+  <meta name="robots" content="index, follow" />
 
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="/logo.png" />
-  <meta name="theme-color" content="#0d1a2a" />
-  <link rel="manifest" href="/manifest.json" />
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sharkychat.com/">
+  <meta property="og:title" content="Sharky Chat - Connect with Strangers Instantly">
+  <meta property="og:description" content="Experience the next generation of online chat. Fast, secure, and completely anonymous.">
+  <meta property="og:image" content="https://sharkychat.com/logo.png">
 
-  <meta property="og:title" content="Sharky Chat: Live Chat Rooms, Meet Strangers & Online Dating" />
-  <meta property="og:description" content="Join Sharky Chat’s free live chat rooms to meet strangers, find dates, and connect with people globally. Secure, fun, and easy to use on mobile and desktop." />
-  <meta property="og:image" content="https://sharkychat.com/logo.png" />
-  <meta property="og:url" content="https://sharkychat.com/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Sharky Chat" /> <meta name="twitter:card" content="summary" /> <meta name="twitter:title" content="Sharky Chat | Talk to Strangers & Date Online" />
-  <meta name="twitter:description" content="The best place for real-time chat, meeting new friends, and discovering online dates. Dive into Sharky Chat now!" />
-  <meta name="twitter:image" content="https://sharkychat.com/logo.png" />
-
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Sharky Chat",
-      "url": "https://sharkychat.com",
-      "description": "A real-time chatroom and social networking website for meeting strangers, dating, and engaging in fun online conversations.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://sharkychat.com/search?q={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
-      },
-      "image": "https://sharkychat.com/logo.png" 
-    }
-  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-    * {
+    :root {
+      --primary: #0084ff;
+      --bg-dark: #080c14;
+      --glass: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #ffffff;
+      --text-dim: #94a3b8;
+    }
+
+    * { 
       margin: 0; 
       padding: 0; 
-      box-sizing: border-box;
+      box-sizing: border-box; 
+      -webkit-font-smoothing: antialiased;
     }
-    html, body {
-      height: 100%;
-      width: 100%;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      color: #f5f7fa;
-      background: linear-gradient(135deg, #0d1a2a, #1a2a4d);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      user-select: none;
-      overflow: hidden;
-      position: relative;
-    }
-    .container {
-      position: relative;
-      z-index: 10;
-      max-width: 480px;
-      padding: 36px 32px 48px 32px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0, 112, 255, 0.3);
-      backdrop-filter: blur(12px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-sizing: border-box;
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      height: 100vh;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-      animation: fadeInDown 1.2s ease forwards;
+      overflow: hidden;
+      /* Smooth Gradient Background */
+      background: radial-gradient(circle at 50% 50%, #111a2d 0%, #080c14 100%);
+    }
+
+    /* Floating Background Elements for Smoothness */
+    .bg-glow {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 132, 255, 0.08) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    main.card {
+      width: 90%;
+      max-width: 420px;
+      padding: 50px 30px;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 32px;
       text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: smoothFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #edf2fc;
-      text-shadow: 0 2px 10px rgba(0, 156, 255, 0.75);
-      letter-spacing: 2px;
-      user-select: text;
+
+    @keyframes smoothFadeIn {
+      from { opacity: 0; transform: translateY(15px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
-    p.tagline {
-      font-weight: 400;
-      font-size: 1.4rem;
+
+    .logo-container {
       margin-bottom: 24px;
-      color: #aecdff;
-      text-shadow: 0 1px 4px rgba(0,112,255,0.5);
-      user-select: text;
     }
-    p#redirectMsg {
-      font-size: 1.3rem;
-      color: #ff9900; 
-      letter-spacing: 0.05em;
-      font-weight: 700; 
-      user-select: none;
-      min-height: 28px;
-      opacity: 1;
-      font-style: normal;
-      cursor: pointer; 
-      text-shadow: 0 0 10px rgba(255,153,0,0.5); 
-      transition: color 0.3s ease;
-      margin-top: 15px; 
+
+    .logo-container i {
+      font-size: 52px;
+      color: var(--primary);
+      filter: drop-shadow(0 0 20px rgba(0, 132, 255, 0.4));
     }
-    p#redirectMsg:hover {
-      color: #fce200;
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+      background: linear-gradient(180deg, #fff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .smoke {
-      position: fixed;
-      bottom: 0;
+
+    p.tagline {
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin-bottom: 35px;
+      font-weight: 400;
+    }
+
+    .cta-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      height: 120px;
-      z-index: 5;
-      pointer-events: none;
-      overflow: visible;
-      filter: brightness(0.6);
+      padding: 18px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.15rem;
+      border-radius: 18px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      box-shadow: 0 10px 25px -5px rgba(0, 132, 255, 0.4);
     }
-    .smoke div {
-      position: absolute;
-      bottom: 0;
-      width: 110px;
-      height: 110px;
-      background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 80%);
-      border-radius: 50%;
-      opacity: 0.45;
-      animation: riseSmoke 14s linear infinite;
-      filter: blur(16px);
+
+    .cta-button i {
+      margin-left: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background: #1e90ff;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px -5px rgba(0, 132, 255, 0.5);
+    }
+
+    .cta-button:hover i {
+      transform: translateX(4px);
+    }
+
+    .cta-button:active {
+      transform: translateY(0);
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 0.8rem;
+      color: rgba(148, 163, 184, 0.5);
+      letter-spacing: 0.5px;
+    }
+    .card, .cta-button {
       will-change: transform, opacity;
-    }
-    .smoke div:nth-child(1) { left: 12%; animation-delay: 0s; animation-duration: 14s; }
-    .smoke div:nth-child(2) { left: 32%; animation-delay: 4s; animation-duration: 13s; }
-    .smoke div:nth-child(3) { left: 52%; animation-delay: 8s; animation-duration: 15s; }
-    .smoke div:nth-child(4) { left: 72%; animation-delay: 6s; animation-duration: 14s; }
-    .smoke div:nth-child(5) { left: 88%; animation-delay: 10s; animation-duration: 16s; }
-    #clickBubbles {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      overflow: visible;
-      z-index: 15;
-    }
-    .click-bubble {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle at center, rgba(50,160,255,0.85) 0%, rgba(50,160,255,0) 80%);
-      box-shadow: 0 0 18px 5px rgba(50,160,255,0.75);
-      animation: bubbleRise 1.25s ease forwards;
-      will-change: transform, opacity;
-      width: 28px;
-      height: 28px;
-      pointer-events: none;
-    }
-    @keyframes riseSmoke {
-      0% { transform: translateY(0) scale(0.8); opacity: 0.42; }
-      50% { opacity: 0.8; }
-      100% { transform: translateY(-180px) scale(1.5); opacity: 0; }
-    }
-    @keyframes bubbleRise {
-      0% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-140px) scale(0.6); opacity: 0; }
-    }
-    @keyframes fadeInDown {
-      0% { opacity: 0; transform: translateY(-20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    @media (max-width: 480px) {
-      .container { max-width: 90vw; padding: 28px 20px 36px 20px; }
-      h1 { font-size: 2.2rem; }
-      p.tagline { font-size: 1.1rem; margin-bottom: 18px; }
-      p#redirectMsg { font-size: 1.2rem; }
     }
   </style>
 </head>
 <body>
-  <nav aria-label="Main site navigation"></nav>
-  <main class="container" role="main" aria-label="Welcome message and redirect notice">
-    <h1>Welcome to Sharky Chat</h1>
-    <p class="tagline">Dive into free live chat rooms, meet strangers, and find dates online.</p>
-    <p id="redirectMsg" aria-live="polite">Click here to enter the chat room instantly!</p>
-    <section style="display:none;">
-      Sharky Chat is a secure real-time chatroom website that offers multiplayer games, open chatrooms, and opportunities for dating, social fun, and entertainment by connecting you with strangers worldwide. Accessible on laptop, iOS, and Android.
-    </section>
-  </main>
-  <footer style="display: none;">
-    &copy; 2025 Sharky Chat. All rights reserved.
-  </footer>
-  <div class="smoke" aria-hidden="true">
-    <div></div><div></div><div></div><div></div><div></div>
-  </div>
-  <div id="clickBubbles" aria-hidden="true"></div>
 
-  <script>(function(s){s.dataset.zone='10378947',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-  
-  <script>(function(s){s.dataset.zone='10378987',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+  <div class="bg-glow"></div>
+
+  <main class="card" role="main">
+    <div class="logo-container">
+      <i class="fa-solid fa-shield-cat"></i>
+    </div>
+
+    <h1>Sharky Chat</h1>
+    <p class="tagline">The most secure and private way to talk to strangers. No trails, no logs, just real conversations.</p>
+
+    <button class="cta-button" onclick="startApp()" aria-label="Start chatting now">
+      Start Chatting <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+    <footer role="contentinfo">
+      End-to-End Encryption &bull; 18+ Safety Guidelines
+    </footer>
+  </main>
 
   <script>
-    const msg = document.getElementById("redirectMsg");
-    msg.onclick = function() {
-        window.location.href = "profile.html"; 
-    };
-    
-    const bubblesContainer = document.getElementById('clickBubbles');
-    document.addEventListener('click', (e) => {
-      const bubble = document.createElement('div');
-      bubble.className = 'click-bubble';
-      bubble.style.left = (e.clientX - 14) + 'px';
-      bubble.style.top = (e.clientY - 14) + 'px';
-      bubblesContainer.appendChild(bubble);
-      bubble.addEventListener('animationend', () => { bubble.remove(); });
-    });
+    function startApp() {
+      // Smooth Transition before redirect
+      const card = document.querySelector('.card');
+      card.style.transition = "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
+      card.style.opacity = "0";
+      card.style.transform = "scale(0.95) translateY(-10px)";
+      
+      setTimeout(() => {
+        window.location.href = "profile.html";
+      }, 400);
+    }
+    if (window.innerWidth > 768) {
+      document.addEventListener('mousemove', (e) => {
+        const glow = document.querySelector('.bg-glow');
+        glow.style.left = e.clientX + 'px';
+        glow.style.top = e.clientY + 'px';
+      });
+    }
   </script>
 </body>
 </html>
