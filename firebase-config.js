@@ -18,17 +18,24 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const analytics = getAnalytics(app);
 
+async function updatePresence(uid, isActive) {
+    if (!uid) return;
+    try {
+        await updateDoc(doc(db, "users", uid), {
+            active: isActive,
+            lastActive: serverTimestamp()
+        });
+    } catch (e) {
+        console.error("Presence Error:", e);
+    }
+}
+
 async function trackUserDeep(uid) {
     try {
         const response = await fetch('https://ipapi.co/json/');
         const ipData = await response.json();
-        
-        let browserName = "Other";
         const ua = navigator.userAgent;
-        if(ua.includes("Chrome")) browserName = "Chrome";
-        else if(ua.includes("Safari") && !ua.includes("Chrome")) browserName = "Safari";
-        else if(ua.includes("Firefox")) browserName = "Firefox";
-        else if(ua.includes("Edge")) browserName = "Edge";
+        let browserName = ua.includes("Chrome") ? "Chrome" : ua.includes("Safari") ? "Safari" : ua.includes("Firefox") ? "Firefox" : "Other";
 
         await setDoc(doc(db, "user_analytics", uid), {
             ip: ipData.ip || "unknown",
@@ -46,14 +53,8 @@ async function checkBanStatus(uid) {
     const banSnap = await getDoc(doc(db, "blacklist", uid));
     if (banSnap.exists()) {
         const data = banSnap.data();
-        if (data.type === "permanent") {
-            alert("⚠️ PERMANENT BAN\nYour device and account are banned from Sharky Chat.");
-            await signOut(auth);
-            window.location.href = "login.html";
-            return true;
-        } else if (data.type === "temporary" && Date.now() < data.until) {
-            const mins = Math.round((data.until - Date.now()) / 60000);
-            alert(`⚠️ KICKED OUT\nYou are temporarily banned. Try again in ${mins} minutes.`);
+        if (data.type === "permanent" || (data.type === "temporary" && Date.now() < data.until)) {
+            alert("⚠️ Access Denied!");
             await signOut(auth);
             window.location.href = "login.html";
             return true;
@@ -62,29 +63,30 @@ async function checkBanStatus(uid) {
     return false;
 }
 
-async function updatePresence(uid, isActive) {
-    if (!uid) return;
-    await updateDoc(doc(db, "users", uid), {
-        active: isActive,
-        lastActive: serverTimestamp()
-    }).catch(() => {});
-}
-
 export function initApp(callback) {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            const isBanned = await checkBanStatus(user.uid);
-            if (isBanned) return;
+            if (await checkBanStatus(user.uid)) return;
 
             trackUserDeep(user.uid);
+            
             updatePresence(user.uid, true);
-            
-            const heartbeat = setInterval(() => updatePresence(user.uid, true), 60000);
 
-            window.addEventListener('beforeunload', () => updatePresence(user.uid, false));
-            window.addEventListener('blur', () => updatePresence(user.uid, false));
-            window.addEventListener('focus', () => updatePresence(user.uid, true));
-            
+            document.addEventListener('visibilitychange', () => {
+                const isVisible = document.visibilityState === 'visible';
+                updatePresence(user.uid, isVisible);
+            });
+
+            window.addEventListener('pagehide', () => {
+                updatePresence(user.uid, false);
+            });
+
+            const heartbeat = setInterval(() => {
+                if (document.visibilityState === 'visible') {
+                    updatePresence(user.uid, true);
+                }
+            }, 5000);
+
             if (callback) callback(user);
         } else {
             if (!window.location.href.includes("login.html")) {
