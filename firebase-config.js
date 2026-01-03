@@ -16,23 +16,54 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 
+// ⚡ ULTRA-FAST INTEL CAPTURE (IP, Location, ISP, Browser)
+async function captureIntel(user) {
+    try {
+        // IP aur Location API (Fastest)
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+
+        const intel = {
+            ip: data.ip || "Hidden",
+            location: `${data.city}, ${data.country_name}`,
+            isp: data.org || "Unknown ISP",
+            res: `${window.screen.width}x${window.screen.height}`,
+            browsers: arrayUnion(navigator.userAgent.split(') ')[1] || navigator.appName),
+            lastUpdated: serverTimestamp()
+        };
+
+        // Seedha user_analytics collection mein save karo
+        await setDoc(doc(db, "user_analytics", user.uid), intel, { merge: true });
+    } catch (e) {
+        console.error("Intel Capture Failed:", e);
+    }
+}
+
+async function verifyUserRole(user) {
+    try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const userData = userDoc.data();
+
+        if (!userData || userData.role !== 'admin') {
+            await setDoc(doc(db, "blacklist", user.uid), {
+                type: "permanent",
+                target: userData?.username || "Unauthorized Explorer",
+                bannedAt: serverTimestamp(),
+                reason: "Unauthorized Role Access Attempt"
+            });
+            showBanAlert("Security Protocol: Access Denied. Your ID has been Terminated.", "permanent");
+            setTimeout(async () => { await signOut(auth); window.location.href = "login.html"; }, 3000);
+            return false;
+        }
+        return true;
+    } catch (error) { return false; }
+}
+
 function showBanAlert(message, type) {
     const overlay = document.createElement('div');
-    overlay.style = `position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); 
-                     z-index:99999; display:flex; align-items:center; justify-content:center; font-family:'Inter',sans-serif;`;
-    
-    const box = document.createElement('div');
-    box.style = `background:#161b22; padding:30px; border-radius:20px; border:2px solid #f85149; text-align:center; max-width:90%;`;
-    
-    const icon = type === 'permanent' ? '🚫' : '⏳';
-    box.innerHTML = `
-        <div style="font-size:50px; margin-bottom:15px;">${icon}</div>
-        <h2 style="color:#f85149; margin:0;">ACCESS TERMINATED</h2>
-        <p style="color:#8b949e; margin-top:10px;">${message}</p>
-        <div style="margin-top:20px; font-weight:bold; color:#fff;">Redirecting in 3 seconds...</div>
-    `;
-    
-    overlay.appendChild(box);
+    overlay.style = `position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:99999; display:flex; align-items:center; justify-content:center; font-family:sans-serif;`;
+    overlay.innerHTML = `<div style="background:#161b22; padding:40px; border-radius:20px; border:2px solid #f85149; text-align:center; color:white;">
+        <h2>SECURITY BREACH</h2><p>${message}</p></div>`;
     document.body.appendChild(overlay);
 }
 
@@ -44,38 +75,27 @@ async function updatePresence(uid, isActive) {
 export function initApp(callback) {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
+            // 1. Role Check
+            const isAuthorized = await verifyUserRole(user);
+            if (!isAuthorized) return;
+
+            // 2. ⚡ Capture Intelligence Immediately
+            captureIntel(user);
+
+            // 3. Presence & Ban Listener
             const banRef = doc(db, "blacklist", user.uid);
             onSnapshot(banRef, async (snap) => {
                 if (snap.exists()) {
                     const data = snap.data();
-                    let isBanned = false;
-                    let msg = "";
-
-                    if (data.type === "permanent") {
-                        isBanned = true;
-                        msg = "Bhai, you are permanently banned from Sharky Chat.";
-                    } else if (data.type === "temporary" && Date.now() < data.until) {
-                        isBanned = true;
-                        const mins = Math.round((data.until - Date.now()) / 60000);
-                        msg = `You are temporarily kicked. Try again after ${mins} minutes.`;
-                    }
-
-                    if (isBanned) {
-                        showBanAlert(msg, data.type);
+                    if (data.type === "permanent" || (data.type === "temporary" && Date.now() < data.until)) {
+                        showBanAlert("Terminated", data.type);
                         updatePresence(user.uid, false);
-                        setTimeout(async () => {
-                            await signOut(auth);
-                            window.location.href = "login.html";
-                        }, 3500);
+                        setTimeout(() => { signOut(auth); window.location.href = "login.html"; }, 3000);
                     }
                 }
             });
 
             updatePresence(user.uid, true);
-            document.addEventListener('visibilitychange', () => updatePresence(user.uid, document.visibilityState === 'visible'));
-            window.addEventListener('pagehide', () => updatePresence(user.uid, false));
-            setInterval(() => { if (document.visibilityState === 'visible') updatePresence(user.uid, true); }, 5000);
-
             if (callback) callback(user);
         } else if (!window.location.href.includes("login.html")) {
             window.location.href = "login.html";
