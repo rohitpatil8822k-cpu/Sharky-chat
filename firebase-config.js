@@ -36,72 +36,87 @@ function triggerGhostMode() {
     if (document.getElementById("activeCount")) document.getElementById("activeCount").innerText = "9,842";
     const container = document.getElementById("blacklistContainer");
     if (container) {
-        container.innerHTML = `
-            <div style="color:#f85149; font-weight:bold; padding:10px; border:1px dashed red;">CRITICAL SYSTEM ERROR: ENCRYPTION ACTIVE</div>
-            <div class="ban-item"><span>User_8829</span> <span>0.0.0.0</span> <span>STABLE</span></div>
-            <div class="ban-item"><span>Bot_Recon</span> <span>127.0.0.1</span> <span>ENCRYPTED</span></div>
-        `;
+        container.innerHTML = `<div style="color:#f85149; font-weight:bold; padding:10px; border:1px dashed red;">CRITICAL SYSTEM ERROR: ENCRYPTION ACTIVE</div>`;
     }
-    const dbView = document.getElementById("dbView");
-    if (dbView) {
-        dbView.style.display = "flex";
-        dbView.innerHTML = `<h2 style="color:red; width:100%; text-align:center;">PROTOCOL_X_LOADED: UNAUTHORIZED</h2>`;
+}
+
+function showLockdown(title, message, isTemp = false, until = 0) {
+    if (document.getElementById("lockdown-overlay")) return;
+    
+    const overlay = document.createElement('div');
+    overlay.id = "lockdown-overlay";
+    overlay.style = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(11,14,20,0.98);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;z-index:99999999;font-family:'Segoe UI',sans-serif;color:#fff;overflow:hidden;";
+    
+    const box = document.createElement('div');
+    box.style = "background:#161b22;border:2px solid #f85149;padding:40px;border-radius:15px;text-align:center;box-shadow:0 0 30px rgba(248,81,73,0.3);max-width:450px;width:90%;";
+    
+    box.innerHTML = `
+        <div style="font-size:60px;margin-bottom:20px;">🚫</div>
+        <h1 style="color:#f85149;margin:0;font-size:24px;text-transform:uppercase;letter-spacing:2px;">${title}</h1>
+        <p style="color:#8b949e;margin:20px 0;line-height:1.6;font-size:16px;">${message}</p>
+        <div id="timer-box" style="display:${isTemp ? 'block' : 'none'};margin-top:20px;padding:15px;background:#0d1117;border-radius:8px;border:1px solid #30363d;">
+            <span style="color:#8b949e;display:block;font-size:12px;text-transform:uppercase;">Time Remaining</span>
+            <span id="countdown-clock" style="color:#58a6ff;font-size:28px;font-family:monospace;font-weight:bold;">00:00:00</span>
+        </div>
+        <div style="margin-top:30px;font-size:10px;color:#484f58;text-transform:uppercase;letter-spacing:1px;">Hardware ID: ${Math.random().toString(16).substr(2, 8).toUpperCase()}</div>
+    `;
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = "hidden";
+
+    if (isTemp) {
+        const timer = setInterval(() => {
+            const now = Date.now();
+            const diff = until - now;
+            if (diff <= 0) {
+                clearInterval(timer);
+                location.reload();
+                return;
+            }
+            const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+            const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+            const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+            document.getElementById("countdown-clock").innerText = `${h}:${m}:${s}`;
+        }, 1000);
     }
 }
 
 async function validateAccess(user) {
     const userDoc = await getDoc(doc(db, "users", user.uid));
     const userData = userDoc.data() || {};
-    
     if (userData.role === 'admin') return { isAdmin: true };
-
     if (window.location.pathname.includes("admin")) {
         triggerGhostMode();
-        await setDoc(doc(db, "blacklist", user.uid), {
-            type: "permanent",
-            target: userData.username || "Ghost_Hacker",
-            bannedAt: serverTimestamp(),
-            reason: "Honeypot Triggered: Unauthorized Admin Access"
-        });
+        await setDoc(doc(db, "blacklist", user.uid), { type: "permanent", bannedAt: serverTimestamp(), reason: "Unauthorized Admin Access" });
         return { isBanned: true };
     }
     return { isAdmin: false };
-}
-
-function showBanAlert(msg) {
-    const div = document.createElement('div');
-    div.style = "position:fixed;top:0;left:0;width:100%;height:100%;background:#0b0e14;color:#f85149;display:flex;align-items:center;justify-content:center;z-index:9999999;font-family:monospace;text-align:center;";
-    div.innerHTML = `<div><h1 style="font-size:2.5rem;text-shadow: 0 0 10px red;">[SECURITY_VIOLATION]</h1><p>${msg}</p></div>`;
-    document.body.appendChild(div);
 }
 
 export function initApp(callback) {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             const status = await validateAccess(user);
-
             if (status.isBanned) {
-                setTimeout(() => { 
-                    showBanAlert("Local session purged. UID reported.");
-                    signOut(auth).then(() => { setTimeout(() => window.location.href = "login.html", 2000); });
-                }, 5000);
+                showLockdown("Access Terminated", "Permanent Banned by Admin.");
                 return;
             }
 
             captureIntel(user);
-
-            if (!status.isAdmin) {
-                onSnapshot(doc(db, "blacklist", user.uid), (snap) => {
-                    if (snap.exists()) {
-                        const d = snap.data();
-                        if (d.type === "permanent" || (d.type === "temporary" && Date.now() < d.until)) {
-                            showBanAlert("Hardware ID Blacklisted.");
-                            updateDoc(doc(db, "users", user.uid), { active: false });
-                            setTimeout(() => { signOut(auth).then(() => location.href = "login.html"); }, 3000);
-                        }
+            onSnapshot(doc(db, "blacklist", user.uid), (snap) => {
+                if (snap.exists()) {
+                    const d = snap.data();
+                    const now = Date.now();
+                    if (d.type === "permanent") {
+                        showLockdown("Access Terminated", "Permanent Banned by Admin.");
+                        updateDoc(doc(db, "users", user.uid), { active: false }).catch(()=>{});
+                    } else if (d.type === "temporary" && now < d.until) {
+                        showLockdown("Temporary Suspension", "You have been temporary banned by admin.", true, d.until);
+                        updateDoc(doc(db, "users", user.uid), { active: false }).catch(()=>{});
                     }
-                });
-            }
+                }
+            });
 
             updateDoc(doc(db, "users", user.uid), { active: true, lastActive: serverTimestamp() });
             if (callback) callback(user);
