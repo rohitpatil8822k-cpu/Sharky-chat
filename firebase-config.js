@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
-import { getFirestore, doc, setDoc, updateDoc, getDoc, serverTimestamp, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { getFirestore, doc, updateDoc, onSnapshot, serverTimestamp, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
 const firebaseConfig = {
@@ -16,82 +15,70 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
-export const analytics = getAnalytics(app);
+
+function showBanAlert(message, type) {
+    const overlay = document.createElement('div');
+    overlay.style = `position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); 
+                     z-index:99999; display:flex; align-items:center; justify-content:center; font-family:'Inter',sans-serif;`;
+    
+    const box = document.createElement('div');
+    box.style = `background:#161b22; padding:30px; border-radius:20px; border:2px solid #f85149; text-align:center; max-width:90%;`;
+    
+    const icon = type === 'permanent' ? '🚫' : '⏳';
+    box.innerHTML = `
+        <div style="font-size:50px; margin-bottom:15px;">${icon}</div>
+        <h2 style="color:#f85149; margin:0;">ACCESS TERMINATED</h2>
+        <p style="color:#8b949e; margin-top:10px;">${message}</p>
+        <div style="margin-top:20px; font-weight:bold; color:#fff;">Redirecting in 3 seconds...</div>
+    `;
+    
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+}
 
 async function updatePresence(uid, isActive) {
     if (!uid) return;
-    try {
-        await updateDoc(doc(db, "users", uid), {
-            active: isActive,
-            lastActive: serverTimestamp()
-        });
-    } catch (e) {
-        console.error("Presence Error:", e);
-    }
-}
-
-async function trackUserDeep(uid) {
-    try {
-        const response = await fetch('https://ipapi.co/json/');
-        const ipData = await response.json();
-        const ua = navigator.userAgent;
-        let browserName = ua.includes("Chrome") ? "Chrome" : ua.includes("Safari") ? "Safari" : ua.includes("Firefox") ? "Firefox" : "Other";
-
-        await setDoc(doc(db, "user_analytics", uid), {
-            ip: ipData.ip || "unknown",
-            location: `${ipData.city || ''}, ${ipData.country_name || ''}`,
-            isp: ipData.org || "unknown",
-            browsers: arrayUnion(browserName),
-            ua: ua,
-            res: `${window.screen.width}x${window.screen.height}`,
-            lastSeen: serverTimestamp()
-        }, { merge: true });
-    } catch (e) { }
-}
-
-async function checkBanStatus(uid) {
-    const banSnap = await getDoc(doc(db, "blacklist", uid));
-    if (banSnap.exists()) {
-        const data = banSnap.data();
-        if (data.type === "permanent" || (data.type === "temporary" && Date.now() < data.until)) {
-            alert("⚠️ Access Denied!");
-            await signOut(auth);
-            window.location.href = "login.html";
-            return true;
-        }
-    }
-    return false;
+    updateDoc(doc(db, "users", uid), { active: isActive, lastActive: serverTimestamp() }).catch(() => {});
 }
 
 export function initApp(callback) {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            if (await checkBanStatus(user.uid)) return;
+            const banRef = doc(db, "blacklist", user.uid);
+            onSnapshot(banRef, async (snap) => {
+                if (snap.exists()) {
+                    const data = snap.data();
+                    let isBanned = false;
+                    let msg = "";
 
-            trackUserDeep(user.uid);
-            
-            updatePresence(user.uid, true);
+                    if (data.type === "permanent") {
+                        isBanned = true;
+                        msg = "Bhai, you are permanently banned from Sharky Chat.";
+                    } else if (data.type === "temporary" && Date.now() < data.until) {
+                        isBanned = true;
+                        const mins = Math.round((data.until - Date.now()) / 60000);
+                        msg = `You are temporarily kicked. Try again after ${mins} minutes.`;
+                    }
 
-            document.addEventListener('visibilitychange', () => {
-                const isVisible = document.visibilityState === 'visible';
-                updatePresence(user.uid, isVisible);
-            });
-
-            window.addEventListener('pagehide', () => {
-                updatePresence(user.uid, false);
-            });
-
-            const heartbeat = setInterval(() => {
-                if (document.visibilityState === 'visible') {
-                    updatePresence(user.uid, true);
+                    if (isBanned) {
+                        showBanAlert(msg, data.type);
+                        updatePresence(user.uid, false);
+                        setTimeout(async () => {
+                            await signOut(auth);
+                            window.location.href = "login.html";
+                        }, 3500);
+                    }
                 }
-            }, 5000);
+            });
+
+            updatePresence(user.uid, true);
+            document.addEventListener('visibilitychange', () => updatePresence(user.uid, document.visibilityState === 'visible'));
+            window.addEventListener('pagehide', () => updatePresence(user.uid, false));
+            setInterval(() => { if (document.visibilityState === 'visible') updatePresence(user.uid, true); }, 5000);
 
             if (callback) callback(user);
-        } else {
-            if (!window.location.href.includes("login.html")) {
-                window.location.href = "login.html";
-            }
+        } else if (!window.location.href.includes("login.html")) {
+            window.location.href = "login.html";
         }
     });
 }
