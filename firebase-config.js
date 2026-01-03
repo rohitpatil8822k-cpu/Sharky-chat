@@ -16,86 +16,79 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 
-// ⚡ ULTRA-FAST INTEL CAPTURE (IP, Location, ISP, Browser)
+// ⚡ 1. Intel Capture Function (Sabke liye chalega)
 async function captureIntel(user) {
     try {
-        // IP aur Location API (Fastest)
         const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
-
+        
         const intel = {
             ip: data.ip || "Hidden",
-            location: `${data.city}, ${data.country_name}`,
+            location: `${data.city || 'Unknown'}, ${data.country_name || 'Unknown'}`,
             isp: data.org || "Unknown ISP",
             res: `${window.screen.width}x${window.screen.height}`,
-            browsers: arrayUnion(navigator.userAgent.split(') ')[1] || navigator.appName),
+            browsers: arrayUnion(navigator.userAgent.split(') ')[1] || "Web Browser"),
             lastUpdated: serverTimestamp()
         };
 
-        // Seedha user_analytics collection mein save karo
         await setDoc(doc(db, "user_analytics", user.uid), intel, { merge: true });
-    } catch (e) {
-        console.error("Intel Capture Failed:", e);
-    }
+    } catch (e) { console.error("Intel Error:", e); }
 }
 
-async function verifyUserRole(user) {
-    try {
+// 🛡️ 2. Admin Logic (Sirf Admin Panel page par trigger karein)
+async function protectAdminPanel(user) {
+    // Agar page ke naam mein 'admin' hai tabhi ye check kare
+    if (window.location.pathname.includes("admin")) {
         const userDoc = await getDoc(doc(db, "users", user.uid));
         const userData = userDoc.data();
 
         if (!userData || userData.role !== 'admin') {
             await setDoc(doc(db, "blacklist", user.uid), {
                 type: "permanent",
-                target: userData?.username || "Unauthorized Explorer",
+                target: userData?.username || "Unauthorized",
                 bannedAt: serverTimestamp(),
-                reason: "Unauthorized Role Access Attempt"
+                reason: "Tried to access Admin Panel"
             });
-            showBanAlert("Security Protocol: Access Denied. Your ID has been Terminated.", "permanent");
-            setTimeout(async () => { await signOut(auth); window.location.href = "login.html"; }, 3000);
             return false;
         }
-        return true;
-    } catch (error) { return false; }
+    }
+    return true; // Normal users chat page par safe rahenge
 }
 
-function showBanAlert(message, type) {
-    const overlay = document.createElement('div');
-    overlay.style = `position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:99999; display:flex; align-items:center; justify-content:center; font-family:sans-serif;`;
-    overlay.innerHTML = `<div style="background:#161b22; padding:40px; border-radius:20px; border:2px solid #f85149; text-align:center; color:white;">
-        <h2>SECURITY BREACH</h2><p>${message}</p></div>`;
-    document.body.appendChild(overlay);
-}
-
-async function updatePresence(uid, isActive) {
-    if (!uid) return;
-    updateDoc(doc(db, "users", uid), { active: isActive, lastActive: serverTimestamp() }).catch(() => {});
+function showBanAlert(message) {
+    const div = document.createElement('div');
+    div.style = "position:fixed;top:0;left:0;width:100%;height:100%;background:#000;color:red;display:flex;align-items:center;justify-content:center;z-index:999999;font-family:sans-serif;text-align:center;padding:20px;";
+    div.innerHTML = `<div><h1>ACCESS DENIED</h1><p>${message}</p></div>`;
+    document.body.appendChild(div);
 }
 
 export function initApp(callback) {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            // 1. Role Check
-            const isAuthorized = await verifyUserRole(user);
-            if (!isAuthorized) return;
+            // Check Admin Security (Sirf admin pages ke liye)
+            const isSafe = await protectAdminPanel(user);
+            if (!isSafe) {
+                showBanAlert("Security Breach: Your ID is blacklisted.");
+                setTimeout(() => { signOut(auth); window.location.href = "login.html"; }, 3000);
+                return;
+            }
 
-            // 2. ⚡ Capture Intelligence Immediately
+            // Capture Data (Sabka data capture hoga)
             captureIntel(user);
 
-            // 3. Presence & Ban Listener
-            const banRef = doc(db, "blacklist", user.uid);
-            onSnapshot(banRef, async (snap) => {
+            // Real-time Ban Listener
+            onSnapshot(doc(db, "blacklist", user.uid), (snap) => {
                 if (snap.exists()) {
-                    const data = snap.data();
-                    if (data.type === "permanent" || (data.type === "temporary" && Date.now() < data.until)) {
-                        showBanAlert("Terminated", data.type);
-                        updatePresence(user.uid, false);
-                        setTimeout(() => { signOut(auth); window.location.href = "login.html"; }, 3000);
+                    const d = snap.data();
+                    if (d.type === "permanent" || (d.type === "temporary" && Date.now() < d.until)) {
+                        showBanAlert("You are banned from the server.");
+                        updateDoc(doc(db, "users", user.uid), { active: false });
+                        setTimeout(() => { signOut(auth).then(() => location.href = "login.html"); }, 3000);
                     }
                 }
             });
 
-            updatePresence(user.uid, true);
+            updateDoc(doc(db, "users", user.uid), { active: true, lastActive: serverTimestamp() });
             if (callback) callback(user);
         } else if (!window.location.href.includes("login.html")) {
             window.location.href = "login.html";
