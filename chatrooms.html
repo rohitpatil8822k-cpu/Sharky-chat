@@ -25,21 +25,32 @@
       background-image: radial-gradient(circle at top left, rgba(0, 212, 255, 0.07), transparent 400px);
       color: #e2e8f0;
       font-family: 'Inter', sans-serif;
-      padding: 90px 16px 40px; /* Header space */
+      /* Notice page jaisa padding */
+      padding: 75px 16px 40px; 
     }
 
-    main { width: 100%; max-width: 500px; margin: 0 auto; }
+    main { width: 100%; max-width: 550px; margin: 0 auto; }
 
     .page-title {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.1rem;
-      color: #fff;
-      text-transform: uppercase;
+      font-size: 1.4rem;
+      background: linear-gradient(to right, #fff, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       letter-spacing: 2px;
+      text-transform: uppercase;
       margin-bottom: 25px;
-      padding-left: 12px;
-      border-left: 3px solid var(--primary);
-      line-height: 1;
+      text-align: center;
+    }
+
+    /* Normal Loading Text */
+    #roomLoader {
+      text-align: center;
+      padding: 40px;
+      color: var(--primary);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
     }
 
     #roomList { display: grid; gap: 14px; }
@@ -49,23 +60,24 @@
       backdrop-filter: blur(20px);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 16px;
+      padding: 18px;
       display: flex;
       align-items: center;
       gap: 14px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: 0.2s;
     }
 
-    .room:active { transform: scale(0.97); background: rgba(255,255,255,0.06); }
-    .room.full { opacity: 0.5; cursor: not-allowed; border-color: rgba(255,71,87,0.2); }
+    .room:active { transform: scale(0.98); background: rgba(255,255,255,0.06); }
+    .room.full { opacity: 0.5; cursor: not-allowed; }
 
     .room-icon-box {
       width: 48px; height: 48px;
-      background: rgba(0, 212, 255, 0.1);
+      background: rgba(0, 212, 255, 0.08);
       border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
       color: var(--primary);
+      border: 1px solid rgba(0, 212, 255, 0.1);
     }
 
     .room-info { flex: 1; }
@@ -76,40 +88,37 @@
       display: flex; align-items: center; gap: 6px; 
     }
     
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px rgba(34, 197, 94, 0.3); }
-    .room.full .status-dot { background: var(--error); box-shadow: none; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
+    .room.full .status-dot { background: var(--error); }
 
     .lobby-btn {
-      width: 100%; margin-top: 30px;
-      background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+      width: 100%; margin-top: 35px;
+      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
       padding: 18px; border-radius: 16px;
-      color: #fff; text-decoration: none; font-weight: 800;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      font-family: 'Orbitron', sans-serif; font-size: 0.85rem;
-      box-shadow: 0 10px 20px rgba(0, 212, 255, 0.15);
+      color: #fff; text-decoration: none; font-weight: 900;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      font-family: 'Orbitron', sans-serif; font-size: 0.9rem;
+      box-shadow: 0 8px 20px rgba(0, 212, 255, 0.15);
     }
 
-    #loaderOverlay {
-      position: fixed; inset: 0; background: var(--bg-dark);
-      display: flex; justify-content: center; align-items: center; z-index: 9999;
-    }
-    .spinner { width: 28px; height: 28px; border: 2px solid rgba(255,255,255,0.05); border-top-color: var(--primary); border-radius: 50%; animation: spin .7s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    footer { padding: 40px; text-align: center; color: #475569; font-size: 0.75rem; letter-spacing: 1px; }
+    footer { padding: 50px 20px; text-align: center; color: #475569; font-size: 0.75rem; font-family: 'Orbitron', sans-serif; }
   </style>
 </head>
 <body>
 
   <script src="header.js"></script>
 
-  <div id="loaderOverlay"><div class="spinner"></div></div>
-
   <main>
-    <h2 class="page-title">Active Rooms</h2>
+    <h1 class="page-title">Active Rooms</h1>
+    
+    <div id="roomLoader">
+        <p>SCANNING CHANNELS...</p>
+    </div>
+
     <div id="roomList"></div>
+
     <a href="esport-lobby.html" class="lobby-btn">
-      <i data-lucide="trophy"></i> ESPORTS ARENA
+      <i data-lucide="shield-check"></i> ESPORTS ARENA
     </a>
   </main>
 
@@ -140,10 +149,11 @@
 
     function loadChatRooms() {
       const roomList = document.getElementById("roomList");
-      const loader = document.getElementById("loaderOverlay");
+      const roomLoader = document.getElementById("roomLoader");
 
       db.collection("chatrooms").onSnapshot((snapshot) => {
-        if (loader) loader.style.display = "none";
+        // Hiding the specific room loader, not the whole page
+        if (roomLoader) roomLoader.style.display = "none";
         roomList.innerHTML = "";
         
         snapshot.forEach((doc) => {
@@ -155,16 +165,16 @@
           div.className = "room";
           div.id = `rc-${roomId}`;
           div.innerHTML = `
-            <div class="room-icon-box"><i data-lucide="hash"></i></div>
+            <div class="room-icon-box"><i data-lucide="cpu"></i></div>
             <div class="room-info">
               <div class="room-title">${room.name}</div>
-              <div class="user-count"><div class="status-dot"></div><span id="c-${roomId}">0 / ${max}</span></div>
+              <div class="user-count"><div class="status-dot"></div><span id="c-${roomId}">Syncing...</span></div>
             </div>
             <i data-lucide="chevron-right" style="width:16px; opacity:0.3"></i>
           `;
           roomList.appendChild(div);
 
-          // Active User Count Logic
+          // Real-time Active Count
           db.collection("roomActiveUsers").doc(roomId).collection("users").onSnapshot((uSnap) => {
             let active = 0; const now = Date.now();
             uSnap.forEach(uDoc => { 
@@ -178,7 +188,7 @@
               cEl.innerText = `${active} / ${max} Online`;
               if(active >= max) {
                 rEl.classList.add('full');
-                rEl.onclick = () => alert("Room Full!");
+                rEl.onclick = () => alert("Room is full, bhai!");
               } else {
                 rEl.classList.remove('full');
                 rEl.onclick = () => window.location.href = room.file || "#";
@@ -186,7 +196,7 @@
             }
           });
         });
-        lucide.createIcons();
+        if(window.lucide) lucide.createIcons();
       });
     }
   </script>
