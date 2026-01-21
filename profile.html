@@ -2,1547 +2,402 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Sharky Chat — Profile</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;500;700&family=Poppins:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
-     crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
+  <title>Sharky Pro | Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Orbitron:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    header {
-      background: #555555;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 2000;
-      width: 100vw;
-      box-shadow: 0 2px 17px #22222290;
-      min-height: auto;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      border-radius: 0;
-      transition: box-shadow 0.23s;
-      color: #d1d1d1;
-      font-family: "Poppins", Arial, sans-serif;
-      font-size: 1rem;
-    }
-    .header-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 16px;
-      min-height: 50px;
-      position: relative;
-      z-index: 1;
-      cursor: default;
-      color: inherit;
-    }
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .logo-container img {
-      height: 30px;
-      animation: float 3.3s ease-in-out infinite;
-      user-select: none;
-      pointer-events: none;
-      filter: none;
-      image-rendering: crisp-edges;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-    }
-    .logo-text {
-      font-family: "Orbitron", Arial, Helvetica, sans-serif;
-      font-size: 1.1rem;
-      color: #bbbbbb;
-      text-shadow: 0 0 5px #88888888;
-      font-weight: 800;
-      letter-spacing: 0.055em;
-      margin-left: 2px;
-      user-select: none;
-      white-space: nowrap;
-    }
-    .menu-btn {
-      font-size: 1.5rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      min-width: 38px;
-      height: 36px;
-      color: #d0d0d0;
-      outline: none;
-      border: none;
-      background: none;
-      border-radius: 9px;
-      position: relative;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      transition: background 0.16s, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      gap: 6px;
-    }
-    .menu-btn:active {
-      background: #444444;
-      transform: scale(0.93);
-    }
-    .menu-btn .notif-badge {
-      background: linear-gradient(105deg, #f87171 65%, #fb923c 110%);
-      color: white;
-      font-weight: 700;
-      font-family: "Orbitron", sans-serif;
-      min-width: 14px;
-      height: 14px;
-      padding: 0 6px;
-      font-size: 12px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      top: -4px;
-      right: -4px;
-      border: 1px solid #555555;
-      box-shadow: 0 2px 6px #ef444488;
-      pointer-events: none;
-      z-index: 10;
-      user-select: none;
-    }
-    .menu-dropdown {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      height: 100vh;
-      width: 220px;
-      background: rgba(85, 85, 85, 0.97);
-      box-shadow: -4px 0 26px rgba(0, 0, 0, 0.77);
-      padding-top: 54px;
-      padding-bottom: 22px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      font-family: "Poppins", Arial, sans-serif;
-      font-weight: 600;
-      font-size: 0.85rem;
-      overflow-y: auto;
-      transition: right 0.31s cubic-bezier(0.65, 0.01, 0.32, 1.03);
-      z-index: 2500;
-      user-select: none;
-      color: #d1d1d1;
-    }
-    header.expanded .menu-dropdown {
-      right: 0;
-    }
-    .menu-dropdown .close-btn {
-      position: absolute;
-      left: 11px;
-      top: 13px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      outline: none;
-      z-index: 2600;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s ease;
-      color: #bbbbbb;
-      user-select: none;
-    }
-    .menu-dropdown .close-btn:hover,
-    .menu-dropdown .close-btn:focus {
-      color: #e0e0e0;
-      transform: scale(1.22);
-    }
-    .menu-dropdown .close-btn svg {
-      width: 22px;
-      height: 22px;
-      stroke: currentColor;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      user-select: none;
-    }
-    .menu-dropdown a {
-      color: #bbbbbb;
-      padding: 13px 17px 13px 46px;
-      text-decoration: none;
-      border-bottom: 2px solid #444444;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      background: none;
-      transition: background 0.13s, color 0.13s, padding-left 0.11s, transform 0.16s;
-      letter-spacing: 0.02em;
-      user-select: none;
-      font-weight: 600;
-      font-size: 0.85rem;
-      will-change: transform;
-      position: relative;
-    }
-    .menu-dropdown a:hover,
-    .menu-dropdown a:focus {
-      background: #666666;
-      color: #ffffff;
-      padding-left: 51px;
-      outline: none;
-      transform: scale(1.05) translateX(-2px);
-    }
-    .menu-dropdown a:active {
-      background: #444444;
-      color: #fbbf24;
-      transform: scale(0.97);
-    }
-    .menu-dropdown .notif-badge {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      box-shadow: none;
-      border: none;
-      font-weight: 700;
-      font-size: 13px;
-      min-width: 22px;
-      height: 18px;
-      background: linear-gradient(120deg, #fae024 70%, #f87171 100%);
-      color: #222b3a;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-family: "Orbitron", sans-serif;
-      border-radius: 7px;
-      user-select: none;
-      padding: 0 6px;
-      line-height: 18px;
-      white-space: nowrap;
-    }
-    .menu-dropdown a .icon {
-      display: inline-flex;
-      width: 22px;
-      height: 22px;
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      fill: #bbbbbb;
-      filter: drop-shadow(0 1px 6px #bbbbbb66);
-      transition: fill 0.13s, filter 0.11s;
-      user-select: none;
-    }
-    .menu-dropdown a:hover .icon,
-    .menu-dropdown a:focus .icon {
-      fill: #fff;
-      filter: drop-shadow(0 2px 8px #fff4);
-    }
-    html,
-    body {
-      background: #2f2f2f;
-      color: #d1d1d1;
-      min-height: 100vh;
-      width: 100vw;
-      font-family: "Poppins", "Segoe UI", Arial, Helvetica, sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      transition: background 0.4s ease, color 0.4s ease;
-      padding-top: 50px; /* Space for the fixed header */
-    }
-    ::-webkit-scrollbar {
-      width: 10px;
-      background: transparent;
-      transition: background 0.4s ease;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #565656;
-      border-radius: 8px;
-      transition: background 0.4s ease;
-    }
-    body.light-theme {
-      background: #f5f6fa;
-      color: #222c3b;
-      transition: background 0.4s ease, color 0.4s ease;
-    }
-    main {
-      padding: 0px 10px 10px 10px;
-      max-width: 400px;
-      width: 100vw;
-      margin: 0 auto;
-      box-sizing: border-box;
-      position: relative;
-    }
-    .profile-cover-big-block {
-      width: 100%;
-      max-width: 400px;
-      min-height: 121px;
-      height: 121px;
-      margin: 18px auto 0 auto;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #444, #2a2a2a);
-      box-shadow: 0 15px 35px #111, 0 5px 18px #4a7f807d;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      transition: box-shadow 0.3s ease;
-    }
-    .profile-cover-big-block:hover {
-      box-shadow: 0 18px 40px #0ef, 0 6px 20px #38c1ea99;
-    }
-    .profile-banner-img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 18px 18px 0 0;
-      z-index: 8;
-      background: #343434;
-      pointer-events: none;
-      opacity: 0.95;
-      transition: opacity 0.3s ease;
-    }
-    .profile-cover-big-block .cover-camera-btn {
-      position: absolute;
-      top: 16px;
-      right: 17px;
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(145deg, #555555 65%, #00c9ff 105%);
-      border-radius: 50%;
-      box-shadow: 0 3px 8px #22baff70;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 20;
-      border: none;
-      outline: none;
-      transition: background 0.25s ease, transform 0.3s ease;
-      filter: drop-shadow(0 0 6px #00baff80);
-    }
-    .cover-camera-btn:hover {
-      background: linear-gradient(160deg, #0077cc 60%, #57d8ff 120%);
-      transform: scale(1.1) rotate(-8deg);
-      filter: drop-shadow(0 0 12px #67e8f9b3);
-    }
-    .cover-camera-btn svg {
-      width: 22px;
-      height: 22px;
-      fill: #e0f2fe;
-      filter: drop-shadow(0 0 5px #50a5fa8a);
-      transition: fill 0.3s ease;
-    }
-    .profile-pic-block {
-      position: relative;
-      margin-top: -68px;
-      margin-bottom: 20px;
-      z-index: 10;
-      text-align: center;
-      height: 90px;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      transition: box-shadow 0.4s ease;
-    }
-    .profile-pic {
-      width: 128px;
-      height: 110px;
-      background-color: #3a3a3a;
-      background-size: cover;
-      background-position: center;
-      margin: 0 auto;
-      box-shadow: 0 15px 25px #1e3a5678, 0 5px 15px #3aa5fa54;
-      cursor: pointer;
-      display: block;
-      transition: box-shadow 0.25s ease, border 0.3s ease, transform 0.3s ease;
-      position: relative;
-      z-index: 12;
-      border: 3px solid #3aa5fa;
-      will-change: transform;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      border-radius: 50%;
-      overflow: hidden;
-      aspect-ratio: 1/1;
-      filter: drop-shadow(0 0 10px #3aa5fa88);
-    }
-    .profile-pic img {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: cover !important;
-      border-radius: 50%;
-      display: block;
-      aspect-ratio: 1/1;
-    }
-    .profile-pic:active {
-      border: 3px solid #1ed8ff;
-      box-shadow: 0 6px 24px #0e3675cc, 0 4px 12px #2c8fcc88;
-      transform: scale(0.92);
-      transition: transform 0.1s ease;
-    }
-    #usernameBadgeWrapper {
-      display: inline-flex;
-      align-items: center;
-      flex-wrap: nowrap;
-      max-width: 100%;
-      margin: 12px auto 0 auto;
-      gap: 5px;
-      background: rgba(255 255 255 / 0.12);
-      padding: 6px 12px;
-      border-radius: 12px;
-      font-family: "Poppins", sans-serif;
-      font-weight: 700;
-      font-size: 1.3rem;
-      color: inherit;
-      user-select: text;
-      box-sizing: border-box;
-      overflow: hidden;
-      white-space: nowrap;
-      box-shadow: 0 2px 10px #2266ff6b;
-      text-shadow: 0 0 3px #72baffcc;
-      transition: background 0.3s ease, color 0.3s ease;
-      justify-content: center;
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-    #usernameBadgeWrapper span#username {
-      flex: 1 1 auto;
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      display: inline-block;
-      color: #d0e8ff;
-      text-shadow: 0 0 4px #5ea9ffbb;
-      transition: color 0.3s ease;
-    }
-    #usernameBadgeWrapper img.profile-badge-img {
-      flex: 0 0 auto;
-      width: 30px;
-      height: 30px;
-      border-radius: 10px;
-      object-fit: contain;
-      user-select: none;
-      pointer-events: none;
-      border: 1.5px solid #3aa5fa;
-      box-shadow: 0 2px 8px #1aa5fa44;
-      vertical-align: middle;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-    .online-indicator {
-      display: inline-block;
-      width: 10px; 
-      height: 10px; 
-      background-color: #f87171; 
-      border-radius: 50%;
-      border: 2px solid #333333; 
-      margin-right: 5px; 
-      box-shadow: 0 0 4px #f87171a0;
-      transition: background-color 0.4s ease, box-shadow 0.4s ease;
-      vertical-align: middle;
-      flex-shrink: 0;
-    }
-    .online-indicator.active {
-      background-color: #34d399; 
-      box-shadow: 0 0 4px #34d399a0;
-      border-color: #555555;
-    }
-    input[type="text"].hidden-input {
-      display: none;
-    }
-    input[type="text"],
-    input[type="number"],
-    select,
-    textarea {
-      max-width: 400px;
-      width: 100%;
-      box-sizing: border-box;
-      background: #3a3a3a;
-      border: none;
-      border-radius: 10px;
-      color: #d1d1d1;
-      font-size: 1rem;
-      font-family: inherit;
-      font-weight: 500;
-      padding: 11px 14px;
-      margin-top: 10px;
-      margin-bottom: 14px;
-      transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s;
-      box-shadow: 0 2px 12px #3aa5fa38;
-    }
-    input:focus,
-    select:focus,
-    textarea:focus {
-      background: #555555;
-      outline: none;
-      color: #eef6ff;
-      box-shadow: 0 0 8px #3aa5facc;
-      transform: scale(1.02);
-      transition: background 0.25s ease, color 0.25s ease, box-shadow 0.4s ease, transform 0.3s ease;
-    }
-    body.light-theme input,
-    body.light-theme select,
-    body.light-theme textarea {
-      background: #e5e7eb;
-      color: #222c3b;
-    }
-    body.light-theme input:focus,
-    body.light-theme select:focus,
-    body.light-theme textarea:focus {
-      background: #cdd6f4;
-      color: #222c3b;
-    }
-    label {
-      margin-top: 18px;
-      display: block;
-      font-weight: 700;
-      color: #94a3b8;
-      font-size: 1.1rem;
-      letter-spacing: 0.02em;
-      margin-bottom: 8px;
-      text-shadow: 0 0 2px #3aa5faaa;
-      user-select: none;
-      transition: color 0.3s ease;
-    }
-    body.light-theme label {
-      color: #344054;
-    }
-    .color-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 11px;
-      margin-top: 12px;
-      justify-content: flex-start;
-    }
-    .color-box {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 3px solid transparent;
-      transition: border 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 0 6px #33333388 inset;
-    }
-    .color-box.selected {
-      border-color: #3aa5fa;
-      box-shadow: 0 0 8px #3aa5fadd;
-      transform: scale(1.2);
-      transition: border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-    }
-    .admin-panel-btn {
-      background: linear-gradient(45deg, #888888cc, #555555cc);
-      color: #c0c0c0dd;
-      font-weight: 800;
-      font-size: 1rem;
-      border-radius: 12px;
-      padding: 12px;
-      margin-top: 14px;
-      border: none;
-      width: 100%;
-      box-shadow: 0 3px 15px #555555dd;
-      letter-spacing: 0.03em;
-      font-family: "Orbitron", Arial, sans-serif;
-      transition: background 0.3s ease, transform 0.3s ease, color 0.4s ease;
-      cursor: pointer;
-    }
-    .admin-panel-btn:hover {
-      background: linear-gradient(45deg, #333333cc, #1a1a1acc);
-      color: #ffffffcc;
-      transform: scale(1.04);
-    }
-    #savedPopup {
-      display: none;
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%) scale(0.92);
-      background: linear-gradient(99deg, #3a3a3acc 90%, #0ea5e9cc 160%);
-      color: #d1d1d1cc;
-      padding: 14px 10vw;
-      border-radius: 18px;
-      z-index: 9999;
-      font-size: 1.15rem;
-      font-family: "Orbitron", Arial, sans-serif;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      box-shadow: 0 8px 25px #0ea5e949, 0 4px 12px #1a1a1a99;
-      border: 2px solid #0ea5e9cc;
-      text-align: center;
-      background-image: url("https://cdn-icons-png.flaticon.com/512/2784/2784445.png"),
-        linear-gradient(99deg, #3a3a3acc 90%, #0ea5e9cc 160%);
-      background-repeat: no-repeat;
-      background-size: 28px 28px, cover;
-      background-position: 6% center, center;
-      padding-left: 40px;
-      user-select: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-    .popup-show {
-      opacity: 0.9 !important;
-      pointer-events: auto !important;
-      animation: notifpop 0.5s ease forwards;
-    }
-    button.save-btn,
-    .footer-btn,
-    .del-btn,
-    .out-btn {
-      font-size: 1rem !important;
-      padding: 12px 0 !important;
-      font-weight: 600 !important;
-      letter-spacing: 0.015em;
-      border-radius: 24px !important;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      box-shadow: 0 3px 15px #3aa5fa66;
-    }
-    button.save-btn {
-      background: linear-gradient(110deg, #0ea5e9cc 0%, #22d3eecc 42%, #a78bface 85%, #f472b6cc 100%);
-      color: #f0f8ffcc;
-      font-family: "Orbitron", Arial, sans-serif;
-      font-weight: 700;
-      margin: 30px auto 20px auto;
-      display: block;
-      width: 95%;
-      box-shadow: 0 4px 14px #a78bfa70, 0 1px 6px #38bdf887;
-    }
-    button.save-btn:hover {
-      filter: drop-shadow(0 0 15px #7aadff88);
-      transform: scale(1.05);
-    }
-    button.save-btn:active {
-      transform: scale(0.96);
-      box-shadow: 0 2px 10px #5a5fb2cc;
-    }
-    .footer-btn {
-      background: #3a3a3a;
-      color: #a5c7ffcc;
-      border: 1.7px solid #4b4b4b;
-      box-shadow: 0 3px 8px #0008 inset;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 10px;
-      border-radius: 14px;
-      font-size: 1rem;
-      font-family: "Segoe UI", Arial, sans-serif;
-      transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
-    }
-    .footer-btn:hover {
-      background: #555555;
-      color: #facc15cc;
-      border-color: #facc15cc;
-      box-shadow: 0 0 14px #facc1577;
-    }
-    .del-btn {
-      background: #c45353cc;
-      color: #faf0f0cc;
-      border: none;
-      font-weight: 700;
-      box-shadow: 0 2px 12px #a5000000;
-      transition: background 0.3s ease;
-    }
-    .del-btn:hover {
-      background: #860000cc;
-      color: #fbbf24cc;
-      box-shadow: 0 0 16px #ffae2ecc;
-    }
-    .out-btn {
-      background: #59728acc;
-      color: #dde9ffcc;
-      box-shadow: 0 2px 10px #405c7e;
-      border-radius: 18px;
-    }
-    .out-btn:hover {
-      background: #405070cc;
-      box-shadow: 0 4px 14px #293a62;
-      color: #cbd6ebcc;
-      filter: brightness(110%);
-      transition: background 0.3s ease;
-    }
-    footer {
-      max-width: 400px;
-      margin: auto;
-      padding-top: 11px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 100vw;
-      padding-left: 1vw;
-      padding-right: 1vw;
-      transition: all 0.3s ease;
-    }
-    .bottom-mini-footer {
-      position: relative !important;
-      width: 100% !important;
-      padding: 11px 0 10px 0 !important;
-      background: transparent !important;
-      text-align: center;
-      font-size: 0.98rem !important;
-      color: #9db9ffdd !important;
-      font-weight: 700 !important;
-      letter-spacing: 0.06em !important;
-      font-family: "Segoe UI", Arial, sans-serif !important;
-      opacity: 0.92 !important;
-      pointer-events: auto !important;
-      margin-top: 14px !important;
-      border-top: 1.8px solid #3a3a3acc;
-      user-select: none;
-    }
-    .bottom-mini-footer::before {
-      content: "";
-      display: block;
-      width: 70%;
-      margin: 0 auto 7px auto;
-      height: 4px;
-      border-radius: 4px;
-      background: linear-gradient(90deg, #3aa5fa, #a78bfa 45%, #22d3ee 85%, #f472b6 100%);
-      opacity: 0.9;
-      filter: drop-shadow(0 0 7px #3aa5faaa);
-      transition: background 0.3s ease;
-    }
-    .bottom-mini-footer a {
-      color: #7cb7ffcc !important;
-      text-decoration: underline !important;
-      font-size: 1rem !important;
-      margin: 0 9px !important;
-      opacity: 0.95 !important;
-      font-weight: 700 !important;
-      transition: color 0.3s ease, font-size 0.4s ease;
-      letter-spacing: 0.05em;
-    }
-    .bottom-mini-footer a:hover {
-      color: #38bdf8cc !important;
-      opacity: 1 !important;
-      font-size: 1.07rem !important;
-      transition: color 0.3s ease, font-size 0.4s ease;
-    }
-    @media (max-width: 600px) {
-      main {
-        max-width: 100vw;
-        padding: 0 3vw 8vw 3vw;
-      }
-      .profile-cover-big-block {
-        height: 50px;
-      }
-      .profile-banner-img {
-        height: 100% !important;
-      }
-      .profile-pic-block {
-        height: 110px;
-      }
-      .profile-pic {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        aspect-ratio: 1/1;
-      }
-      .profile-pic img {
-        width: 100% !important;
-        height: 100% !important;
-        border-radius: 50%;
-        aspect-ratio: 1/1;
-        object-fit: cover !important;
-        display: block;
-      }
-      #usernameBadgeWrapper {
-        max-width: 100%;
-        font-size: 1.05rem;
-        gap: 4px;
-        padding: 5px 10px;
-      }
-      #usernameBadgeWrapper span#username {
-        max-width: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      #usernameBadgeWrapper img.profile-badge-img {
-        width: 26px;
-        height: 26px;
-        margin-left: 4px;
-      }
-      .new-field-input,
-      .new-field-textarea,
-      .new-field-select {
-        font-size: 0.95rem;
-      }
-    }
-    .new-field-input,
-    .new-field-textarea,
-    .new-field-select {
-      max-width: 400px;
-      width: 100%;
-      box-sizing: border-box;
-      background: #3a3a3a;
-      border: none;
-      border-radius: 10px;
-      color: #d1d1d1;
-      font-size: 1rem;
-      font-family: inherit;
-      font-weight: 500;
-      padding: 11px 14px;
-      margin-top: 10px;
-      margin-bottom: 14px;
-      transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s;
-      box-shadow: 0 2px 12px #3aa5fa38;
-    }
-    .new-field-input:focus,
-    .new-field-textarea:focus,
-    .new-field-select:focus {
-      background: #555555;
-      outline: none;
-      color: #eef6ff;
-      box-shadow: 0 0 12px #3aa5facc;
-      transform: scale(1.02);
-      transition: background 0.25s ease, color 0.25s ease, box-shadow 0.4s ease, transform 0.3s ease;
-    }
-    .new-field-input:disabled,
-    .new-field-textarea:disabled,
-    .new-field-select:disabled,
-    input:disabled,
-    select:disabled,
-    textarea:disabled {
-      background: #353535;
-      cursor: not-allowed;
-      color: #94a3b8;
-    }
-    body.light-theme .new-field-input,
-    body.light-theme .new-field-textarea,
-    body.light-theme .new-field-select {
-      background: #e5e7eb;
-      color: #222c3b;
-    }
-    body.light-theme .new-field-input:focus,
-    body.light-theme .new-field-textarea:focus,
-    body.light-theme .new-field-select:focus {
-      background: #cdd6f4de;
-      color: #222c3b;
-    }
-    select,
-    .new-field-select {
-      font-size: 0.9rem !important;
-      transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s;
-      will-change: transform;
-      cursor: pointer;
-    }
-    select:active,
-    .new-field-select:active {
-      transform: scale(0.97);
-      background: #4a5d7d;
-      color: #fbbf24cc;
-    }
-    select:focus,
-    .new-field-select:focus {
-      background: #555555;
-      color: #fff;
-      transform: scale(1.05);
-    }
-    body.light-theme select:active,
-    body.light-theme .new-field-select:active {
-      background: #dbeafecc;
-      color: #eab308cc;
-    }
-    body.light-theme select:focus,
-    body.light-theme .new-field-select:focus {
-      background: #c3d2fecc;
-      color: #222c3b;
-      transform: scale(1.05);
-    }
-    @keyframes notifpop {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.2) rotate(-4deg);
-      }
-      100% {
-        transform: scale(1) rotate(0deg);
-      }
+    :root {
+      --primary: #00d4ff; --surface: #121826; --bg: #05070a;
+      --border: rgba(255, 255, 255, 0.08); --text-main: #f1f5f9;
+      --text-dim: #94a3b8; --gold: #fbbf24; --pro: #a855f7; --premium: #f43f5e;
     }
 
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    body { 
+      background-color: var(--bg); 
+      color: var(--text-main); 
+      font-family: 'Inter', sans-serif; 
+      padding-top: 60px;
+      overflow-x: hidden;
+      transition: background 0.5s ease;
+    }
+
+    body.theme-basic { background: radial-gradient(circle at top, #0f172a 0%, #05070a 100%); }
+    body.theme-pro { background: radial-gradient(circle at top, #1e1033 0%, #05070a 100%); }
+    body.theme-premium { background: radial-gradient(circle at top, #2d0a0e 0%, #05070a 100%); }
+
+    .app-container { width: 100%; max-width: 480px; margin: 0 auto; position: relative; padding-bottom: 120px; }
+    
+    .hero-section { position: relative; padding: 0 10px; margin-top: 10px; }
+    .cover-wrapper { 
+      width: 100%; height: 170px; background: #161b22; overflow: hidden; border-radius: 24px; 
+      border: 1px solid var(--border); transition: 0.4s;
+    }
+    .theme-basic .cover-wrapper { border-color: var(--primary); }
+    .theme-pro .cover-wrapper { border-color: var(--pro); box-shadow: 0 0 20px rgba(168, 85, 247, 0.2); }
+    .theme-premium .cover-wrapper { border-color: var(--premium); box-shadow: 0 0 25px rgba(244, 63, 94, 0.25); }
+
+    .cover-image { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.8s; }
+    .cover-image.loaded { opacity: 1; }
+    
+    .change-btn { position: absolute; top: 15px; right: 25px; z-index: 20; background: rgba(0,0,0,0.7); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 12px; font-size: 0.75rem; backdrop-filter: blur(10px); cursor: pointer; }
+    
+    .profile-header { display: flex; flex-direction: column; align-items: center; margin-top: -55px; position: relative; z-index: 10; }
+    .avatar-circle { width: 110px; height: 110px; border-radius: 35px; border: 5px solid var(--bg); background-size: cover; background-position: center; position: relative; cursor: pointer; background-color: #1a1a1a; transition: 0.5s; }
+    .avatar-circle::after { content: "\f030"; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; bottom: 5px; right: 5px; background: var(--primary); color: #000; width: 28px; height: 28px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; border: 3px solid var(--bg); }
+    
+    .name-bubble { display: flex; align-items: center; gap: 10px; margin-top: 15px; background: rgba(255, 255, 255, 0.05); padding: 10px 22px; border-radius: 50px; border: 1px solid var(--border); backdrop-filter: blur(10px); }
+    #username { font-size: 1.2rem; font-weight: 700; font-family: 'Orbitron', sans-serif; }
+    
+    .badges-container { display: flex; gap: 5px; }
+    .equipped-badge-img { width: 24px; height: 24px; object-fit: contain; display: none; }
+    
+    .membership-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 24px; padding: 18px 22px; margin: 25px 15px; display: flex; justify-content: space-between; align-items: center; position: relative; overflow: hidden; }
+    .membership-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--gold); }
+    .status-box h4 { font-size: 0.65rem; color: var(--text-dim); font-weight: 800; font-family: 'Orbitron', sans-serif; margin-bottom: 2px; }
+    #planLabel { font-weight: 900; font-size: 1.1rem; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+    .upgrade-btn { background: var(--gold); color: #000; border: none; padding: 12px 20px; border-radius: 14px; font-weight: 900; font-size: 0.8rem; font-family: 'Orbitron', sans-serif; cursor: pointer; transition: 0.3s; }
+    .upgrade-btn:active { transform: scale(0.95); }
+    
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; padding: 24px; margin: 0 15px 20px; transition: 0.4s; }
+    .card-title { font-size: 0.75rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-family: 'Orbitron', sans-serif; }
+    
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    label { font-size: 0.68rem; color: var(--text-dim); font-weight: 800; display: block; margin-bottom: 6px; font-family: 'Orbitron', sans-serif; }
+    
+    input, select, textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 16px; padding: 15px; color: white; margin-bottom: 15px; outline: none; font-family: 'Inter', sans-serif; transition: 0.3s; }
+    input:focus { border-color: var(--primary); background: rgba(0,0,0,0.5); }
+    
+    .color-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+    .color-box { 
+      width: 100%; aspect-ratio: 1/1; border-radius: 14px; cursor: pointer; border: 2px solid transparent; 
+      display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; 
+    }
+    .color-box.selected { border-color: #fff; transform: scale(1.1); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+    .lock-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-size: 0.7rem; }
+    
+    .sec-btn { width: 100%; background: rgba(255, 255, 255, 0.04); color: white; border: 1px solid var(--border); padding: 18px; border-radius: 18px; font-size: 0.95rem; margin-bottom: 12px; text-align: left; display: flex; align-items: center; gap: 14px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+    .sec-btn:hover { background: rgba(255, 255, 255, 0.08); }
+    .btn-danger { color: #ff4b4b; background: rgba(255, 75, 75, 0.08); border-color: rgba(255, 75, 75, 0.2); }
+    
+    .bottom-bar { position: fixed; bottom: 0; width: 100%; max-width: 480px; padding: 25px; background: linear-gradient(transparent, var(--bg) 60%); z-index: 1000; left: 50%; transform: translateX(-50%); }
+    .save-btn { width: 100%; background: var(--primary); color: #000; border: none; padding: 20px; border-radius: 24px; font-weight: 900; font-size: 1.1rem; font-family: 'Orbitron', sans-serif; box-shadow: 0 10px 30px rgba(0,212,255,0.4); cursor: pointer; }
+    
+    .modal { 
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); 
+      display: none; align-items: center; justify-content: center; z-index: 11000; padding: 20px; 
+    }
+    .modal-content { 
+      background: #121826; border: 1px solid var(--gold); border-radius: 30px; padding: 35px; 
+      width: 100%; max-width: 380px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .modal-content h2 { font-family: 'Orbitron', sans-serif; color: var(--gold); margin-bottom: 15px; font-size: 1.3rem; }
+    .modal-content p { color: var(--text-dim); margin-bottom: 25px; line-height: 1.5; font-size: 0.95rem; }
+    .modal-btns { display: flex; gap: 12px; }
+    .m-btn { flex: 1; padding: 15px; border-radius: 16px; font-weight: 800; font-family: 'Orbitron', sans-serif; cursor: pointer; border: none; }
+    .btn-buy { background: var(--gold); color: #000; }
+    .btn-cancel { background: rgba(255,255,255,0.05); color: #fff; }
+
+    #savePopup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #121826; padding: 35px; border-radius: 30px; border: 1px solid var(--primary); z-index: 12000; text-align: center; display: none; box-shadow: 0 0 60px rgba(0,0,0,0.9); }
   </style>
 </head>
 <body>
-  <header id="mainHeader">
-    <div class="header-inner">
-      <div class="logo-container" tabindex="0" aria-label="Sharky Chat Logo">
-        <img src="https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/gc-logo.png?alt=media&token=ddfe6e46-7351-4a07-8140-ea702b1bd823" alt="Sharky Logo" />
-        <div class="logo-text">SHARKY CHAT</div>
-      </div>
-      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle menu">
-        ☰
-        <span class="notif-badge" id="menuNotif" style="display:none;">0</span>
-      </button>
-    </div>
-    <nav class="menu-dropdown" role="menu" aria-label="Main Navigation">
-      <button class="close-btn" aria-label="Close menu" title="Close menu" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </button>
-      <a href="profile.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="12" r="7"/><ellipse cx="16" cy="23.5" rx="12" ry="6.5"/></svg>
-        </span>
-        Profile
-      </a>
-      <a href="chatrooms.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="8" width="28" height="16" rx="5"/><rect x="12" y="6" width="8" height="4" rx="2"/><circle cx="7" cy="12" r="2"/><circle cx="25" cy="12" r="2"/></svg>
-        </span>
-        Chat Rooms
-      </a>
-      <a href="friends.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="12" r="5"/><circle cx="22" cy="12" r="5"/><ellipse cx="16" cy="23" rx="12" ry="6"/></svg>
-        </span>
-        Friends
-        <span id="friends-notif" class="notif-badge" style="display:none;">0</span>
-      </a>
-      <a href="add-friends.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="13" r="7"/><rect x="23" y="19" width="9" height="3" rx="1.5"/><rect x="26" y="16" width="3" height="9" rx="1.5"/></svg>
-        </span>
-        Add Friend
-      </a>
-      <a href="inbox.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="8" width="24" height="16" rx="4"/><polyline points="4,8 16,18 28,8" fill="none" stroke="#60a5fa" stroke-width="2"/></svg>
-        </span>
-        Messages
-        <span id="messages-notif" class="notif-badge" style="display:none;">0</span>
-      </a>
-      <a href="wallet.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="10" width="24" height="12" rx="3"/><ellipse cx="24" cy="16" rx="2" ry="2"/><rect x="6" y="13" width="20" height="4" rx="2"/><circle cx="17" cy="16" r="2" fill="#fff"/></svg>
-        </span>
-        Wallet
-      </a>
-      <a href="shop.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="13" width="20" height="9" rx="3"/><rect x="12" y="7" width="8" height="6" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><circle cx="10" cy="26" r="2"/><circle cx="22" cy="26" r="2"/></svg>
-        </span>
-        Shop
-      </a>
-      <a href="inventory.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="10" width="18" height="12" rx="3"/><rect x="11" y="6" width="10" height="4" rx="2"/><rect x="13" y="22" width="6" height="4" rx="2"/><path d="M7 22h18"/><circle cx="16" cy="18" r="2"/></svg>
-        </span>
-        Inventory
-      </a>
-      <a href="news.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="7" width="22" height="18" rx="4"/><rect x="9" y="11" width="14" height="2" rx="1"/><rect x="9" y="16" width="8" height="2" rx="1"/><circle cx="10" cy="21" r="2"/><rect x="14" y="20" width="7" height="2" rx="1"/></svg>
-        </span>
-        News
-      </a>
-      <a href="level.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 5v17" stroke="#6699ff" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="26" r="5" fill="#38bdf8" stroke="#bae6fd" stroke-width="1.5"/><rect x="11" y="13" width="10" height="4" rx="2" fill="#bae6fd" /><rect x="13" y="8" width="6" height="3" rx="1.5" fill="#60a5fa"/></svg>
-        </span>
-        Level
-      </a>
-      <a href="refer.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="13" fill="#5eead4" /><path d="M22.5,14h-8.7l3-3m-2.8,8a3,3,0,1,0-3,-3" stroke="#262626" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-        Refer A Friend
-      </a>
-      <a href="verify-email.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="8" width="22" height="16" rx="5"/><polyline points="5,8 16,18 27,8" fill="none" stroke="#2dd4bf" stroke-width="2"/><circle cx="16" cy="19" r="2.5"/></svg>
-        </span>
-        Email Verification
-      </a>
-      <a href="help.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="12" fill="none" stroke="#fbbf24" stroke-width="2"/><text x="16" y="20" text-anchor="middle" fill="#fbbf24" font-size="8" font-family="Orbitron">?</text></svg>
-        </span>
-        Help
-      </a>
-      <a href="social-media.html" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="12" r="3"/><circle cx="24" cy="12" r="3"/><circle cx="16" cy="22" r="3"/><line x1="8" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/><line x1="24" y1="15" x2="16" y2="19" stroke="#60a5fa" stroke-width="2"/></svg>
-        </span>
-        Social Media
-      </a>
-      <a href="#" id="themeSwitch" role="menuitem" tabindex="0">
-        <span class="icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="12"/><path d="M16 4v8"/><circle cx="16" cy="16" r="5" fill="#fff"/></svg>
-        </span>
-        Change Theme
-      </a>
-    </nav>
-  </header>
 
-  <div id="savedPopup"><span style="font-size:1.08em;vertical-align:middle;filter:drop-shadow(0 0 6px #0ea5e9);margin-right:8px;">👾</span>Profile Saved!</div>
-  <main>
-    <div class="profile-cover-big-block" id="profileCoverBlock">
-      <img class="profile-banner-img" id="profileBannerImg" alt="Banner" src="" style="display:none;">
-      <button class="cover-camera-btn" aria-label="Change Cover Photo" onclick="location.href='inventory.html'">
-        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="13" rx="3" fill="currentColor"/><circle cx="12" cy="13.5" r="3.8" fill="#bae6fd"/><rect x="7.6" y="4.4" width="8.8" height="4.1" rx="2" fill="currentColor"/></svg>
-      </button>
-    </div>
+  <script src="header.js"></script>
 
-    <div class="profile-pic-block">
-      <div class="profile-pic" id="profilePic"></div>
-      <div id="usernameBadgeWrapper" title="">
-        <span class="online-indicator" id="activeStatusIndicator" title="Offline"></span>
-        <span id="username"></span>
+  <div class="modal" id="upgradeModal">
+    <div class="modal-content">
+      <h2>UNLOCK PREMIUM</h2>
+      <p>This feature is exclusive to our Premium & Pro members. Ready to level up your profile?</p>
+      <div class="modal-btns">
+        <button class="m-btn btn-cancel" onclick="closeModal()">CANCEL</button>
+        <button class="m-btn btn-buy" onclick="location.href='membership.html'">UPGRADE</button>
       </div>
     </div>
-
-    <label>Role</label>
-    <select id="role" disabled>
-      <option value="member">Member</option>
-      <option value="moderator">Moderator</option>
-      <option value="admin">Admin</option>
-    </select>
-
-    <label>Age</label>
-    <input type="number" id="age" min="0" />
-
-    <label>Gender</label>
-    <select id="gender">
-      <option value="">Select</option>
-      <option>Male</option>
-      <option>Female</option>
-      <option>Other</option>
-    </select>
-
-    <label>Country</label>
-    <input type="text" id="country" disabled />
-
-    <label>State</label>
-    <select id="state"></select>
-
-    <label>City</label>
-    <input type="text" id="city" />
-
-    <label>Profession</label>
-    <select id="profession" class="new-field-select">
-      <option value="">Select</option>
-      <option value="Student">Student</option>
-      <option value="Employee">Employee</option>
-      <option value="Unemployed">Unemployed</option>
-      <option value="Housewife">Housewife</option>
-    </select>
-
-    <label>Hobbies (max 30 words)</label>
-    <textarea id="hobbies" rows="3" class="new-field-textarea" maxlength="250" placeholder="Write your hobbies..."></textarea>
-
-    <label>Height (cm)</label>
-    <input type="number" id="height" class="new-field-input" min="0" placeholder="e.g. 175" />
-
-    <label>Weight (kg/lbs)</label>
-    <input type="text" id="weight" class="new-field-input" placeholder="e.g. 70 kg or 154 lbs" />
-
-    <label>Bio</label>
-    <textarea id="bio" rows="3"></textarea>
-
-    <label>Username Color</label>
-    <div class="color-options" id="colorOptions"></div>
-
-    <button class="save-btn" onclick="saveProfile()">💾 Save Profile</button>
-    <button id="adminPanelBtn" class="admin-panel-btn" style="display:none;" onclick="location.href='admin-panel.html'">🛠️ Admin Panel</button>
-  </main>
-
-  <footer>
-    <button class="footer-btn" onclick="changePassword()">🔑 Change Password</button>
-    <button class="footer-btn" onclick="changeEmail()">📧 Change Email</button>
-    <button class="footer-btn del-btn" onclick="deleteAccount()">🗑️ Delete Account</button>
-    <button class="footer-btn out-btn" onclick="logout()">🚪 Logout</button>
-  </footer>
-
-  <div class="bottom-mini-footer" id="bottomMiniFooter">
-    <a href="privacy.html" target="_blank">Privacy Policy</a>
-    <a href="tou.html" target="_blank">Terms of Use</a>
-    <a href="contact-us.html" target="_blank">Contact Us</a>
   </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import {
-    getAuth,
-    onAuthStateChanged,
-    deleteUser,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    getDoc,
-    setDoc,
-    collection,
-    query,
-    where,
-    onSnapshot,
-    getDocs,
-    serverTimestamp,
-    updateDoc
-  } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-  import {
-    getStorage
-  } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+  <div id="savePopup">
+    <div style="font-size: 3rem; color: #2ed573; margin-bottom: 12px;"><i class="fa-solid fa-circle-check"></i></div>
+    <div style="color: #fff; font-weight: 900; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;">PROFILE SYNCED</div>
+  </div>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
-    authDomain: "sharky-chat-007.firebaseapp.com",
-    projectId: "sharky-chat-007",
-    storageBucket: "sharky-chat-007.appspot.com",
-    messagingSenderId: "637104796242",
-    appId: "1:637104796242:web:74ac36b86af91be15ea58b",
-    measurementId: "G-HT9T3P9KST"
-  };
+  <div class="app-container">
+    <section class="hero-section">
+      <button class="change-btn" onclick="location.href='inventory.html'">Change Banner</button>
+      <div class="cover-wrapper"><img class="cover-image" id="profileBannerImg"></div>
+      <div class="profile-header">
+        <div class="avatar-circle" id="profilePic" onclick="location.href='gallery.html'"></div>
+        <div class="name-bubble">
+          <span id="username">Guest</span>
+          <div class="badges-container">
+            <img id="badge1" class="equipped-badge-img">
+            <img id="badge2" class="equipped-badge-img">
+            <img id="badge3" class="equipped-badge-img">
+          </div>
+        </div>
+      </div>
+    </section>
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-  const storage = getStorage(app);
+    <div class="membership-card">
+        <div class="status-box">
+            <h4>ACCOUNT TYPE</h4>
+            <div id="planLabel">FREE</div>
+        </div>
+        <button class="upgrade-btn" id="planActionBtn">UPGRADE</button>
+    </div>
 
-  const mainHeader = document.getElementById("mainHeader");
-  const menuBtn = document.getElementById("menuBtn");
-  const closeBtn = document.querySelector(".menu-dropdown .close-btn");
-  const themeSwitch = document.getElementById("themeSwitch");
+    <div class="card">
+        <div class="card-title"><i class="fa-solid fa-user-pen"></i> Personal Details</div>
+        <div class="grid-2">
+            <div><label>AGE</label><input type="number" id="age" placeholder="--"></div>
+            <div><label>GENDER</label><select id="gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+        </div>
+        <div class="grid-2">
+            <div><label>COUNTRY</label><input type="text" id="country" readonly></div>
+            <div><label>STATE</label><input type="text" id="state" placeholder="State"></div>
+        </div>
+        <label>CITY</label><input type="text" id="city" placeholder="City">
+        <div class="grid-2">
+            <div><label>HEIGHT (CM)</label><input type="number" id="height" placeholder="170"></div>
+            <div><label>WEIGHT (KG)</label><input type="number" id="weight" placeholder="60"></div>
+        </div>
+        <label>BIO SYNOPSIS</label><textarea id="bio" rows="2" placeholder="Tell us about yourself..."></textarea>
+    </div>
 
-  const menuNotif = document.getElementById("menuNotif");
-  const friendsNotif = document.getElementById("friends-notif");
-  const messagesNotif = document.getElementById("messages-notif");
+    <div class="card">
+        <div class="card-title" style="color:var(--gold);"><i class="fa-solid fa-crown"></i> VIP Name Signatures</div>
+        <div class="color-grid" id="vipSignatureGrid"></div>
+    </div>
 
-  const profilePic = document.getElementById("profilePic");
-  const roleSelect = document.getElementById("role");
-  const adminPanelBtn = document.getElementById("adminPanelBtn");
-  const profileBannerImg = document.getElementById("profileBannerImg");
-  const usernameBadgeWrapper = document.getElementById("usernameBadgeWrapper");
-  const usernameSpan = document.getElementById("username");
-  const professionSelect = document.getElementById("profession");
-  const hobbiesTextarea = document.getElementById("hobbies");
-  const heightInput = document.getElementById("height");
-  const weightInput = document.getElementById("weight");
-  const activeStatusIndicator = document.getElementById('activeStatusIndicator');
+    <div class="card">
+        <div class="card-title"><i class="fa-solid fa-palette"></i> Standard Colors</div>
+        <div class="color-grid" id="basicSignatureGrid"></div>
+    </div>
 
+    <div class="card">
+        <div class="card-title" style="color:var(--gold);"><i class="fa-solid fa-message"></i> Premium Chat Tint</div>
+        <div class="color-grid" id="vipMessageGrid"></div>
+    </div>
 
-  let uid = "", selectedColor = "#60a5fa", username = "", userCountry = "";
+    <div class="card">
+        <div class="card-title"><i class="fa-solid fa-shield-halved"></i> Security & Session</div>
+        <button class="sec-btn" onclick="location.href='change-email.html'"><i class="fa-solid fa-envelope"></i> Change Email</button>
+        <button class="sec-btn" onclick="location.href='change-password.html'"><i class="fa-solid fa-lock"></i> Change Password</button>
+        <button class="sec-btn btn-danger" onclick="deleteAccount()"><i class="fa-solid fa-trash-can"></i> Delete Account</button>
+        <button class="sec-btn" style="background:transparent; border:none; justify-content:center; opacity:0.5;" onclick="logout()"><i class="fa-solid fa-door-open"></i> Logout Session</button>
+    </div>
 
-  let theme = localStorage.getItem("theme") || "dark";
-  if (theme === "light") document.body.classList.add("light-theme");
+    <div class="bottom-bar"><button class="save-btn" onclick="saveProfile()">SAVE CHANGES</button></div>
+  </div>
 
-  if (themeSwitch) {
-    themeSwitch.addEventListener("click", () => {
-      document.body.classList.toggle("light-theme");
-      theme = document.body.classList.contains("light-theme") ? "light" : "dark";
-      localStorage.setItem("theme", theme);
-      mainHeader.classList.remove("expanded");
-    });
-  }
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-  function bumpBadge(el, number) {
-    if (!el) return;
-    el.style.animation = "";
-    setTimeout(() => {
-      el.style.animation = "notifpop .34s";
-    }, 25);
-  }
-  function bumpBadgeDropdown(el, number) {
-    if (!el) return;
-    el.style.animation = "";
-    setTimeout(() => {
-      el.style.animation = "notifpop .33s";
-    }, 30);
-  }
-
-  const statesList = {
-    "India": ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"],
-    "USA": ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
-    "UK": ["England","Northern Ireland","Scotland","Wales"]
-  };
-
-  const colors = ['#f87171','#fbbf24','#34d399','#60a5fa','#a78bfa','#f472b6','#fb923c','#4ade80','#c084fc','#38d214','#facc15','#94a3b8'];
-
-  const itemsMeta = {
-    banner: {
-      "banner_stars_profile": { id: "banner_stars_profile", name: "Stars Profile Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94c0fcfa-2a7a-46f1-ad8d-9ae08a932228.png" },
-      "banner_cute_rabbit": { id: "banner_cute_rabbit", name: "Cute Rabbit Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c4c60231-2b74-427d-8037-98f1b33227f1.png" },
-      "banner_peaceful_house_3d": { id: "banner_peaceful_house_3d", name: "3D Peaceful House Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/3baf3830-1a64-425c-bd6f-905bacbc84ad.png" },
-      "banner_4d_illusion": { id: "banner_4d_illusion", name: "4D Illusion Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/0704da65-dc4f-4ece-adbc-cd598182010c.png" },
-      "banner_3d_luxury": { id: "banner_3d_luxury", name: "3D Luxury Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/5d228e0c-1e37-4101-90e4-28313586a6af.png" },
-      "banner_3d_moon": { id: "banner_3d_moon", name: "3D Moon Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/d185a9a8-660f-4396-9925-b3760299e111.png" },
-      "banner_3d_gaming": { id: "banner_3d_gaming", name: "3D Gaming Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/86b48c74-56b9-4e3d-b82c-4be753dd9234.png" },
-      "banner_cartoon_one_eyed_devil": { id: "banner_cartoon_one_eyed_devil", name: "Cartoon One Eyed Devil Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c33cf83a-151b-4f56-ad81-5b2f2c4b9164.png" },
-      "banner_bmw_headlight_evil": { id: "banner_bmw_headlight_evil", name: "BMW Headlight Evil Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/e3a07e8f-23af-42d5-9a5d-03f4f768ec76.png" },
-      "banner_cartoon_turtle": { id: "banner_cartoon_turtle", name: "Cartoon Turtle Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/73c882c5-e531-4b01-a356-75fdc5e4f822.png" },
-      "banner_3d_rain": { id: "banner_3d_rain", name: "3D Rain Banner", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/09250fbd-e0a9-4861-9251-8033325be157.png" }
-    },
-    badge: {
-      "badge_star_light": { id: 'badge_star_light', name: 'Star Light Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/cb7afe60-1c8e-4af6-8780-01856f63b51d.png' },
-      "badge_moon_dark": { id: 'badge_moon_dark', name: 'Moon Dark Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/60a43f65-1ab7-4923-8788-758778130a22.png' },
-      "badge_rising_star": { id: 'badge_rising_star', name: 'Rising Star Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/43fb251c-b5e8-4541-a786-d91e060eb7f0.png' },
-      "badge_luxury": { id: 'badge_luxury', name: 'Luxury Badge', image: 'https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/23b9ac5c-faaf-4d14-ad52-65aab320e878.png' },
-      "badge_legendary": { id: "badge_legendary", name: "Legendary Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/85b7077f-5e80-42e1-890f-ec78df6afd0e.png" },
-      "badge_warrior": { id: "badge_warrior", name: "Warrior Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/8315ccb8-4f68-4dc9-b1c9-225b62ed2a87.png" },
-      "badge_wolf": { id: "badge_wolf", name: "Wolf Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94674004-81f1-4aa5-afe2-15c097b29a76.png" },
-      "badge_lion": { id: "badge_lion", name: "Lion Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/f026bd24-7f5b-44d8-9312-a190d6d30933.png" },
-      "badge_king": { id: "badge_king", name: "King Badge", image: "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/a07d8670-6f91-43b1-884e-79a347c3fda0.png" }
-    }
-  };
-
-  function getIPCountry(callback) {
-    fetch("https://ipapi.co/json/")
-      .then(res => res.json())
-      .then(data => {
-        callback && callback(data.country_name || "India", data.country_code || "IN");
-      }).catch(() => callback("India", "IN"));
-  }
-
-  function renderStates(country) {
-    const sel = document.getElementById("state");
-    sel.innerHTML = "";
-    let list = statesList[country] || [];
-    if (country === "UK") list = ["England", "Northern Ireland", "Scotland", "Wales"];
-    list.forEach(state => {
-      const opt = document.createElement("option");
-      opt.value = state;
-      opt.textContent = state;
-      sel.appendChild(opt);
-    });
-    sel.disabled = list.length === 0;
-    sel.style.background = list.length ? "#3a3a3a" : "#353535";
-  }
-
-  function renderColorOptions() {
-    const div = document.getElementById("colorOptions");
-    div.innerHTML = "";
-    colors.forEach(c => {
-      const box = document.createElement("div");
-      box.className = "color-box";
-      box.style.backgroundColor = c;
-      box.onclick = () => {
-        selectedColor = c;
-        document.querySelectorAll(".color-box").forEach(b => b.classList.remove("selected"));
-        box.classList.add("selected");
-        if (usernameSpan) {
-          usernameSpan.style.color = selectedColor;
-          usernameSpan.style.textShadow = `0 0 6px ${selectedColor}93`;
-        }
-      };
-      if (c === selectedColor) box.classList.add("selected");
-      div.appendChild(box);
-    });
-  }
-
-  function showPopup() {
-    const popup = document.getElementById("savedPopup");
-    popup.style.display = "block";
-    popup.style.opacity = "0.85";
-    popup.style.transform = "translateX(-50%) scale(.93)";
-    popup.style.animation = "popupIn 0.44s cubic-bezier(.42,1.24,.36,1) both";
-    setTimeout(() => {
-      popup.style.animation = "popupOut 0.41s cubic-bezier(.42,1.04,.46,1.12) both";
-      setTimeout(() => {
-        popup.style.display = "none";
-        popup.style.animation = "";
-      }, 410);
-    }, 2150);
-  }
-
-  function renderEquippedFieldsFromInventory(equipped) {
-    if (equipped.banner && itemsMeta.banner[equipped.banner]) {
-      profileBannerImg.src = itemsMeta.banner[equipped.banner].image;
-      profileBannerImg.style.display = 'block';
-    } else {
-      profileBannerImg.src = '';
-      profileBannerImg.style.display = 'none';
-    }
-    let badgeImg = usernameBadgeWrapper.querySelector('img.profile-badge-img');
-    if (equipped.badge && itemsMeta.badge[equipped.badge]) {
-      if (!badgeImg) {
-        badgeImg = document.createElement('img');
-        badgeImg.className = 'profile-badge-img';
-        usernameBadgeWrapper.appendChild(badgeImg);
-      }
-      badgeImg.src = itemsMeta.badge[equipped.badge].image;
-      badgeImg.alt = "badge";
-      usernameBadgeWrapper.title = itemsMeta.badge[equipped.badge].name || "";
-      badgeImg.style.display = "inline-block";
-      badgeImg.style.marginLeft = "3px";
-    } else {
-      if (badgeImg) {
-        badgeImg.style.display = "none";
-        usernameBadgeWrapper.title = "";
-        badgeImg.style.marginLeft = "0";
-      }
-    }
-  }
-
-  function fillCountryAndStates(country, code) {
-    userCountry = country;
-    const countryElem = document.getElementById("country");
-    if (countryElem) {
-      countryElem.value = userCountry;
-      countryElem.disabled = true;
-    }
-    renderStates(userCountry);
-  }
-
-  const userRef = (uid) => doc(db, "users", uid);
-
-  async function updatePresence(uid, active) {
-    if (!uid) return;
-    const updateData = {
-        active: active,
-        lastActive: serverTimestamp() 
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b"
     };
-    try {
-        await updateDoc(userRef(uid), updateData);
-    } catch (error) {
-        if (error.code === 'not-found') {
-            await setDoc(userRef(uid), updateData, { merge: true });
-        }
-    }
-    activeStatusIndicator.classList.toggle('active', active);
-    activeStatusIndicator.title = active ? 'Online' : 'Offline';
-  }
 
-  function setupPresenceListeners(uid) {
-      if (!uid) return;
-      
-      const setInactive = () => updatePresence(uid, false);
-      const setActive = () => updatePresence(uid, true);
-      
-      setActive(); 
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-      window.addEventListener('beforeunload', setInactive);
-      window.addEventListener('blur', setInactive);
-      window.addEventListener('focus', setActive);
-      
-      setInterval(setActive, 60000); 
-  }
-  // --- /ACTIVE USER PRESENCE LOGIC ---
-
-  function setupMenuNotifications(uid, username) {
-    onSnapshot(
-      query(collection(db, "friendRequests"), where("to", "==", uid), where("status", "==", "pending")),
-      (snap) => {
-        const frCount = snap.size;
-        menuNotif.dataset.fr = frCount;
-        friendsNotif.textContent = frCount > 99 ? "99+" : frCount;
-        friendsNotif.style.display = frCount > 0 ? "inline-flex" : "none";
-        bumpBadgeDropdown(friendsNotif, frCount);
-        updateMenuBadge();
+    const itemsMeta = {
+      banner: {
+        "banner_stars_profile": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94c0fcfa-2a7a-46f1-ad8d-9ae08a932228.png", 
+        "banner_cute_rabbit": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c4c60231-2b74-427d-8037-98f1b33227f1.png",
+        "banner_peaceful_house_3d": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/3baf3830-1a64-425c-bd6f-905bacbc84ad.png",
+        "banner_4d_illusion": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/0704da65-dc4f-4ece-adbc-cd598182010c.png",
+        "banner_3d_luxury": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/5d228e0c-1e37-4101-90e4-28313586a6af.png",
+        "banner_3d_moon": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/d185a9a8-660f-4396-9925-b3760299e111.png",
+        "banner_3d_gaming": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/86b48c74-56b9-4e3d-b82c-4be753dd9234.png",
+        "banner_cartoon_one_eyed_devil": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/c33cf83a-151b-4f56-ad81-5b2f2c4b9164.png",
+        "banner_bmw_headlight_evil": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/e3a07e8f-23af-42d5-9a5d-03f4f768ec76.png",
+        "banner_cartoon_turtle": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/73c882c5-e531-4b01-a356-75fdc5e4f822.png",
+        "banner_3d_rain": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/09250fbd-e0a9-4861-9251-8033325be157.png"
+      },
+      badge: {
+        "badge_star_light": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/cb7afe60-1c8e-4af6-8780-01856f63b51d.png",
+        "badge_moon_dark": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/60a43f65-1ab7-4923-8788-758778130a22.png",
+        "badge_rising_star": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/43fb251c-b5e8-4541-a786-d91e060eb7f0.png",
+        "badge_luxury": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/23b9ac5c-faaf-4d14-ad52-65aab320e878.png",
+        "badge_legendary": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/85b7077f-5e80-42e1-890f-ec78df6afd0e.png",
+        "badge_warrior": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/8315ccb8-4f68-4dc9-b1c9-225b62ed2a87.png",
+        "badge_wolf": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/94674004-81f1-4aa5-afe2-15c097b29a76.png",
+        "badge_lion": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/f026bd24-7f5b-44d8-9312-a190d6d30933.png",
+        "badge_king": "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/a07d8670-6f91-43b1-884e-79a347c3fda0.png"
       }
-    );
-  }
+    };
 
-  async function setupMessageNotifications(uid, username) {
-    const friendsSnap = await getDocs(collection(db, "friends"));
-    let myFriends = [];
-    friendsSnap.forEach((doc) => {
-      if (doc.id === uid && doc.data()) myFriends = Object.keys(doc.data());
+    const basicColors = ['#f87171','#fbbf24','#34d399','#60a5fa','#a78bfa','#f472b6','#fb923c','#4ade80','#c084fc','#38d214','#facc15','#94a3b8'];
+    const vipGradients = [
+        'linear-gradient(45deg, #FFD700, #B8860B)', 
+        'linear-gradient(45deg, #00C9FF, #92FE9D)', 
+        'linear-gradient(45deg, #FF0080, #7928CA)', 
+        'linear-gradient(45deg, #12c2e9, #c471ed, #f64f59)', 
+        'linear-gradient(45deg, #fc00ff, #00dbde)', 
+        'linear-gradient(45deg, #2af598, #009efd)', 
+        'linear-gradient(135deg, #667eea, #764ba2)', 
+        'linear-gradient(135deg, #f093fb, #f5576c)', 
+        'linear-gradient(45deg, #3f0d12, #a71d31)', 
+        'linear-gradient(45deg, #13315c, #0d1b2a)', 
+        'linear-gradient(45deg, #8E2DE2, #4A00E0)', 
+        'linear-gradient(45deg, #f85032, #e73827)'
+    ];
+
+    let currentUserUid, currentPlan = "free", selSig = "#ffffff", selMsg = "#0084ff";
+
+    auth.onAuthStateChanged(async user => {
+        if(!user) { location.href="login.html"; return; }
+        currentUserUid = user.uid;
+        const uSnap = await db.collection("users").doc(currentUserUid).get();
+        if(!uSnap.exists) return;
+        const d = uSnap.data();
+        
+        currentPlan = (d.membershipPlan || "free").toLowerCase();
+        applyTheme(currentPlan);
+        
+        const actionBtn = document.getElementById("planActionBtn");
+        document.getElementById("planLabel").textContent = currentPlan.toUpperCase();
+        actionBtn.textContent = currentPlan === "free" ? "UPGRADE" : "MANAGE PLAN";
+        actionBtn.onclick = () => location.href="membership.html";
+        
+        document.getElementById("username").textContent = d.username;
+        document.getElementById("age").value = d.age || "";
+        document.getElementById("city").value = d.city || "";
+        document.getElementById("state").value = d.state || "";
+        document.getElementById("height").value = d.height || "";
+        document.getElementById("weight").value = d.weight || "";
+        document.getElementById("bio").value = d.bio || "";
+        document.getElementById("gender").value = d.gender || "Male";
+        
+        selSig = d.usernameColor || "#ffffff";
+        selMsg = d.messageColor || "#0084ff";
+
+        if(d.profilePic) document.getElementById("profilePic").style.backgroundImage = `url('${d.profilePic}')`;
+        fetch('https://ipapi.co/json/').then(r=>r.json()).then(loc => {
+            document.getElementById("country").value = loc.country_name || "Unknown";
+        });
+
+        const eqSnap = await db.collection("equipped").doc(currentUserUid).get();
+        if (eqSnap.exists) {
+            const eq = eqSnap.data();
+            if (eq.banner) { 
+                const bi = document.getElementById("profileBannerImg"); 
+                bi.src = itemsMeta.banner[eq.banner]; 
+                bi.onload = () => bi.classList.add('loaded'); 
+            }
+            const maxBadges = currentPlan === "premium" ? 3 : (currentPlan === "pro" ? 2 : 1);
+            for(let i=1; i<=3; i++) {
+                let bid = eq[`badge${i}`];
+                if(bid && i <= maxBadges) { 
+                    const img = document.getElementById(`badge${i}`); 
+                    img.src = itemsMeta.badge[bid]; 
+                    img.style.display="block"; 
+                }
+            }
+        }
+        renderGrids();
+        applySignatureStyle();
     });
-    if (myFriends.length === 0) {
-      messagesNotif.style.display = "none";
-      updateMenuBadge();
-      return;
+
+    function applyTheme(plan) {
+        document.body.className = `theme-${plan}`;
     }
-    let unseenTracker = {};
-    let usernamesData = {};
-    let batchSize = 10;
-    for (let i = 0; i < myFriends.length; i += batchSize) {
-      let batch = myFriends.slice(i, i + batchSize);
-      const usersSnap = await getDocs(query(collection(db, "users"), where("__name__", "in", batch)));
-      usersSnap.forEach((doc) => {
-        usernamesData[doc.id] = doc.data().username;
-      });
+
+    function renderGrids() {
+        const vGrid = document.getElementById("vipSignatureGrid"); vGrid.innerHTML = "";
+        vipGradients.forEach(g => {
+            const box = document.createElement("div"); 
+            box.className = `color-box ${selSig === g ? 'selected' : ''}`; 
+            box.style.background = g;
+            if(currentPlan === "free" || currentPlan === "basic") { 
+                box.innerHTML = '<div class="lock-overlay"><i class="fa-solid fa-lock"></i></div>'; 
+                box.onclick = () => openModal(); 
+            } else { 
+                box.onclick = () => { selSig = g; applySignatureStyle(); renderGrids(); }; 
+            }
+            vGrid.appendChild(box);
+        });
+
+        const bGrid = document.getElementById("basicSignatureGrid"); bGrid.innerHTML = "";
+        basicColors.forEach(c => {
+            const box = document.createElement("div"); 
+            box.className = `color-box ${selSig === c ? 'selected' : ''}`; 
+            box.style.backgroundColor = c;
+            box.onclick = () => { selSig = c; applySignatureStyle(); renderGrids(); };
+            bGrid.appendChild(box);
+        });
+
+        const mGrid = document.getElementById("vipMessageGrid"); mGrid.innerHTML = "";
+        const allColors = [...vipGradients, ...basicColors];
+        allColors.forEach(c => {
+            const box = document.createElement("div"); 
+            box.className = `color-box ${selMsg === c ? 'selected' : ''}`;
+            box.style.background = c; 
+            
+            let isLocked = false;
+            if(c.includes('gradient') && currentPlan !== 'premium') isLocked = true;
+            if(!c.includes('gradient') && currentPlan === 'free') isLocked = true;
+
+            if(isLocked) {
+                box.innerHTML = '<div class="lock-overlay"><i class="fa-solid fa-lock"></i></div>';
+                box.onclick = () => openModal();
+            } else {
+                box.onclick = () => { selMsg = c; renderGrids(); };
+            }
+            mGrid.appendChild(box);
+        });
     }
-    for (const fid of myFriends) {
-      const friendUsername = usernamesData[fid];
-      if (!friendUsername || friendUsername === username) continue;
-      const chatId = [username, friendUsername].sort().join("_");
-      const msgRef = collection(db, "personalMessages", chatId, "messages");
-      onSnapshot(
-        query(msgRef, where("recipient", "==", username), where("seen", "==", false)),
-        (snap) => {
-          let unseen = 0;
-          snap.forEach((doc) => {
-            if (doc.data().sender !== username) unseen++;
-          });
-          unseenTracker[chatId] = unseen;
-          updateMessagesBadge();
+
+    function applySignatureStyle() {
+        const u = document.getElementById("username");
+        if(selSig.includes("gradient")) { 
+            u.style.background = selSig; 
+            u.style.webkitBackgroundClip = "text"; 
+            u.style.webkitTextFillColor = "transparent"; 
+        } else { 
+            u.style.background = "none"; 
+            u.style.webkitTextFillColor = "initial"; 
+            u.style.color = selSig; 
         }
-      );
-    }
-    function updateMessagesBadge() {
-      let totalUnseen = Object.values(unseenTracker).reduce((a, b) => a + b, 0);
-      messagesNotif.dataset.count = totalUnseen;
-      messagesNotif.textContent = totalUnseen > 99 ? "99+" : totalUnseen;
-      messagesNotif.style.display = totalUnseen > 0 ? "inline-flex" : "none";
-      bumpBadge(messagesNotif, totalUnseen);
-      updateMenuBadge();
-    }
-  }
-
-  function updateMenuBadge() {
-    const frCount = parseInt(menuNotif.dataset.fr) || 0;
-    const msgCount = parseInt(messagesNotif.dataset.count) || 0;
-    const total = frCount + msgCount;
-    if (total > 0) {
-      menuNotif.textContent = total > 99 ? "99+" : total;
-      menuNotif.style.display = "inline-flex";
-      bumpBadge(menuNotif, total);
-    } else {
-      menuNotif.style.display = "none";
-    }
-  }
-
-  onAuthStateChanged(auth, async user => {
-    if (!user) {
-      if(uid) updatePresence(uid, false); 
-      alert("Please login first.");
-      window.location.href = "login.html";
-      return;
-    }
-    uid = user.uid;
-
-    setupPresenceListeners(uid);
-
-    const docRef = doc(db, "users", uid);
-    const snap = await getDoc(docRef);
-    let userData = {};
-    if (snap.exists()) {
-      userData = snap.data();
-      username = userData.username || "";
-      usernameSpan.textContent = username;
-      selectedColor = userData.usernameColor || "#60a5fa";
-      if (usernameSpan) {
-        usernameSpan.style.color = selectedColor;
-        usernameSpan.style.textShadow = `0 0 6px ${selectedColor}93`;
-      }
-      document.getElementById("age").value = userData.age || "";
-      document.getElementById("gender").value = userData.gender || "";
-      document.getElementById("city").value = userData.city || "";
-      if (professionSelect) professionSelect.value = userData.profession || "";
-      if (hobbiesTextarea) hobbiesTextarea.value = userData.hobbies || "";
-      if (heightInput) heightInput.value = userData.height || "";
-      if (weightInput) weightInput.value = userData.weight || "";
-      document.getElementById("bio").value = userData.bio || "";
-      if (roleSelect) {
-        roleSelect.value = userData.role || "member";
-        roleSelect.disabled = true;
-      }
-      adminPanelBtn.style.display = (userData.role === "admin") ? "block" : "none";
-
-      const avatar = localStorage.getItem("selectedAvatar");
-      if (avatar) {
-        profilePic.style.backgroundImage = `url('${avatar}')`;
-        await setDoc(docRef, { profilePic: avatar }, { merge: true });
-        localStorage.removeItem("selectedAvatar");
-      } else {
-        profilePic.style.backgroundImage = `url('${userData.profilePic || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}')`;
-      }
-
-      getIPCountry((country, code) => {
-        fillCountryAndStates(country, code);
-        setTimeout(() => {
-          const stateSelect = document.getElementById("state");
-          if (userData.state && stateSelect.options.length > 0) {
-            const found = Array.from(stateSelect.options).find(opt => opt.value === userData.state);
-            if (found) found.selected = true;
-          }
-        }, 120);
-      });
-    }
-    renderColorOptions();
-    const eqRef = doc(db, "equipped", uid);
-    const snapEq = await getDoc(eqRef);
-    if (!snapEq.exists()) {
-      renderEquippedFieldsFromInventory({});
-    } else {
-      renderEquippedFieldsFromInventory(snapEq.data());
     }
 
-    setupMenuNotifications(uid, username);
-    setupMessageNotifications(uid, username);
-  });
+    window.openModal = () => document.getElementById("upgradeModal").style.display = "flex";
+    window.closeModal = () => document.getElementById("upgradeModal").style.display = "none";
 
-  window.saveProfile = async () => {
-    const stateVal = document.getElementById("state").value;
-    await setDoc(doc(db, "users", uid), {
-      age: document.getElementById("age").value,
-      gender: document.getElementById("gender").value,
-      country: document.getElementById("country").value,
-      state: stateVal,
-      city: document.getElementById("city").value,
-      profession: professionSelect.value,
-      hobbies: hobbiesTextarea.value,
-      height: heightInput.value,
-      weight: weightInput.value,
-      bio: document.getElementById("bio").value,
-      usernameColor: selectedColor
-    }, { merge: true });
-    if (usernameSpan) {
-      usernameSpan.style.color = selectedColor;
-      usernameSpan.style.textShadow = `0 0 6px ${selectedColor}93`;
-    }
-    showPopup();
-  };
+    window.saveProfile = async () => {
+        const pop = document.getElementById("savePopup");
+        pop.style.display = "block";
+        try {
+            await db.collection("users").doc(currentUserUid).update({
+                age: document.getElementById("age").value,
+                city: document.getElementById("city").value,
+                state: document.getElementById("state").value,
+                height: document.getElementById("height").value,
+                weight: document.getElementById("weight").value,
+                gender: document.getElementById("gender").value,
+                bio: document.getElementById("bio").value,
+                usernameColor: selSig, 
+                messageColor: selMsg
+            });
+            setTimeout(() => { pop.style.display = "none"; }, 1500);
+        } catch (err) {
+            pop.style.display = "none";
+            alert("Error: " + err.message);
+        }
+    };
 
-  window.changePassword = () => { location.href = 'change-password.html'; };
-  window.changeEmail = () => { location.href = 'change-email.html'; };
-
-  window.logout = async () => { 
-    if(uid) updatePresence(uid, false); 
-    await signOut(auth); 
-    location.href = "login.html"; 
-  };
-  window.deleteAccount = async () => {
-    if (!confirm("Are you sure? Your account will be permanently deleted.")) return;
-    try {
-      if(uid) updatePresence(uid, false); 
-      await deleteUser(auth.currentUser);
-      location.href = "login.html";
-    } catch(e) { alert(e.message || e); }
-  };
-
-  profilePic.onclick = () => { location.href = "gallery.html"; };
-
-  menuBtn.addEventListener("click", (e) => {
-    mainHeader.classList.toggle("expanded");
-    e.stopPropagation();
-  });
-
-  closeBtn.addEventListener("click", (e) => {
-    mainHeader.classList.remove("expanded");
-    menuBtn.focus();
-    e.stopPropagation();
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!mainHeader.contains(e.target)) mainHeader.classList.remove("expanded");
-  });
-
-  document.querySelector(".menu-dropdown").addEventListener("click", (e) => {
-    if (e.target.tagName === "A") mainHeader.classList.remove("expanded");
-  });
-
-</script>
+    window.logout = () => auth.signOut().then(() => location.href="login.html");
+    window.deleteAccount = () => { if(confirm("Contact Admin for deletion.")) { } };
+  </script>
 </body>
 </html>
