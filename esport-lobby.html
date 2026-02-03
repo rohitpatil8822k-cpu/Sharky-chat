@@ -215,6 +215,23 @@
     } catch (e) { alert("Error creating arena"); }
   };
 
+  window.handlePublicEntry = () => {
+    const box = document.getElementById('actionContent');
+    box.innerHTML = `
+      <div class="close-x" onclick="closeM('actionModal')"><i data-lucide="x"></i></div>
+      <h3 style="margin-bottom:5px">Public Room</h3>
+      <p style="text-align:center; color:var(--neon); font-size:0.65rem; font-weight:800; margin-bottom:20px; font-family:'Orbitron'">GLOBAL ARENA</p>
+      <div class="scroll-area">
+        <div class="info-line"><label>Entry Fee</label><span>FREE</span></div>
+        <div class="info-line"><label>Status</label><span>OPEN FOR ALL</span></div>
+        <p style="font-size:0.85rem; color:#94a3b8; margin-top:15px; text-align:center">Universal chat lobby for all active players. Meet new teams and chat with the community.</p>
+      </div>
+      <button class="btn-main" style="margin-top:25px" onclick="location.href='public-room.html'">ENTER GLOBAL CHAT</button>
+    `;
+    document.getElementById('actionModal').style.display = 'flex';
+    lucide.createIcons();
+  };
+
   window.handleRoomClick = (room) => {
     const box = document.getElementById('actionContent');
     const isOwner = room.createdBy === auth.currentUser.uid;
@@ -302,35 +319,41 @@
     onSnapshot(collection(db, "lobbies"), snap => {
       const list = document.getElementById('roomList'); 
       list.innerHTML = "";
+      
+      const publicCard = document.createElement('div');
+      publicCard.className = 'card';
+      publicCard.onclick = () => handlePublicEntry();
+      publicCard.innerHTML = `
+        <div class="c-left">
+          <div class="c-icon"><i data-lucide="message-square" size="22"></i></div>
+          <div class="c-info">
+            <span class="name">Public Room</span>
+            <div class="meta">
+              <div class="tag" style="background:rgba(255,255,255,0.1);color:#fff">GLOBAL</div>
+              <span class="count-pill">ALL USERS</span>
+              <span style="color:#22c55e; font-weight:700">FREE</span>
+            </div>
+          </div>
+        </div>
+        <i data-lucide="chevron-right" size="18" style="opacity:0.3"></i>`;
+      list.appendChild(publicCard);
+
       const rooms = []; 
       snap.forEach(d => rooms.push({id: d.id, ...d.data()}));
       
-      rooms.sort((a,b) => (a.name === "Public Room" ? -1 : 1));
-
-      if(rooms.length === 0) {
-          list.innerHTML = `<div style="text-align:center; padding:40px; color:#475569; font-size:0.8rem">No active arenas found.</div>`;
-          return;
-      }
-
       rooms.forEach(r => {
-        if(r.status === "offline") return;
+        if(r.status === "offline" || r.name === "Public Room") return;
         const isFull = r.joined >= r.limit;
-        const isPublic = r.name === "Public Room";
-
         const div = document.createElement('div'); 
         div.className = 'card';
         div.onclick = () => handleRoomClick(r);
         div.innerHTML = `
           <div class="c-left">
-            <div class="c-icon">
-                <i data-lucide="${isPublic || r.type === 'chat' ? 'message-square' : 'swords'}" size="22"></i>
-            </div>
+            <div class="c-icon"><i data-lucide="${r.type === 'chat' ? 'message-square' : 'swords'}" size="22"></i></div>
             <div class="c-info">
               <span class="name">${r.name}</span>
               <div class="meta">
-                <div class="tag" style="${isPublic ? 'background:rgba(255,255,255,0.1);color:#fff' : ''}">
-                    ${(isPublic ? 'GLOBAL' : r.type).toUpperCase()}
-                </div>
+                <div class="tag">${r.type.toUpperCase()}</div>
                 <span class="count-pill">${r.joined || 0}/${r.limit} Users</span>
                 <span style="color:${r.fee > 0 ? 'var(--neon)' : '#22c55e'}; font-weight:700">
                     ${r.fee > 0 ? '₹'+r.fee : 'FREE'}
