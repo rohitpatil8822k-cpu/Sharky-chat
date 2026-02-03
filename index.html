@@ -4,19 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
   
-  <title>Sharky Chat | Free Anonymous Chat & Dating Platform</title>
-  <meta name="title" content="Sharky Chat | Free Anonymous Chat & Dating Platform">
-  <meta name="description" content="Sharky Chat connects you with strangers worldwide instantly. Enjoy secure, private, and free text chat rooms. Join Now!" />
-  <meta name="keywords" content="Sharky Chat, Sharkychat, talk to strangers, free chat rooms, random chat, anonymous dating, private messaging, sharky chatroom, sharky chat app, free dating app, find new friends, chat app online" />
+  <title>Sharky Chat | Free Anonymous Chat & Random Chat Rooms</title>
+  <meta name="title" content="Sharky Chat | Free Anonymous Chat & Random Chat Rooms">
+  <meta name="description" content="Join Sharky Chat (Sharkychat) - The best anonymous chatroom to talk to strangers. Free, secure, and private random chat with no registration required. Start your sharkychat experience now!" />
+  
+  <meta name="keywords" content="Sharky Chat, Sharkychat, Sharky chatroom, talk to strangers, free chat rooms, random chat, anonymous dating, private messaging, sharky chat app, free dating app, find new friends, chat app online, stranger chat, no login chat" />
   
   <link rel="canonical" href="https://sharkychat.com/" />
   <meta name="robots" content="index, follow" />
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sharkychat.com/">
-  <meta property="og:title" content="Sharky Chat - Connect with Strangers Instantly">
-  <meta property="og:description" content="Experience the next generation of online chat. Fast, secure, and completely anonymous.">
+  <meta property="og:title" content="Sharky Chat - Talk to Strangers Instantly">
+  <meta property="og:description" content="Secure, private, and fast anonymous chat. Join the world's best random chatroom.">
   <meta property="og:image" content="https://sharkychat.com/logo.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Sharky Chat",
+    "url": "https://sharkychat.com/",
+    "applicationCategory": "SocialNetworkingApplication",
+    "operatingSystem": "All",
+    "description": "An anonymous chat platform to connect with strangers worldwide."
+  }
+  </script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -31,28 +44,19 @@
       --text-dim: #94a3b8;
     }
 
-    * { 
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
-      -webkit-font-smoothing: antialiased;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
     body {
       font-family: 'Outfit', sans-serif;
-      background-color: var(--bg-dark);
+      background: radial-gradient(circle at 50% 50%, #111a2d 0%, #080c14 100%);
       color: var(--text);
-      height: 100vh;
+      min-height: 100vh; 
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
-      /* Smooth Gradient Background */
-      background: radial-gradient(circle at 50% 50%, #111a2d 0%, #080c14 100%);
     }
 
-    /* Floating Background Elements for Smoothness */
     .bg-glow {
       position: fixed;
       top: 50%;
@@ -84,10 +88,6 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    .logo-container {
-      margin-bottom: 24px;
-    }
-
     .logo-container i {
       font-size: 52px;
       color: var(--primary);
@@ -97,8 +97,7 @@
     h1 {
       font-size: 2.5rem;
       font-weight: 700;
-      letter-spacing: -1px;
-      margin-bottom: 12px;
+      margin: 20px 0 12px;
       background: linear-gradient(180deg, #fff 0%, #cbd5e1 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -109,7 +108,16 @@
       color: var(--text-dim);
       line-height: 1.6;
       margin-bottom: 35px;
-      font-weight: 400;
+    }
+    .seo-text {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
     }
 
     .cta-button {
@@ -127,36 +135,17 @@
       border: none;
       cursor: pointer;
       transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-      box-shadow: 0 10px 25px -5px rgba(0, 132, 255, 0.4);
-    }
-
-    .cta-button i {
-      margin-left: 10px;
-      transition: transform 0.3s ease;
     }
 
     .cta-button:hover {
-      background: #1e90ff;
       transform: translateY(-3px);
       box-shadow: 0 15px 30px -5px rgba(0, 132, 255, 0.5);
-    }
-
-    .cta-button:hover i {
-      transform: translateX(4px);
-    }
-
-    .cta-button:active {
-      transform: translateY(0);
     }
 
     footer {
       margin-top: 30px;
       font-size: 0.8rem;
       color: rgba(148, 163, 184, 0.5);
-      letter-spacing: 0.5px;
-    }
-    .card, .cta-button {
-      will-change: transform, opacity;
     }
   </style>
 </head>
@@ -164,41 +153,36 @@
 
   <div class="bg-glow"></div>
 
-  <main class="card" role="main">
+  <div class="seo-text">
+      <h2>Free Online Chatroom and Anonymous Dating</h2>
+      <p>Looking for Sharky Chat? Sharkychat is the premium destination for random chat, talking to strangers, and finding new friends online without any registration.</p>
+  </div>
+
+  <main class="card">
     <div class="logo-container">
       <i class="fa-solid fa-shield-cat"></i>
     </div>
 
     <h1>Sharky Chat</h1>
-    <p class="tagline">The most secure and private way to talk to strangers. No trails, no logs, just real conversations.</p>
+    <p class="tagline">Experience the ultimate <strong>Sharky Chatroom</strong>. Secure, private, and anonymous. No logs, just real conversations with strangers.</p>
 
-    <button class="cta-button" onclick="startApp()" aria-label="Start chatting now">
+    <button class="cta-button" onclick="startApp()">
       Start Chatting <i class="fa-solid fa-chevron-right"></i>
     </button>
 
-    <footer role="contentinfo">
-      End-to-End Encryption &bull; 18+ Safety Guidelines
+    <footer>
+      &copy; 2026 Sharky Chat &bull; Secure Chatrooms &bull; 18+
     </footer>
   </main>
 
   <script>
     function startApp() {
-      // Smooth Transition before redirect
       const card = document.querySelector('.card');
-      card.style.transition = "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
       card.style.opacity = "0";
-      card.style.transform = "scale(0.95) translateY(-10px)";
-      
+      card.style.transform = "scale(0.95)";
       setTimeout(() => {
         window.location.href = "profile.html";
       }, 400);
-    }
-    if (window.innerWidth > 768) {
-      document.addEventListener('mousemove', (e) => {
-        const glow = document.querySelector('.bg-glow');
-        glow.style.left = e.clientX + 'px';
-        glow.style.top = e.clientY + 'px';
-      });
     }
   </script>
 </body>
