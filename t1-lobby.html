@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Sharky Elite — Tournament Lobby</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
   
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -13,15 +13,22 @@
   <style>
     :root { --primary-neon: #f1ec67; --bg-dark: #0b0d11; --card-bg: rgba(25, 28, 35, 0.95); --glass-border: rgba(241, 236, 103, 0.2); --accent-red: #ff4757; }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-    body { margin: 0; padding: 0; background: var(--bg-dark); font-family: 'Inter', sans-serif; color: #e2e8f0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    
+    body { 
+        margin: 0; padding: 0; background: var(--bg-dark); font-family: 'Inter', sans-serif; 
+        color: #e2e8f0; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; 
+    }
 
-    .room-header { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: #16191f; border-bottom: 1px solid var(--glass-border); z-index: 1000; }
+    /* HEADER.JS SPACE (50px) */
+    #external-header { height: 50px; width: 100%; flex-shrink: 0; z-index: 2000; }
+
+    .room-header { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: #16191f; border-bottom: 1px solid var(--glass-border); z-index: 1000; flex-shrink: 0; }
     .back-btn { background: none; border: 1px solid var(--glass-border); color: white; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;}
     .room-info h2 { margin: 0; font-family: 'Orbitron'; font-size: 0.8rem; color: var(--primary-neon); letter-spacing: 1px; }
 
     .pinned-bar { background: rgba(241, 236, 103, 0.1); padding: 10px 15px; display: none; align-items: center; justify-content: space-between; cursor: pointer; font-size: 0.75rem; color: var(--primary-neon); border-bottom: 1px solid var(--glass-border); }
 
-    .messages-container { flex: 1; overflow-y: auto; padding: 15px; background: var(--bg-dark); display: flex; flex-direction: column; gap: 12px; }
+    .messages-container { flex: 1; overflow-y: auto; padding: 15px; background: var(--bg-dark); display: flex; flex-direction: column; gap: 12px; -webkit-overflow-scrolling: touch; }
     .message { display: flex; gap: 10px; max-width: 95%; animation: slideUp 0.15s ease-out; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     
@@ -32,18 +39,21 @@
     .msg-text { font-size: 0.88rem; color: #cfd8dc; line-height: 1.4; word-break: break-word; }
     .msg-dots { cursor: pointer; color: #546e7a; font-size: 1.2rem; padding: 5px 10px; margin: -5px -10px -5px 0; }
 
-    .input-wrapper { background: #0b0d11; border-top: 1px solid #1a1d23; }
+    .input-wrapper { background: #0b0d11; border-top: 1px solid #1a1d23; flex-shrink: 0; }
     .input-cd-bar { background: rgba(241, 236, 103, 0.05); padding: 6px 15px; display: flex; justify-content: center; align-items: center; gap: 8px; font-family: 'Orbitron'; font-size: 0.65rem; border-top: 1px solid var(--glass-border); }
     .input-main { padding: 12px; }
     .input-bar { background: #1a1d23; border-radius: 14px; padding: 2px 15px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--glass-border); }
     #messageInput { flex: 1; background: transparent; border: none; color: white; padding: 12px 0; font-size: 0.9rem; }
     #sendBtn { background: none; border: none; cursor: pointer; color: var(--primary-neon); display: flex; align-items: center; }
 
-    .action-menu { position: fixed; bottom: -100%; left: 0; width: 100%; background: #16191f; border-top: 2px solid var(--primary-neon); z-index: 10000; display: flex; flex-direction: column; border-radius: 20px 20px 0 0; transition: 0.3s ease; padding-bottom: 20px; }
+    /* SHARKY TOURNAMENTS BANNER (30px) */
+    .sharky-banner { height: 30px; width: 100%; background: #f1ec67; color: #000; font-family: 'Orbitron'; font-size: 10px; font-weight: 900; display: flex; align-items: center; justify-content: center; letter-spacing: 1.5px; text-transform: uppercase; }
+
+    .action-menu { position: fixed; bottom: -100%; left: 0; width: 100%; background: #16191f; border-top: 2px solid var(--primary-neon); z-index: 10000; display: flex; flex-direction: column; border-radius: 20px 20px 0 0; transition: 0.3s ease; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
     .action-menu.active { bottom: 0; }
     .action-item { padding: 18px; color: white; font-family: 'Orbitron'; font-size: 0.75rem; text-align: center; border-bottom: 1px solid #222; cursor: pointer; }
 
-    .active-panel { position: fixed; right: -300px; top: 0; width: 280px; height: 100%; background: #0b0d11; border-left: 1px solid var(--glass-border); z-index: 2000; transition: 0.3s ease; padding: 15px; }
+    .active-panel { position: fixed; right: -300px; top: 0; width: 280px; height: 100%; background: #0b0d11; border-left: 1px solid var(--glass-border); z-index: 2001; transition: 0.3s ease; padding: 15px; }
     .active-panel.open { right: 0; }
     .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; }
     
@@ -60,6 +70,8 @@
   </style>
 </head>
 <body onclick="void(0)">
+
+  <div id="external-header"></div>
 
   <div class="room-header">
     <button class="back-btn" onclick="window.history.back()">
@@ -100,6 +112,7 @@
           </button>
         </div>
     </div>
+    <div class="sharky-banner">SHARKY TOURNAMENTS • FAIR PLAY</div>
   </div>
 
   <div class="active-panel" id="activePanel">
@@ -143,6 +156,8 @@
   </div>
 
   <div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+  <script src="header.js"></script>
 
   <script>
     const firebaseConfig = {
