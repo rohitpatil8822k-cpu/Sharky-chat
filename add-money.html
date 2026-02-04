@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Sharky Secure Wallet</title>
+  <title>Sharky Wallet</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@600&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@latest"></script>
-  
   <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -15,198 +14,170 @@
 
   <style>
     :root {
-      --primary: #00e5ff; 
-      --bg: #080a0c;
-      --card-bg: rgba(255, 255, 255, 0.04); 
-      --border: rgba(255, 255, 255, 0.08);
-      --text-main: #ffffff; 
-      --text-dim: #8e9196;
-      --error: #ff4747;
+      --primary: #00e5ff; --bg: #05070a;
+      --card: #12151c; --border: rgba(255, 255, 255, 0.06);
+      --text: #ffffff; --dim: #8e9196;
+      --success: #00ff88; --danger: #ff4747; --warning: #ffc107;
     }
 
-    body { 
-      margin: 0; 
-      background: var(--bg); 
-      color: var(--text-main); 
-      font-family: 'Outfit', sans-serif; 
-      overflow-x: hidden; 
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; line-height: 1.5; }
     
-    .app-container { padding: 40px 20px 100px; max-width: 450px; margin: 0 auto; }
+    .app-container { padding: 30px 20px; max-width: 480px; margin: 0 auto; min-height: 100vh; }
     
-    .balance-hero { 
-      background: linear-gradient(145deg, #111418, #080a0c); 
-      border: 1px solid var(--border); 
-      border-radius: 35px; 
-      padding: 40px 20px; 
-      text-align: center; 
-      margin-bottom: 30px; 
-      border-bottom: 4px solid var(--primary); 
+    .nav-header { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; color: var(--dim); font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+
+    .balance-card { 
+      background: linear-gradient(145deg, #161a22, #0c0f14);
+      border: 1px solid var(--border); border-radius: 32px; padding: 40px 20px; 
+      text-align: center; margin-bottom: 25px; 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     }
+    .balance-card span { font-size: 0.75rem; color: var(--dim); letter-spacing: 2px; font-weight: 700; }
+    .balance-card h1 { font-family: 'IBM Plex Mono'; font-size: 3rem; margin: 12px 0; color: var(--text); }
 
-    .balance-hero h1 { font-family: 'IBM Plex Mono'; font-size: 2.8rem; margin: 10px 0; }
-
-    .option-card { 
-      background: var(--card-bg); 
-      border: 1px solid var(--border); 
-      border-radius: 24px; 
-      padding: 20px; 
-      display: flex; 
-      align-items: center; 
-      gap: 15px; 
-      margin-bottom: 12px; 
-      cursor: pointer; 
-    }
-
-    .icon-box { 
-      width: 50px; 
-      height: 50px; 
-      border-radius: 15px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-    }
-
-    .modal-overlay { 
-      position: fixed; 
-      inset: 0; 
-      background: rgba(0,0,0,0.95); 
-      backdrop-filter: blur(10px); 
-      display: none; 
-      align-items: center; 
-      justify-content: center; 
-      z-index: 2000; 
-      padding: 20px; 
-    }
-
-    .modal-box { 
-      background: #111418; 
-      border: 1px solid var(--border); 
-      width: 100%; 
-      max-width: 400px; 
-      border-radius: 30px; 
-      padding: 25px; 
-    }
-
-    .input-field { 
-      width: 100%; 
-      background: #000; 
-      border: 1px solid var(--border); 
-      padding: 15px; 
-      border-radius: 15px; 
-      color: #fff; 
-      margin-bottom: 12px; 
-      font-family: 'Outfit';
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-dim);
-      cursor: pointer;
-    }
-
-    .tab-btn.active {
-      background: var(--primary);
-      color: #000;
-      font-weight: 700;
-    }
-
+    .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 35px; }
     .action-btn { 
-      width: 100%; 
-      background: var(--primary); 
-      color: #000; 
-      border: none; 
-      padding: 18px; 
-      border-radius: 15px; 
-      font-weight: 800; 
-      cursor: pointer; 
+      background: var(--card); border: 1px solid var(--border); border-radius: 24px; 
+      padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; 
+      cursor: pointer; transition: all 0.2s ease;
+    }
+    .action-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.02); }
+    .action-btn i { width: 28px; height: 28px; }
+    .action-btn span { font-weight: 600; font-size: 0.95rem; }
+
+    .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .history-header h3 { margin: 0; font-size: 1.1rem; font-weight: 700; }
+
+    .txn-card { 
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px; 
+      padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .txn-info h4 { margin: 0 0 4px; font-size: 0.95rem; font-weight: 600; }
+    .txn-info p { margin: 0; font-size: 0.75rem; color: var(--dim); }
+    
+    .status-pill { 
+      font-size: 0.6rem; padding: 4px 10px; border-radius: 8px; font-weight: 800; 
+      text-transform: uppercase; margin-top: 6px; display: inline-block;
     }
 
-    .history-item { 
-      display: flex; 
-      justify-content: space-between; 
-      padding: 15px; 
-      background: var(--card-bg); 
-      border-radius: 18px; 
-      margin-bottom: 10px; 
+    .modal { 
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); 
+      display: none; align-items: flex-end; justify-content: center; z-index: 2000;
+    }
+    .modal-content { 
+      background: var(--card); width: 100%; max-width: 500px; 
+      border-radius: 32px 32px 0 0; padding: 30px 24px 40px; 
+      border: 1px solid var(--border); animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    .input-group { margin-bottom: 18px; }
+    .input-group label { display: block; font-size: 0.8rem; color: var(--dim); margin-bottom: 8px; margin-left: 4px; font-weight: 600; }
+    
+    .field { 
+      width: 100%; background: #000; border: 1px solid var(--border); 
+      padding: 16px; border-radius: 16px; color: #fff; font-family: 'Outfit';
+      font-size: 1rem; transition: 0.2s; outline: none;
+    }
+    .field:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 229, 255, 0.1); }
+
+    .btn-submit { 
+      width: 100%; background: var(--primary); color: #000; border: none; 
+      padding: 18px; border-radius: 18px; font-weight: 800; font-size: 1rem; 
+      cursor: pointer; margin-top: 10px;
     }
 
     #toast { 
-      position: fixed; 
-      bottom: 30px; 
-      left: 50%; 
-      transform: translateX(-50%); 
-      background: #fff; 
-      color: #000; 
-      padding: 12px 25px; 
-      border-radius: 50px; 
-      font-weight: 700; 
-      display: none; 
-      z-index: 9999; 
+      position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); 
+      background: #fff; color: #000; padding: 14px 28px; border-radius: 50px; 
+      display: none; z-index: 9999; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
   </style>
 </head>
 <body>
 
   <div class="app-container">
-    <div style="margin-bottom: 20px; cursor: pointer; color: var(--text-dim);" onclick="history.back()">
-      <i data-lucide="arrow-left" style="vertical-align: middle;"></i> BACK
+    <div class="nav-header" onclick="history.back()">
+      <i data-lucide="chevron-left" style="width:20px;"></i> MY WALLET
     </div>
     
-    <div class="balance-hero">
-      <span style="font-size:0.8rem; opacity:0.6; letter-spacing:1px">TOTAL BALANCE</span>
-      <h1 id="mainBalance">₹0</h1>
+    <div class="balance-card">
+      <span>CURRENT BALANCE</span>
+      <h1 id="mainBalance">₹0.00</h1>
     </div>
 
-    <div class="option-card" onclick="openM('addM')">
-      <div class="icon-box" style="background: rgba(0,229,255,0.1); color: var(--primary);"><i data-lucide="plus"></i></div>
-      <div><h4 style="margin:0">Add Money</h4><p style="margin:0; font-size:0.8rem; color:var(--text-dim)">Instant deposit</p></div>
+    <div class="action-grid">
+      <div class="action-btn" onclick="openM('addM')">
+        <i data-lucide="plus-circle" style="color:var(--primary)"></i>
+        <span>Deposit</span>
+      </div>
+      <div class="action-btn" onclick="openM('withdrawM')">
+        <i data-lucide="arrow-up-right" style="color:var(--warning)"></i>
+        <span>Withdraw</span>
+      </div>
     </div>
 
-    <div class="option-card" onclick="openM('withdrawM')">
-      <div class="icon-box" style="background: rgba(255,193,7,0.1); color: #ffc107;"><i data-lucide="arrow-up-right"></i></div>
-      <div><h4 style="margin:0">Withdraw</h4><p style="margin:0; font-size:0.8rem; color:var(--text-dim)">UPI or Bank Transfer</p></div>
+    <div class="history-header">
+      <h3>Activity</h3>
+      <i data-lucide="list-filter" style="width:18px; color:var(--dim)"></i>
     </div>
 
-    <h3 style="margin: 30px 0 15px;">Transaction History</h3>
-    <div id="txnHistory"></div>
+    <div id="txnHistory">
+      <p style="text-align:center; color:var(--dim); margin-top:20px;">Fetching transactions...</p>
+    </div>
   </div>
 
-  <div id="addM" class="modal-overlay" onclick="closeM(event, 'addM')">
-    <div class="modal-box">
-      <h3 style="margin-top:0">Deposit</h3>
-      <input type="number" id="depositAmt" class="input-field" placeholder="Enter Amount">
-      <button id="checkoutBtn" class="action-btn" onclick="startCashfree()">PROCEED TO PAY</button>
+  <div id="addM" class="modal" onclick="closeM(event, 'addM')">
+    <div class="modal-content">
+      <h3 style="margin:0 0 20px;">Deposit Money</h3>
+      <div class="input-group">
+        <label>AMOUNT (₹)</label>
+        <input type="number" id="depositAmt" class="field" placeholder="0.00">
+      </div>
+      <button class="btn-submit" onclick="startCashfree()">CONTINUE TO PAY</button>
     </div>
   </div>
 
-  <div id="withdrawM" class="modal-overlay" onclick="closeM(event, 'withdrawM')">
-    <div class="modal-box">
-      <h3 style="margin-top:0">Withdraw Funds</h3>
+  <div id="withdrawM" class="modal" onclick="closeM(event, 'withdrawM')">
+    <div class="modal-content">
+      <h3 style="margin:0 0 20px;">Withdraw Funds</h3>
       
-      <div style="display:flex; gap:10px; margin-bottom:20px;">
-        <button id="upiTab" class="tab-btn active" onclick="switchTab('upi')">UPI</button>
-        <button id="bankTab" class="tab-btn" onclick="switchTab('bank')">Bank</button>
+      <div class="input-group">
+        <label>PAYMENT METHOD</label>
+        <select id="w_method" class="field" onchange="toggleWFields()">
+          <option value="upi">UPI Transfer</option>
+          <option value="bank">Bank Transfer</option>
+        </select>
       </div>
 
-      <input type="number" id="w_amount" class="input-field" placeholder="Amount (Min ₹100)">
-      <input type="text" id="w_name" class="input-field" placeholder="Full Name">
-
-      <div id="upiFields">
-        <input type="text" id="w_upi" class="input-field" placeholder="UPI ID (e.g. name@apl)">
+      <div class="input-group">
+        <label>AMOUNT (MIN ₹100)</label>
+        <input type="number" id="w_amt" class="field" placeholder="100.00">
       </div>
 
-      <div id="bankFields" style="display:none">
-        <input type="text" id="w_acc" class="input-field" placeholder="Account Number">
-        <input type="text" id="w_ifsc" class="input-field" placeholder="IFSC Code">
-        <input type="text" id="w_bankname" class="input-field" placeholder="Bank Name">
+      <div class="input-group">
+        <label>FULL NAME</label>
+        <input type="text" id="w_name" class="field" placeholder="Enter account holder name">
       </div>
-
-      <button class="action-btn" onclick="submitWithdraw()">SUBMIT REQUEST</button>
+      
+      <div id="upi_wrap" class="input-group">
+        <label>UPI ID</label>
+        <input type="text" id="w_upi" class="field" placeholder="username@upi">
+      </div>
+      
+      <div id="bank_wrap" style="display:none">
+        <div class="input-group">
+          <label>ACCOUNT NUMBER</label>
+          <input type="text" id="w_acc" class="field" placeholder="0000 0000 0000">
+        </div>
+        <div class="input-group">
+          <label>IFSC CODE</label>
+          <input type="text" id="w_ifsc" class="field" placeholder="SBIN000XXXX">
+        </div>
+      </div>
+      
+      <button class="btn-submit" onclick="submitWithdraw()">REQUEST WITHDRAWAL</button>
     </div>
   </div>
 
@@ -229,8 +200,6 @@
     const cashfree = Cashfree({ mode: "production" });
 
     let myUid = "";
-    let currentMethod = "upi";
-
     lucide.createIcons();
 
     function showT(m) {
@@ -242,105 +211,84 @@
     window.openM = (id) => document.getElementById(id).style.display = 'flex';
     window.closeM = (e, id) => { if(e.target.id === id) document.getElementById(id).style.display = 'none'; };
 
-    function switchTab(type) {
-      currentMethod = type;
-      document.getElementById('upiTab').classList.toggle('active', type === 'upi');
-      document.getElementById('bankTab').classList.toggle('active', type === 'bank');
-      document.getElementById('upiFields').style.display = type === 'upi' ? 'block' : 'none';
-      document.getElementById('bankFields').style.display = type === 'bank' ? 'block' : 'none';
+    function toggleWFields() {
+      const m = document.getElementById('w_method').value;
+      document.getElementById('upi_wrap').style.display = m === 'upi' ? 'block' : 'none';
+      document.getElementById('bank_wrap').style.display = m === 'bank' ? 'block' : 'none';
     }
 
     async function submitWithdraw() {
-      const amt = parseInt(document.getElementById('w_amount').value);
+      const amt = parseInt(document.getElementById('w_amt').value);
       const name = document.getElementById('w_name').value;
-      
-      if(!amt || amt < 100) return alert("Min withdrawal ₹100");
-      if(!name) return alert("Enter account holder name");
+      const method = document.getElementById('w_method').value;
+      if(!amt || amt < 100) return alert("Min ₹100 required");
+      if(!name) return alert("Enter holder name");
 
-      let details = { name, amount: amt, method: currentMethod };
-
-      if(currentMethod === 'upi') {
-        details.upi = document.getElementById('w_upi').value;
-        if(!details.upi.includes('@')) return alert("Invalid UPI ID");
-      } else {
-        details.acc = document.getElementById('w_acc').value;
-        details.ifsc = document.getElementById('w_ifsc').value;
-        details.bank = document.getElementById('w_bankname').value;
-        if(!details.acc || !details.ifsc) return alert("Fill all bank details");
-      }
+      let pDetails = { method, name, amount: amt };
+      if(method === 'upi') pDetails.upi = document.getElementById('w_upi').value;
+      else { pDetails.acc = document.getElementById('w_acc').value; pDetails.ifsc = document.getElementById('w_ifsc').value; }
 
       try {
         await db.runTransaction(async (t) => {
           const wRef = db.collection("wallets").doc(myUid);
           const snap = await t.get(wRef);
           if(!snap.exists || (snap.data().realMoney || 0) < amt) throw "Insufficient Balance";
-
           t.update(wRef, { realMoney: firebase.firestore.FieldValue.increment(-amt) });
-          
-          const reqId = db.collection("withdrawals").doc().id;
-          t.set(db.collection("withdrawals").doc(reqId), {
-            ...details,
-            uid: myUid,
-            status: "pending",
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-          });
-
-          t.set(db.collection("transactions").doc(), {
-            uid: myUid,
-            amount: amt,
-            type: "withdrawal",
-            title: `Payout (${currentMethod.toUpperCase()})`,
-            status: "pending",
+          const txnId = db.collection("transactions").doc().id;
+          t.set(db.collection("transactions").doc(txnId), {
+            uid: myUid, amount: amt, type: "withdrawal", status: "pending", details: pDetails,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
           });
         });
-
-        showT("Withdrawal Request Submitted!");
+        showT("Withdrawal Request Sent!");
         document.getElementById('withdrawM').style.display = 'none';
       } catch(e) { alert(e); }
     }
 
     function loadHistory(uid) {
-      db.collection("transactions").where("uid", "==", uid).orderBy("timestamp", "desc").limit(15).onSnapshot(snap => {
-        const h = document.getElementById('txnHistory');
-        if(snap.empty) { h.innerHTML = "<p style='color:var(--text-dim)'>No transactions yet.</p>"; return; }
-        
-        h.innerHTML = "";
+      db.collection("transactions").where("uid", "==", uid).orderBy("timestamp", "desc").onSnapshot(snap => {
+        const container = document.getElementById('txnHistory');
+        if(snap.empty) { container.innerHTML = "<p style='text-align:center; color:var(--dim);'>No transactions yet.</p>"; return; }
+        container.innerHTML = "";
         snap.forEach(doc => {
-          const d = doc.data();
-          const isIn = d.type === "deposit";
-          h.innerHTML += `
-            <div class="history-item">
-              <div>
-                <div style="font-weight:600">${d.title}</div>
-                <div style="font-size:0.7rem; color:var(--text-dim)">${d.status.toUpperCase()}</div>
+          const tx = doc.data();
+          const isDep = tx.type === "deposit";
+          const statusColor = tx.status === 'success' ? 'var(--success)' : 'var(--warning)';
+          const statusBg = tx.status === 'success' ? '#00ff8815' : '#ffc10715';
+          
+          container.innerHTML += `
+            <div class="txn-card">
+              <div class="txn-info">
+                <h4>${isDep ? 'Money Added' : 'Withdrawal Request'}</h4>
+                <p>${tx.timestamp ? new Date(tx.timestamp.seconds*1000).toLocaleString([], {dateStyle: 'medium', timeStyle: 'short'}) : 'Processing...'}</p>
+                <span class="status-pill" style="background:${statusBg}; color:${statusColor}">${tx.status}</span>
               </div>
-              <div style="font-family:'IBM Plex Mono'; font-weight:700; color:${isIn ? 'var(--primary)' : '#fff'}">
-                ${isIn ? '+' : '-'}₹${d.amount}
+              <div style="font-family:'IBM Plex Mono'; font-weight:700; color:${isDep ? 'var(--success)' : 'var(--text)'}">
+                ${isDep ? '+' : '-'}₹${tx.amount.toLocaleString()}
               </div>
             </div>`;
         });
-      });
+      }, err => { document.getElementById('txnHistory').innerHTML = "Check Indexing in Firebase."; });
     }
 
     auth.onAuthStateChanged(user => {
-      if(!user) return location.href = "login.html";
+      if(!user) return;
       myUid = user.uid;
       db.collection("wallets").doc(myUid).onSnapshot(doc => {
         const bal = doc.exists ? (doc.data().realMoney || 0) : 0;
-        document.getElementById('mainBalance').innerText = "₹" + bal.toLocaleString();
+        document.getElementById('mainBalance').innerText = "₹" + bal.toLocaleString('en-IN', {minimumFractionDigits: 2});
       });
       loadHistory(myUid);
     });
 
     async function startCashfree() {
       const amt = document.getElementById('depositAmt').value;
-      if(!amt || amt < 1) return alert("Enter valid amount");
+      if(!amt || amt < 1) return alert("Min ₹1 required");
       try {
         const createOrder = functions.httpsCallable('createCashfreeOrder');
         const result = await createOrder({ amount: amt, uid: myUid });
         cashfree.checkout({ paymentSessionId: result.data.payment_session_id, redirectTarget: "_self" });
-      } catch(e) { alert("Error: " + e.message); }
+      } catch(e) { alert(e.message); }
     }
   </script>
 </body>
