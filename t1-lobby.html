@@ -4,162 +4,187 @@
   <meta charset="UTF-8" />
   <title>Sharky Elite — Tournament Lobby</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
   
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
   <style>
-    :root { --primary-neon: #f1ec67; --bg-dark: #0b0d11; --card-bg: rgba(25, 28, 35, 0.95); --glass-border: rgba(241, 236, 103, 0.2); --accent-red: #ff4757; }
+    :root { 
+      --primary-neon: #f1ec67; 
+      --bg-dark: #0b0d11; 
+      --card-bg: rgba(25, 28, 35, 0.95); 
+      --glass-border: rgba(241, 236, 103, 0.2); 
+      --accent-red: #ff4757; 
+      --h-height: 48px; 
+    }
+    
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
     
     body { 
-        margin: 0; padding: 0; background: var(--bg-dark); font-family: 'Inter', sans-serif; 
-        color: #e2e8f0; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; 
+      margin: 0; padding: 0; background: var(--bg-dark); 
+      font-family: 'Inter', sans-serif; color: #e2e8f0; 
+      height: 100dvh; display: flex; flex-direction: column; overflow: hidden; 
     }
 
-    /* HEADER.JS SPACE (50px) */
-    #external-header { height: 50px; width: 100%; flex-shrink: 0; z-index: 2000; }
+    /* Main Container with Header Space */
+    .app-main {
+      flex: 1; display: flex; flex-direction: column;
+      margin-top: var(--h-height); 
+      height: calc(100dvh - var(--h-height));
+      position: relative;
+      z-index: 10; /* Lower than header's 2000 */
+    }
 
-    .room-header { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: #16191f; border-bottom: 1px solid var(--glass-border); z-index: 1000; flex-shrink: 0; }
-    .back-btn { background: none; border: 1px solid var(--glass-border); color: white; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;}
+    /* Lobby Header */
+    .room-header { 
+      height: 55px; display: flex; align-items: center; justify-content: space-between; 
+      padding: 0 15px; background: #16191f; border-bottom: 1px solid var(--glass-border); 
+      flex-shrink: 0; 
+    }
+
+    .back-btn { background: none; border: 1px solid var(--glass-border); color: white; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer;}
     .room-info h2 { margin: 0; font-family: 'Orbitron'; font-size: 0.8rem; color: var(--primary-neon); letter-spacing: 1px; }
-
+    
     .pinned-bar { background: rgba(241, 236, 103, 0.1); padding: 10px 15px; display: none; align-items: center; justify-content: space-between; cursor: pointer; font-size: 0.75rem; color: var(--primary-neon); border-bottom: 1px solid var(--glass-border); }
-
-    .messages-container { flex: 1; overflow-y: auto; padding: 15px; background: var(--bg-dark); display: flex; flex-direction: column; gap: 12px; -webkit-overflow-scrolling: touch; }
-    .message { display: flex; gap: 10px; max-width: 95%; animation: slideUp 0.15s ease-out; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     
-    .user-avatar { width: 38px; height: 38px; border-radius: 8px; border: 1px solid var(--glass-border); background: #1a1d23; object-fit: cover; }
-    .msg-content { background: var(--card-bg); padding: 10px; border-radius: 2px 12px 12px 12px; border: 1px solid rgba(255,255,255,0.03); flex: 1; position: relative; }
+    /* Messages Area */
+    .messages-container { 
+      flex: 1; overflow-y: auto; padding: 15px; background: var(--bg-dark); 
+      display: flex; flex-direction: column; gap: 12px; -webkit-overflow-scrolling: touch; 
+    }
+
+    .message { display: flex; gap: 10px; max-width: 95%; animation: slideUp 0.2s ease-out; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .user-avatar { width: 38px; height: 38px; border-radius: 8px; border: 1px solid var(--glass-border); object-fit: cover; }
+    .msg-content { background: var(--card-bg); padding: 10px; border-radius: 2px 12px 12px 12px; border: 1px solid rgba(255,255,255,0.03); flex: 1; }
     .msg-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-    .msg-user { font-size: 0.75rem; font-weight: 700; color: var(--primary-neon); }
+    .msg-user { font-size: 0.72rem; font-weight: 700; color: var(--primary-neon); }
     .msg-text { font-size: 0.88rem; color: #cfd8dc; line-height: 1.4; word-break: break-word; }
-    .msg-dots { cursor: pointer; color: #546e7a; font-size: 1.2rem; padding: 5px 10px; margin: -5px -10px -5px 0; }
+    .msg-dots { cursor: pointer; color: #546e7a; font-size: 1.1rem; padding: 0 5px; }
 
-    .input-wrapper { background: #0b0d11; border-top: 1px solid #1a1d23; flex-shrink: 0; }
+    /* Input Styling */
+    .input-wrapper { background: #0b0d11; border-top: 1px solid #1a1d23; flex-shrink: 0; padding-bottom: env(safe-area-inset-bottom); }
     .input-cd-bar { background: rgba(241, 236, 103, 0.05); padding: 6px 15px; display: flex; justify-content: center; align-items: center; gap: 8px; font-family: 'Orbitron'; font-size: 0.65rem; border-top: 1px solid var(--glass-border); }
-    .input-main { padding: 12px; }
-    .input-bar { background: #1a1d23; border-radius: 14px; padding: 2px 15px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--glass-border); }
-    #messageInput { flex: 1; background: transparent; border: none; color: white; padding: 12px 0; font-size: 0.9rem; }
-    #sendBtn { background: none; border: none; cursor: pointer; color: var(--primary-neon); display: flex; align-items: center; }
+    .input-main { padding: 10px 12px; }
+    .input-bar { background: #1a1d23; border-radius: 12px; padding: 2px 12px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--glass-border); }
+    #messageInput { flex: 1; background: transparent; border: none; color: white; padding: 10px 0; font-size: 0.9rem; }
+    #sendBtn { background: none; border: none; cursor: pointer; color: var(--primary-neon); }
+    .sharky-banner { height: 28px; background: #f1ec67; color: #000; font-family: 'Orbitron'; font-size: 9px; font-weight: 900; display: flex; align-items: center; justify-content: center; letter-spacing: 1px; }
 
-    /* SHARKY TOURNAMENTS BANNER (30px) */
-    .sharky-banner { height: 30px; width: 100%; background: #f1ec67; color: #000; font-family: 'Orbitron'; font-size: 10px; font-weight: 900; display: flex; align-items: center; justify-content: center; letter-spacing: 1.5px; text-transform: uppercase; }
-
-    .action-menu { position: fixed; bottom: -100%; left: 0; width: 100%; background: #16191f; border-top: 2px solid var(--primary-neon); z-index: 10000; display: flex; flex-direction: column; border-radius: 20px 20px 0 0; transition: 0.3s ease; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
-    .action-menu.active { bottom: 0; }
-    .action-item { padding: 18px; color: white; font-family: 'Orbitron'; font-size: 0.75rem; text-align: center; border-bottom: 1px solid #222; cursor: pointer; }
-
-    .active-panel { position: fixed; right: -300px; top: 0; width: 280px; height: 100%; background: #0b0d11; border-left: 1px solid var(--glass-border); z-index: 2001; transition: 0.3s ease; padding: 15px; }
+    /* Players List Panel UI (Enhanced) */
+    .active-panel { 
+      position: fixed; right: -105%; top: 0; width: 300px; height: 100%; 
+      background: #0b0d11; border-left: 1px solid var(--glass-border); 
+      z-index: 3000; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+      padding: 70px 20px 20px; 
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    }
     .active-panel.open { right: 0; }
-    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; }
-    
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; z-index: 1500; backdrop-filter: blur(4px); }
-    .overlay.show { display: block; }
+    .player-card { 
+      display: flex; align-items: center; gap: 12px; 
+      background: rgba(255,255,255,0.03); padding: 10px; 
+      border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05);
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #00ff88; box-shadow: 0 0 5px #00ff88; }
 
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 25px; }
-    .modal-content { background: #16191f; border: 1px solid var(--glass-border); padding: 25px; border-radius: 24px; width: 100%; max-width: 380px; position: relative; }
-    .modal-input { width: 100%; padding: 14px; background: #0b0d11; border: 1px solid #333; color: white; border-radius: 12px; margin-bottom: 15px; font-size: 0.9rem; }
+    /* Modals & Overlay */
+    .overlay-main { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: none; z-index: 2500; }
+    .overlay-main.show { display: block; }
     
-    .role-tag { font-size: 7px; padding: 2px 5px; border-radius: 3px; color: #000; font-weight: 900; margin-left: 5px; text-transform: uppercase; }
-    .role-admin { background: var(--primary-neon); }
-    .role-host { background: #00e0ff; }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+    .modal-content { background: #16191f; border: 1px solid var(--glass-border); padding: 25px; border-radius: 20px; width: 100%; max-width: 350px; }
+    .modal-input { width: 100%; padding: 12px; background: #0b0d11; border: 1px solid #333; color: white; border-radius: 10px; margin-bottom: 12px; }
+    
+    .action-menu { position: fixed; bottom: 0; left: 0; width: 100%; background: #16191f; border-top: 2px solid var(--primary-neon); z-index: 10000; border-radius: 20px 20px 0 0; transition: transform 0.3s ease; transform: translateY(100%); padding-bottom: env(safe-area-inset-bottom); }
+    .action-menu.active { transform: translateY(0); }
+    .action-item { padding: 18px; color: white; font-family: 'Orbitron'; font-size: 0.75rem; text-align: center; border-bottom: 1px solid #222; cursor: pointer; }
+    
+    .role-tag { font-size: 7px; padding: 1px 4px; border-radius: 3px; color: #000; font-weight: 900; margin-left: 5px; text-transform: uppercase; background: var(--primary-neon); }
   </style>
 </head>
-<body onclick="void(0)">
+<body>
 
-  <div id="external-header"></div>
+  <script src="header.js"></script>
 
-  <div class="room-header">
-    <button class="back-btn" onclick="window.history.back()">
-        <svg viewBox="0 0 24 24" width="20" fill="white"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-    </button>
-    <div class="room-info">
-      <h2 id="roomTitle">ARENA LOBBY</h2>
-      <div style="font-size: 9px; color: #546e7a; font-family: 'Orbitron';">ONLINE: <span id="onlineCount" style="color:#00ff88">0</span></div>
+  <div class="app-main" id="lobbyBody">
+    <div class="room-header">
+      <div class="back-btn" onclick="window.history.back()">
+          <svg viewBox="0 0 24 24" width="20" fill="white"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </div>
+      <div class="room-info" style="text-align:center;">
+        <h2 id="roomTitle">TOURNAMENT LOBBY</h2>
+        <div style="font-size: 9px; color: #546e7a; font-family: 'Orbitron';">ACTIVE: <span id="onlineCount" style="color:#00ff88">0</span></div>
+      </div>
+      <div style="display:flex; gap:12px;">
+          <div id="adminSettingsBtn" style="display:none;" onclick="openSettings()">
+              <svg viewBox="0 0 24 24" width="20" fill="var(--primary-neon)"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+          </div>
+          <div onclick="toggleActivePanel(true)">
+              <svg viewBox="0 0 24 24" width="22" fill="#78909c"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          </div>
+      </div>
     </div>
-    
-    <div style="display:flex; gap:15px; align-items:center;">
-        <div id="adminSettingsBtn" style="display:none; cursor:pointer;" onclick="openSettings()">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="var(--primary-neon)"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-        </div>
-        <div id="openActive" style="cursor:pointer;" onclick="toggleActivePanel(true)">
-            <svg viewBox="0 0 24 24" width="24" fill="#78909c"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-        </div>
-    </div>
-  </div>
 
-  <div class="pinned-bar" id="pinnedBar" onclick="showPinPopup()">
-    <span id="pinPreview">📌 LOADING PINNED...</span>
-    <svg viewBox="0 0 24 24" width="16" fill="var(--primary-neon)"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
-  </div>
-
-  <div class="messages-container" id="messages"></div>
-
-  <div class="input-wrapper">
-    <div class="input-cd-bar" id="cdBar">
-        <span style="color:#888" id="cdLabel">TIMER:</span>
-        <span id="timer-clock" style="color:#fff">00:00:00</span>
+    <div class="pinned-bar" id="pinnedBar" onclick="showPinPopup()">
+      <span id="pinPreview">📌 PINNED: Loading...</span>
     </div>
-    <div class="input-main">
-        <div class="input-bar">
-          <input type="text" id="messageInput" placeholder="Enter message..." autocomplete="off">
-          <button id="sendBtn" onclick="sendMessage()">
-            <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-          </button>
-        </div>
+
+    <div class="messages-container" id="messages"></div>
+
+    <div class="input-wrapper">
+      <div class="input-cd-bar" id="cdBar">
+          <span style="color:#888" id="cdLabel">TIMER:</span>
+          <span id="timer-clock" style="color:#fff">00:00:00</span>
+      </div>
+      <div class="input-main">
+          <div class="input-bar">
+            <input type="text" id="messageInput" placeholder="Write a message..." autocomplete="off">
+            <button id="sendBtn" onclick="sendMessage()">
+              <svg viewBox="0 0 24 24" width="24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+          </div>
+      </div>
+      <div class="sharky-banner">SHARKY TOURNAMENTS</div>
     </div>
-    <div class="sharky-banner">SHARKY TOURNAMENTS • FAIR PLAY</div>
   </div>
 
   <div class="active-panel" id="activePanel">
-    <div class="panel-header">
-        <h3 style="color:var(--primary-neon); font-family:'Orbitron'; font-size:0.8rem;">PLAYERS ONLINE</h3>
-        <button style="background:none; border:none; color:#64748b; cursor:pointer;" onclick="toggleActivePanel(false)">
-            <svg viewBox="0 0 24 24" width="24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <span style="color:var(--primary-neon); font-family:'Orbitron'; font-size:0.85rem;">SURVIVORS ONLINE</span>
+        <button onclick="toggleActivePanel(false)" style="background:none; border:none; color:#555; font-size:28px; cursor:pointer;">&times;</button>
     </div>
     <div id="activeUsersList"></div>
   </div>
 
   <div class="action-menu" id="userActionMenu">
-      <div id="menuTitle" style="padding:15px; font-size:10px; color:var(--primary-neon); text-align:center; border-bottom:1px solid #222; font-family:'Orbitron'">OPTIONS</div>
-      <div class="action-item" id="opt-mute-toggle" onclick="handleUserAction('mute-toggle')">MUTE (PRIVATE)</div>
-      <div class="action-item" onclick="handleUserAction('report')">REPORT USER</div>
+      <div class="action-item" onclick="handleUserAction('mute-toggle')" id="opt-mute">MUTE USER</div>
       <div class="action-item" id="opt-pin" style="display:none;" onclick="handleUserAction('pin')">PIN MESSAGE</div>
-      <div class="action-item" id="opt-del-msg" style="display:none; color:var(--accent-red);" onclick="handleUserAction('del-msg')">DELETE MESSAGE</div>
-      <div class="action-item" id="opt-kick" style="display:none; color:var(--accent-red);" onclick="handleUserAction('kick')">KICK FROM LOBBY</div>
-      <div class="action-item" onclick="closeActionMenu()" style="border:none; color:#555;">CANCEL</div>
-  </div>
-
-  <div class="modal" id="pinModal">
-    <div class="modal-content">
-        <button onclick="closeModals()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#666; font-size:24px; cursor:pointer;">×</button>
-        <h3 style="color:var(--primary-neon); font-family:'Orbitron'; font-size:0.9rem; margin-bottom:15px;">PINNED MESSAGE</h3>
-        <p id="pinFullText" style="font-size:1rem; line-height:1.6; color:#cfd8dc; white-space:pre-wrap;"></p>
-        <button class="modal-input" style="background:var(--primary-neon); color:#000; font-weight:800; border:none; margin-top:20px;" onclick="closeModals()">CLOSE</button>
-    </div>
+      <div class="action-item" id="opt-del" style="display:none; color:var(--accent-red);" onclick="handleUserAction('del')">DELETE MESSAGE</div>
+      <div class="action-item" onclick="closeAll()" style="color:#555;">CANCEL</div>
   </div>
 
   <div class="modal" id="settingsModal">
     <div class="modal-content">
-        <h3 style="color:var(--primary-neon); font-family:'Orbitron'; font-size:0.8rem; margin-bottom:15px; text-align:center;">LOBBY SETTINGS</h3>
-        <input type="number" id="cdInput" class="modal-input" placeholder="Cooldown (Seconds)">
-        <input type="text" id="cdMsgInput" class="modal-input" placeholder="Timer Label Text">
-        <input type="number" id="cdTimeInput" class="modal-input" placeholder="Timer Hours (e.g. 2)">
-        <button class="modal-input" style="background:var(--primary-neon); color:#000; font-weight:800; border:none;" onclick="saveLobbySettings()">SAVE SETTINGS</button>
-        <button class="modal-input" style="background:#222; color:#fff; border:none;" onclick="closeModals()">CANCEL</button>
+        <h3 style="color:var(--primary-neon); font-family:'Orbitron'; font-size:0.9rem; text-align:center; margin-bottom:20px;">LOBBY CONFIG</h3>
+        <label style="font-size:10px; color:#888;">COOLDOWN (SECONDS)</label>
+        <input type="number" id="cdInput" class="modal-input" placeholder="e.g. 5">
+        <label style="font-size:10px; color:#888;">TIMER LABEL</label>
+        <input type="text" id="cdMsgInput" class="modal-input" placeholder="e.g. STARTING IN">
+        <label style="font-size:10px; color:#888;">COUNTDOWN (MINUTES)</label>
+        <input type="number" id="cdMinInput" class="modal-input" placeholder="e.g. 15">
+        
+        <button class="modal-input" style="background:var(--primary-neon); color:#000; font-weight:800; margin-top:10px;" onclick="saveLobbySettings()">SAVE CHANGES</button>
+        <button class="modal-input" style="background:#222; color:#fff;" onclick="closeModals()">CLOSE</button>
     </div>
   </div>
 
-  <div class="overlay" id="overlay" onclick="closeAll()"></div>
-
-  <script src="header.js"></script>
+  <div class="overlay-main" id="overlay" onclick="closeAll()"></div>
 
   <script>
+    // Config logic
     const firebaseConfig = {
       apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
       authDomain: "sharky-chat-007.firebaseapp.com",
@@ -168,115 +193,119 @@
       messagingSenderId: "637104796242",
       appId: "1:637104796242:web:74ac36b86af91be15ea58b"
     };
-
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore(), auth = firebase.auth();
-    const urlParams = new URLSearchParams(window.location.search);
-    const arenaId = urlParams.get('arena') || "tournament-lobby";
-    
-    let userUid = "", userData = {}, lastSent = 0, currentCD = 0, selId, selUid, selText;
+
+    const arenaId = new URLSearchParams(window.location.search).get('arena') || "lobby-01";
+    let userUid, userData = {}, currentCD = 0, lastSent = 0, selId, selUid, selText;
     let localMuted = JSON.parse(localStorage.getItem('mutedUsers') || '[]');
 
     auth.onAuthStateChanged(async user => {
-      if (!user) return;
+      if(!user) return;
       userUid = user.uid;
       const uDoc = await db.collection("users").doc(userUid).get();
       userData = uDoc.data() || {};
-      
-      const kickCheck = await db.collection("kickedUsers").doc(userUid).get();
-      if(kickCheck.exists) { alert("Kicked!"); window.history.back(); return; }
-
-      const lobbyRef = await db.collection("lobbies").doc(arenaId).get();
-      const lData = lobbyRef.data();
-      if(lData) document.getElementById('roomTitle').innerText = lData.name.toUpperCase();
-      
-      const isOwner = lData && lData.createdBy === userUid;
-      const isAdmin = ["admin", "creator"].includes(userData.role);
-
-      if(!isOwner && !isAdmin && lData?.fee > 0) {
-          const acc = await db.collection("users").doc(userUid).collection("arena_access").doc(arenaId).get();
-          if(!acc.exists) { window.location.href="arena.html"; return; }
+      if(["admin", "creator"].includes(userData.role)) {
+          document.getElementById('adminSettingsBtn').style.display = 'block';
       }
-
-      if(isAdmin || isOwner) document.getElementById('adminSettingsBtn').style.display = 'block';
-
-      listenMessages();
-      listenConfigs();
-      syncActiveUsers();
+      listenMessages(); 
+      listenConfigs(); 
+      syncActiveUsers(); 
       updatePresence();
     });
 
+    // 1. Clean Messages Listener
     function listenMessages() {
       db.collection(arenaId).orderBy("createdAt", "desc").limit(40).onSnapshot(snap => {
         const cont = document.getElementById("messages");
-        cont.innerHTML = "";
-        const docs = snap.docs.reverse();
-        docs.forEach(doc => {
+        cont.innerHTML = ""; // Complete refresh to avoid duplicates
+        snap.docs.reverse().forEach(doc => {
           const m = doc.data();
           if(localMuted.includes(m.uid)) return;
-          
           const div = document.createElement("div");
           div.className = "message";
           div.innerHTML = `
-            <img src="https://via.placeholder.com/38" class="user-avatar" id="av-${doc.id}">
+            <img src="${m.pic || 'https://via.placeholder.com/38'}" class="user-avatar">
             <div class="msg-content">
               <div class="msg-header">
-                <span class="msg-user" id="un-${doc.id}">...</span>
+                <span class="msg-user">${m.name} ${m.role==='admin'?'<span class="role-tag">ADMIN</span>':''}</span>
                 <span class="msg-dots" onclick="openMenu(event, '${doc.id}', '${m.uid}', '${m.text.replace(/'/g, "\\'")}')">⋮</span>
               </div>
               <div class="msg-text">${m.text}</div>
             </div>`;
           cont.appendChild(div);
-          
-          db.collection("users").doc(m.uid).get().then(u => {
-              const d = u.data();
-              if(d && document.getElementById(`un-${doc.id}`)) {
-                  document.getElementById(`un-${doc.id}`).innerHTML = `${d.ign} <span class="role-tag ${d.role==='admin'?'role-admin':'role-host'}" style="${d.role?'':'display:none'}">${d.role||''}</span>`;
-                  document.getElementById(`av-${doc.id}`).src = d.profilePic || "https://via.placeholder.com/38";
-              }
-          });
         });
         cont.scrollTop = cont.scrollHeight;
       });
     }
 
-    function openMenu(e, id, uid, text) {
-        e.preventDefault(); e.stopPropagation();
-        selId = id; selUid = uid; selText = text;
-        const isAdmin = ["admin", "creator"].includes(userData.role);
-        
-        document.getElementById('opt-mute-toggle').innerText = localMuted.includes(uid) ? "UNMUTE (PRIVATE)" : "MUTE (PRIVATE)";
-        document.getElementById('opt-pin').style.display = isAdmin ? 'block' : 'none';
-        document.getElementById('opt-del-msg').style.display = isAdmin ? 'block' : 'none';
-        document.getElementById('opt-kick').style.display = isAdmin ? 'block' : 'none';
-        
-        document.getElementById('userActionMenu').classList.add('active');
-        document.getElementById('overlay').classList.add('show');
-    }
-
-    async function handleUserAction(type) {
-        if(type === 'mute-toggle') {
-            if(localMuted.includes(selUid)) localMuted = localMuted.filter(id => id !== selUid);
-            else localMuted.push(selUid);
-            localStorage.setItem('mutedUsers', JSON.stringify(localMuted));
-            listenMessages(); 
-        }
-        else if(type === 'pin') await db.collection("lobbyConfigs").doc(arenaId+"_pin").set({ text: selText });
-        else if(type === 'del-msg') await db.collection(arenaId).doc(selId).delete();
-        else if(type === 'kick') await db.collection("kickedUsers").doc(selUid).set({ time: Date.now() });
-        closeActionMenu();
-    }
-
-    function showPinPopup() {
-        db.collection("lobbyConfigs").doc(arenaId+"_pin").get().then(d => {
-            if(d.exists) {
-                document.getElementById('pinFullText').innerText = d.data().text;
-                document.getElementById('pinModal').style.display = 'flex';
-                document.getElementById('overlay').classList.add('show');
-            }
+    // 2. Active Players UI Fix
+    function syncActiveUsers() {
+        db.collection("active_" + arenaId).onSnapshot(snap => {
+            const list = document.getElementById("activeUsersList");
+            list.innerHTML = "";
+            document.getElementById("onlineCount").innerText = snap.size;
+            snap.forEach(doc => {
+                const u = doc.data();
+                const d = document.createElement("div");
+                d.className = "player-card";
+                d.innerHTML = `
+                    <div style="position:relative;">
+                        <img src="${u.pic || 'https://via.placeholder.com/35'}" style="width:35px; height:35px; border-radius:8px; object-fit:cover;">
+                        <div style="position:absolute; bottom:-2px; right:-2px;" class="status-dot"></div>
+                    </div>
+                    <div style="display:flex; flex-direction:column;">
+                        <span style="font-size:0.8rem; font-weight:600; color:#fff;">${u.ign || 'Survivor'}</span>
+                        <span style="font-size:0.6rem; color:#546e7a;">ONLINE</span>
+                    </div>`;
+                list.appendChild(d);
+            });
         });
     }
 
+    // 3. Header Dropdown Integration Fix
+    function closeAll() {
+        document.getElementById('userActionMenu').classList.remove('active');
+        document.getElementById('activePanel').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+        // Clear expanded class from external header if exists
+        const h = document.getElementById("mainHeader");
+        if(h) h.classList.remove("expanded");
+        closeModals();
+    }
+
+    function toggleActivePanel(s) { 
+        if(s) { 
+            document.getElementById('activePanel').classList.add('open'); 
+            document.getElementById('overlay').classList.add('show'); 
+        } else closeAll();
+    }
+
+    // 4. Send Message with CD
+    async function sendMessage() {
+        const inp = document.getElementById("messageInput");
+        const text = inp.value.trim();
+        if(!text) return;
+        
+        const now = Date.now();
+        if(!["admin", "creator"].includes(userData.role) && now < lastSent + (currentCD * 1000)) {
+            alert(`Wait ${currentCD}s cooldown!`);
+            return;
+        }
+        
+        inp.value = ""; 
+        lastSent = now;
+        await db.collection(arenaId).add({ 
+            uid: userUid, 
+            name: userData.ign || "Player", 
+            pic: userData.profilePic || "", 
+            role: userData.role || "user", 
+            text: text, 
+            createdAt: firebase.firestore.FieldValue.serverTimestamp() 
+        });
+    }
+
+    // Timer & Pin Configs
     function listenConfigs() {
         db.collection("lobbyConfigs").doc(arenaId+"_settings").onSnapshot(d => {
             if(!d.exists) return;
@@ -284,10 +313,13 @@
             currentCD = data.cooldown || 0;
             document.getElementById('cdLabel').innerText = (data.cdMsg || "TIMER") + ":";
             if(data.timerEnd) {
-                clearInterval(window.timerInt);
-                window.timerInt = setInterval(() => {
+                if(window.tInt) clearInterval(window.tInt);
+                window.tInt = setInterval(() => {
                     const diff = data.timerEnd - Date.now();
-                    if(diff <= 0) { document.getElementById('timer-clock').innerText = "00:00:00"; return; }
+                    if(diff <= 0) { 
+                        document.getElementById('timer-clock').innerText = "00:00:00"; 
+                        return; 
+                    }
                     const h = Math.floor(diff/3600000).toString().padStart(2,'0');
                     const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
                     const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
@@ -296,65 +328,53 @@
             }
         });
         db.collection("lobbyConfigs").doc(arenaId+"_pin").onSnapshot(d => {
-            if(d.exists) {
-                document.getElementById('pinnedBar').style.display = 'flex';
-                document.getElementById('pinPreview').innerText = "📌 " + d.data().text.substring(0,35) + "...";
-            }
+            const bar = document.getElementById('pinnedBar');
+            if(d.exists) { 
+                bar.style.display = 'flex'; 
+                document.getElementById('pinPreview').innerText = "📌 " + d.data().text.substring(0,45) + "..."; 
+            } else bar.style.display = 'none';
         });
     }
 
     async function saveLobbySettings() {
-        const h = parseInt(document.getElementById('cdTimeInput').value) || 0;
+        const mins = parseInt(document.getElementById('cdMinInput').value) || 0;
         await db.collection("lobbyConfigs").doc(arenaId+"_settings").set({
             cooldown: parseInt(document.getElementById('cdInput').value) || 0,
-            cdMsg: document.getElementById('cdMsgInput').value || "Countdown",
-            timerEnd: Date.now() + (h * 3600000)
+            cdMsg: document.getElementById('cdMsgInput').value || "TIMER",
+            timerEnd: Date.now() + (mins * 60000)
         });
         closeModals();
     }
 
-    function syncActiveUsers() {
-      db.collection("active_" + arenaId).onSnapshot(snap => {
-        const list = document.getElementById("activeUsersList"); list.innerHTML = "";
-        let count = 0;
-        snap.forEach(doc => {
-            const u = doc.data();
-            if(Date.now() - u.lastSeen < 45000) {
-                count++;
-                const item = document.createElement("div");
-                item.style = "display:flex; align-items:center; gap:10px; margin-bottom:12px; padding:10px; background:#1a1d23; border-radius:10px; border:1px solid #222;";
-                item.innerHTML = `<img src="${u.pic || ''}" style="width:30px; height:30px; border-radius:8px;">
-                                  <div style="flex:1; font-size:0.85rem; font-weight:600;">${u.ign}</div>
-                                  <div onclick="openMenu(event, null, '${u.uid}', '')" style="color:#555; cursor:pointer;">⋮</div>`;
-                list.appendChild(item);
-            }
-        });
-        document.getElementById("onlineCount").innerText = count;
-      });
+    function openMenu(e, id, uid, text) {
+        e.stopPropagation(); selId = id; selUid = uid; selText = text;
+        const isAdmin = ["admin", "creator"].includes(userData.role);
+        document.getElementById('opt-pin').style.display = isAdmin ? 'block' : 'none';
+        document.getElementById('opt-del').style.display = isAdmin ? 'block' : 'none';
+        document.getElementById('userActionMenu').classList.add('active');
+        document.getElementById('overlay').classList.add('show');
     }
 
-    async function sendMessage() {
-        const text = document.getElementById("messageInput").value.trim();
-        if(!text) return;
-        if(!["admin", "creator"].includes(userData.role) && Date.now() < lastSent + (currentCD * 1000)) { 
-            alert(`Wait ${currentCD}s!`); return; 
+    async function handleUserAction(type) {
+        if(type === 'del') await db.collection(arenaId).doc(selId).delete();
+        if(type === 'pin') await db.collection("lobbyConfigs").doc(arenaId+"_pin").set({ text: selText });
+        if(type === 'mute-toggle') {
+            if(localMuted.includes(selUid)) localMuted = localMuted.filter(i => i !== selUid);
+            else localMuted.push(selUid);
+            localStorage.setItem('mutedUsers', JSON.stringify(localMuted));
+            listenMessages();
         }
-        document.getElementById("messageInput").value = "";
-        lastSent = Date.now();
-        await db.collection(arenaId).add({ uid: userUid, text, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+        closeAll();
     }
 
     function updatePresence() {
-        const hb = () => db.collection("active_" + arenaId).doc(userUid).set({ uid: userUid, ign: userData.ign, pic: userData.profilePic, lastSeen: Date.now() });
-        hb(); setInterval(hb, 25000);
+        const ref = db.collection("active_" + arenaId).doc(userUid);
+        const up = () => ref.set({ ign: userData.ign, pic: userData.profilePic, lastSeen: Date.now() }, {merge:true});
+        up(); setInterval(up, 30000);
     }
 
-    window.closeActionMenu = () => { document.getElementById('userActionMenu').classList.remove('active'); document.getElementById('overlay').classList.remove('show'); };
-    window.closeModals = () => { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); document.getElementById('overlay').classList.remove('show'); };
-    window.toggleActivePanel = (s) => { if(s) { document.getElementById('activePanel').classList.add('open'); document.getElementById('overlay').classList.add('show'); } else { document.getElementById('activePanel').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); } };
-    window.openSettings = () => { document.getElementById('settingsModal').style.display = 'flex'; document.getElementById('overlay').classList.add('show'); };
-    window.closeAll = () => { toggleActivePanel(false); closeActionMenu(); closeModals(); };
-    
+    function openSettings() { document.getElementById('settingsModal').style.display = 'flex'; document.getElementById('overlay').classList.add('show'); }
+    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
     document.getElementById("messageInput").onkeypress = e => { if(e.key === "Enter") sendMessage(); };
   </script>
 </body>
