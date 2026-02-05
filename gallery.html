@@ -4,310 +4,67 @@
   <meta charset="UTF-8" />
   <title>Choose Your Avatar | Sharky Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6924983412433035"
-     crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
   <style>
-    body {
-      background: #1f1f1f;
-      color: #d1d1d1;
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    header {
-      background: #292929;
-      padding: 20px 0 10px 0;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
-      position: relative;
-      user-select: none;
-    }
-    header h1 {
-      font-family: 'Playfair Display', serif; /* Classy Font for Header */
-      color: #e0e0e0;
-      font-size: 2.6rem;
-      letter-spacing: 5px;
-      margin: 0;
-      font-weight: 700;
-      text-transform: uppercase;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.8);
-    }
-    .create-album-bar {
-      text-align: center;
-      padding: 15px 0 20px 0;
-      background: #292929;
-    }
-    .create-album-btn-header {
-      background: linear-gradient(90deg, #5a85ff, #8a5aff);
-      border: none;
-      border-radius: 30px;
-      padding: 12px 30px;
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 5px 20px rgba(90, 133, 255, 0.5);
-      transition: all 0.3s ease;
-      letter-spacing: 1px;
-    }
-    .create-album-btn-header:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 8px 30px rgba(138, 90, 255, 0.7);
-      background: linear-gradient(90deg, #8a5aff, #5a85ff);
-    }
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 24px 10px 24px 10px;
-    }
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 600px;
-      width: 100%;
-      margin: 0 0 24px 0;
-      padding: 0 5px;
-      user-select: none;
-    }
-    select#categorySelector {
-      background: #3a3a3a;
-      color: #ccc;
-      border: 2px solid #555;
-      border-radius: 28px;
-      padding: 10px 16px;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 1.05rem;
-      cursor: pointer;
-      outline: none;
-      min-width: 180px;
-      box-shadow: 0 0 10px #111 inset;
-      transition: border-color 0.3s, box-shadow 0.3s;
-      user-select: none;
-    }
-    select#categorySelector:hover,
-    select#categorySelector:focus {
-      border-color: #5a85ff;
-      box-shadow: 0 0 14px #5a85ffcc inset;
-      color: #eee;
-      background: #444;
-    }
-    button.back-btn {
-      background: transparent;
-      border: 2px solid #666;
-      border-radius: 28px;
-      padding: 10px 24px;
-      color: #aaa;
-      font-family: 'Poppins', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;
-      box-shadow: 0 0 8px #000 inset;
-      user-select: none;
-    }
-    button.back-btn:hover {
-      background: #555;
-      border-color: #eee;
-      color: #eee;
-      box-shadow: 0 0 18px #5a85ffcc;
-    }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 28px;
-      max-width: 600px;
-      width: 100%;
-      margin: 0;
-      user-select: none;
-    }
-    .pic-wrapper {
-      border-radius: 22px;
-      background: #2d2d2d;
-      box-shadow: 0 5px 15px rgb(0 0 0 / 0.75);
-      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      aspect-ratio: 1 / 1;
-      cursor: pointer;
-      overflow: hidden;
-      border: 2px solid transparent;
-    }
-    .pic-wrapper:hover {
-      transform: translateY(-6px) scale(1.05);
-      box-shadow: 0 15px 28px rgb(96 165 250 / 0.65);
-      border-color: #5a85ff;
-      z-index: 5;
-    }
-    .avatar-pic {
-      width: 84px;
-      height: 84px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3.5px solid transparent;
-      box-shadow: 0 1.5px 6px rgb(0 0 0 / 0.9);
-      transition: border-color 0.28s ease, box-shadow 0.28s ease;
-      background-color: #555;
-      display: block;
-      user-select: none;
-      pointer-events: none;
-    }
-    .pic-wrapper.selected,
-    .pic-wrapper:hover {
-      border-color: #5a85ff;
-      box-shadow: 0 0 18px #5a85ffcc, 0 0 8px #5a85ffcc inset;
-      z-index: 10;
-    }
-    .pic-wrapper.selected .avatar-pic {
-      border-color: #5a85ff;
-      box-shadow: 0 0 14px #5a85ffcc;
-    }
-    .success-msg {
-      position: fixed;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #4caf50dd;
-      border-radius: 40px;
-      padding: 14px 28px;
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: #f0f0f0;
-      box-shadow: 0 5px 16px #4caf5066;
-      user-select: none;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 9000;
-    }
-    .success-msg.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .select-popup-sheet {
-      position: fixed;
-      left: 50%;
-      bottom: 20px;
-      transform: translateX(-50%) translateY(100%);
-      background: linear-gradient(135deg, #575757 70%, #3f3f3f 100%);
-      color: #e2e2e2;
-      border-radius: 24px;
-      box-shadow: 0 10px 30px #000000cc;
-      padding: 18px 32px 18px 32px;
-      z-index: 2010;
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      text-align: center;
-      opacity: 0;
-      animation: popupSlideIn 0.3s cubic-bezier(0.63,0,0.44,1.15) forwards;
-      display: flex;
-      flex-direction: column;
-      min-width: 240px;
-      font-family: 'Poppins', sans-serif;
-      user-select: none;
-    }
-    @keyframes popupSlideIn {
-      to { transform: translateX(-50%) translateY(0); opacity: 1; }
-    }
-    .popup-select-btn {
-      background: #5a85ff;
-      border: none;
-      border-radius: 20px;
-      color: #fff;
-      font-size: 1.15rem;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 700;
-      padding: 11px 36px;
-      margin: 16px auto 0 auto;
-      cursor: pointer;
-      box-shadow: 0 6px 20px #5a85ffaa;
-      transition: background 0.3s ease;
-      outline: none;
-      user-select: none;
-      letter-spacing: 0.4px;
-      width: 130px;
-    }
-    .popup-select-btn:hover {
-      background: #3d5ecc;
-      box-shadow: 0 7px 25px #3d5ecccc;
-    }
+    body { background: #1f1f1f; color: #d1d1d1; font-family: 'Poppins', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+    header { background: #292929; padding: 20px 0 10px 0; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.7); position: relative; }
+    header h1 { font-family: 'Playfair Display', serif; color: #e0e0e0; font-size: 2.6rem; letter-spacing: 5px; margin: 0; font-weight: 700; text-transform: uppercase; }
+    .create-album-bar { text-align: center; padding: 15px 0 20px 0; background: #292929; }
+    .create-album-btn-header { background: linear-gradient(90deg, #5a85ff, #8a5aff); border: none; border-radius: 30px; padding: 12px 30px; color: #fff; font-weight: 700; cursor: pointer; box-shadow: 0 5px 20px rgba(90, 133, 255, 0.5); transition: 0.3s; }
+    main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 24px 10px; }
+    .controls { display: flex; justify-content: space-between; align-items: center; max-width: 600px; width: 100%; margin-bottom: 24px; }
+    select#categorySelector { background: #3a3a3a; color: #ccc; border: 2px solid #555; border-radius: 28px; padding: 10px 16px; font-size: 1.05rem; cursor: pointer; outline: none; min-width: 180px; }
+    button.back-btn { background: transparent; border: 2px solid #666; border-radius: 28px; padding: 10px 24px; color: #aaa; font-weight: 600; cursor: pointer; transition: 0.3s; }
+    button.back-btn:hover { background: #555; border-color: #eee; color: #eee; }
+    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 28px; max-width: 600px; width: 100%; }
+    .pic-wrapper { border-radius: 22px; background: #2d2d2d; box-shadow: 0 5px 15px rgba(0,0,0,0.75); transition: 0.25s; position: relative; display: flex; justify-content: center; align-items: center; aspect-ratio: 1/1; cursor: pointer; overflow: hidden; border: 2px solid transparent; }
+    .pic-wrapper:hover, .pic-wrapper.selected { border-color: #5a85ff; box-shadow: 0 0 18px rgba(90, 133, 255, 0.8); transform: translateY(-5px); }
+    .avatar-pic { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; background-color: #555; }
+    .success-msg { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); background: #4caf50dd; border-radius: 40px; padding: 14px 28px; color: #f0f0f0; opacity: 0; transition: 0.3s; z-index: 9000; pointer-events: none; }
+    .success-msg.show { opacity: 1; }
+    .select-popup-sheet { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: #333; color: #e2e2e2; border-radius: 24px; box-shadow: 0 10px 30px #000; padding: 20px 30px; z-index: 2010; text-align: center; animation: popupSlideIn 0.3s forwards; }
+    @keyframes popupSlideIn { from { transform: translateX(-50%) translateY(100%); } to { transform: translateX(-50%) translateY(0); } }
+    .popup-select-btn { background: #5a85ff; border: none; border-radius: 20px; color: #fff; font-weight: 700; padding: 10px 30px; margin-top: 15px; cursor: pointer; }
+    
     @media (max-width: 600px) {
-      header h1 {
-        font-size: 2rem;
-      }
-      .create-album-btn-header {
-        font-size: 1rem;
-        padding: 10px 20px;
-      }
-      .gallery {
-        grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
-        gap: 22px;
-        max-width: 480px;
-      }
-      select#categorySelector {
-        min-width: 140px;
-        font-size: 1rem;
-        padding: 8px 14px;
-      }
-      button.back-btn {
-        padding: 8px 18px;
-        font-size: 1rem;
-      }
-      .avatar-pic {
-        width: 75px;
-        height: 75px;
-      }
-      .controls {
-        flex-direction: column;
-        gap: 15px;
-        margin-bottom: 20px;
-      }
-      select#categorySelector, button.back-btn {
-        width: 100%;
-        max-width: 300px;
-      }
-    }
-    @media (max-width: 400px) {
-      .gallery {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-        max-width: 320px;
-      }
+      .gallery { grid-template-columns: repeat(3, 1fr); gap: 15px; }
+      .controls { flex-direction: column; gap: 15px; }
+      select#categorySelector, .back-btn { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>SHARKY GALLERY</h1>
-  </header>
-  <div class="create-album-bar">
-    <button class="create-album-btn-header" onclick="window.location.href='album.html'">
-      CREATE YOUR OWN ALBUM
-    </button>
-  </div>
+  <header><h1>SHARKY GALLERY</h1></header>
+  <div class="create-album-bar"><button class="create-album-btn-header" onclick="window.location.href='album.html'">CREATE YOUR OWN ALBUM</button></div>
   <main>
     <div class="controls">
-      <select id="categorySelector" aria-label="Choose Category"></select>
+      <select id="categorySelector"></select>
       <button class="back-btn" onclick="window.location.href='profile.html'">Back to Profile</button>
     </div>
     <div class="gallery" id="gallery"></div>
   </main>
-  <div class="success-msg" id="successMsg">Profile Picture Saved!</div>
+  <div class="success-msg" id="successMsg">Profile Picture Updated!</div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
     const categories = [
-        { name: 'Avatar',      key: 'avatar',    icon: 'person',           images: [
+      { name: 'Avatar',      key: 'avatar',    icon: 'person',           images: [
         "https://cdn-icons-png.flaticon.com/512/147/147144.png",
         "https://cdn-icons-png.flaticon.com/512/1946/1946429.png",
         "https://cdn-icons-png.flaticon.com/512/236/236831.png",
@@ -420,7 +177,7 @@
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%E2%99%A1.jpeg?alt=media&token=dc2f59af-6a36-4e33-8cde-ca0ac3d13b95",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%F0%9D%97%AF%F0%9D%97%B2%F0%9D%97%AE%F0%9D%98%82%F0%9D%98%81%F0%9D%97%B6%F0%9D%97%B3%F0%9D%98%82%F0%9D%97%B9%20%F0%9D%97%B0%F0%9D%97%AE%F0%9D%97%BD%F0%9D%98%81%F0%9D%98%82%F0%9D%97%BF%F0%9D%97%B2.jpeg?alt=media&token=3b161512-dbc9-4602-9d03-c73635003b17",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%F0%9D%99%8E%F0%9D%99%96%F0%9D%99%AB%F0%9D%99%9A%20%3D%20%F0%9D%99%81%F0%9D%99%A4%F0%9D%99%A1%F0%9D%99%A1%F0%9D%99%A4%F0%9D%99%AC%20%F0%9D%99%A2%F0%9D%99%9A.jpeg?alt=media&token=a00192b5-9f2b-4e31-80b5-88254be8e577",
-    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%F0%9D%99%96%F0%9D%99%9E%F0%9D%99%A3%F0%9D%99%96%F0%9D%99%A6%F0%9D%99%A7%F0%9D%99%A1%F0%9D%99%96%F0%9D%99%9E%F0%9D%99%A9%F0%9D%99%9D%20%E2%8B%86%20_%CB%9A%20%E2%9F%A1%20%E0%A3%AA%20%CB%96.jpeg?alt=media&token=2c693fa5-4be7-4b44-8f54-11ba6cc4638f",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%F0%9D%99%96%F0%9D%99%9E%F0%9D%99%A3%F0%9D%99%96%F0%9D%99%96%F0%9D%99%A7%F0%9D%99%A1%F0%9D%99%96%F0%9D%99%9E%F0%9D%99%A9%F0%9D%99%9D%20%E2%8B%86%20_%CB%9A%20%E2%9F%A1%20%E0%A3%AA%20%CB%96.jpeg?alt=media&token=2c693fa5-4be7-4b44-8f54-11ba6cc4638f",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAnime%20Girl%2F%F0%9F%96%A4%F0%9F%A5%B9.jpeg?alt=media&token=a6bd29db-39a2-40b2-9bf2-95f23ee0fcdc"
       ] },
       { name: 'Cars',        key: 'cars',      icon: 'directions_car',   images: [
@@ -446,7 +203,7 @@
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2FANKIT%20NAME%20PFP.jpeg?alt=media&token=0632b61a-3cf5-4704-9f2c-7de5a1da3e2f",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2FStan%20Knight%20_%20stanislas%20knight%20aesthetic%20_%20insomnia%20_%20insomnia%20aesthetic%20_%20the%20royal%20thorns%20_%20L%C3%A9a%20Nemezia%20_%20lea%20nemezia%20_%20wattpad.jpeg?alt=media&token=b2c2cdba-4ac8-4aaa-9480-616f2d9169fc",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fclassic%20%E2%9A%9C%EF%B8%8F.jpeg?alt=media&token=87366370-6c9d-4479-a183-837cd6006c2e",
-    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fd758e964-77d4-4ce8-85e3-00ab43f7d856.jpeg?alt=media&token=d5725c01-bb17-465c-bf6a-36b166c9abe",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fd758e964-77d4-4ce8-85e3-00ab43f7d856.jpeg?alt=media&token=d5725c01-bb17-465c-bf6a-36b1668c9abe",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fe3b9b9d4-ba68-47d5-8ad0-6b3de3933a66.jpeg?alt=media&token=2e93f8c7-74bf-42a2-bbd9-ae6def497543",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fe7b566ae-b4cf-40a7-a75f-d95ea9b3bbb0.jpeg?alt=media&token=77e3cb54-bafd-4b32-bdf1-a08d40abae10",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FAesthetic%20pfp%2Fe96e1b22-8c41-4fdd-8a45-c1b89e0d22a1.jpeg?alt=media&token=2b6fabc7-3506-4fef-8d2f-ed1da3855e49",
@@ -477,10 +234,11 @@
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2FFOLLOW_SAVE%20FOR%20MORE.jpeg?alt=media&token=d5926dd4-d23b-4903-a240-400a34329894",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2Fa270189c-e08a-4022-9e09-087a40c486d9.jpeg?alt=media&token=317ddbdd-fe47-48b3-a6fd-1384de6e4aa2",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2Fe7611a74-155d-4040-b6c8-31fda295b635.jpeg?alt=media&token=9e017f5a-290c-4195-a9b3-219d4cb749f0",
-    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2Frelated%20discord%20server%20in%20my%20bio%20%E2%9D%A4%EF%B8%8F.jpeg?alt=media&token=a78f771b-49fb-4231-8f97-319ca62cba1b",
+    "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2Frelated%20discord%20server%20in%20my%20bio%20%E2%9D%A4%EF%B8%8F.jpeg?alt=media&token=a78f781b-49fb-4231-8f97-319ca62cba1b",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FNature%2F%DD%81%E2%82%8A%20%E2%8A%B9%20_.jpeg?alt=media&token=9d5f31e7-994f-40a6-8057-266843302615"
       ] },
       { name: 'Cats',        key: 'cats',      icon: 'pets',             images: [
+
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2F%23cats.jpeg?alt=media&token=cd8a55b2-95cd-4933-a2d1-5e1ddbb22f66",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2F17d98314-648c-4cbd-be09-9eb27e0ec3e2.jpeg?alt=media&token=7cc009a5-bfa9-49a5-8d6c-2a487768e26c",
     "https://firebasestorage.googleapis.com/v0/b/sharky-chat-007.firebasestorage.app/o/profilePic%2FCats%2F25cea8b8-bbc7-40a3-9824-8a7d01227ede.jpeg?alt=media&token=736a691b-ff5e-4aca-8c98-bf4e2a3b8753",
@@ -496,7 +254,6 @@
       ] },
     ];
 
-
     let currentCatIndex = 0;
     let openPopup = null;
     const gallery = document.getElementById("gallery");
@@ -510,8 +267,6 @@
       categorySelector.appendChild(option);
     });
 
-    categorySelector.value = 0;
-
     categorySelector.addEventListener("change", () => {
       currentCatIndex = parseInt(categorySelector.value, 10);
       renderGallery();
@@ -521,43 +276,26 @@
       gallery.innerHTML = '';
       const saved = localStorage.getItem("selectedAvatar");
       categories[currentCatIndex].images.forEach(url => {
-        if (!url) return;
         const wrap = document.createElement("div");
         wrap.className = "pic-wrapper";
         if (saved && url === saved) wrap.classList.add("selected");
         const img = document.createElement("img");
         img.src = url;
         img.className = "avatar-pic";
-        img.alt = categories[currentCatIndex].name;
         wrap.appendChild(img);
-        wrap.onclick = e => {
-          e.stopPropagation();
-          showSelectPopup(url, wrap);
-        };
+        wrap.onclick = e => { e.stopPropagation(); showSelectPopup(url, wrap); };
         gallery.appendChild(wrap);
       });
-      document.body.onclick = function(e) {
-        if (openPopup && !e.target.classList.contains('popup-select-btn')) {
-          openPopup.remove();
-          openPopup = null;
-        }
-      };
     }
 
     function showSelectPopup(url, wrap) {
-      if (openPopup) {
-        openPopup.remove();
-        openPopup = null;
-      }
+      if (openPopup) openPopup.remove();
       const popup = document.createElement('div');
       popup.className = 'select-popup-sheet';
-      popup.innerHTML = `
-        Change profile picture?<br>
-        <button class="popup-select-btn">Select</button>
-      `;
+      popup.innerHTML = `Change profile picture?<br><button class="popup-select-btn" id="confirmSelect">Confirm</button>`;
       document.body.appendChild(popup);
       openPopup = popup;
-      popup.querySelector('.popup-select-btn').onclick = function(e) {
+      document.getElementById("confirmSelect").onclick = function(e) {
         e.stopPropagation();
         selectPic(url, wrap);
         popup.remove();
@@ -565,15 +303,42 @@
       };
     }
 
-    function selectPic(url, wrap) {
-      document.querySelectorAll('.pic-wrapper.selected').forEach(s => s.classList.remove("selected"));
-      wrap.classList.add("selected");
-      localStorage.setItem("selectedAvatar", url);
-      successMsg.classList.add("show");
-      setTimeout(() => successMsg.classList.remove("show"), 1900);
-    }
+    async function selectPic(url, wrap) {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Please log in to change your avatar.");
+        return;
+      }
 
-    renderGallery();
+      try {
+        await db.collection("users").doc(user.uid).update({
+          profilePic: url
+        });
+
+        document.querySelectorAll('.pic-wrapper.selected').forEach(s => s.classList.remove("selected"));
+        wrap.classList.add("selected");
+        localStorage.setItem("selectedAvatar", url);
+        
+        successMsg.classList.add("show");
+        setTimeout(() => {
+          successMsg.classList.remove("show");
+          window.location.href = "profile.html"; // Auto redirect back
+        }, 1500);
+
+      } catch (error) {
+        console.error("Error updating profile pic: ", error);
+        alert("Failed to save. Please try again.");
+      }
+    }
+    auth.onAuthStateChanged(user => {
+      renderGallery();
+    });
+    document.body.onclick = function(e) {
+      if (openPopup && !e.target.closest('.select-popup-sheet')) {
+        openPopup.remove();
+        openPopup = null;
+      }
+    };
   </script>
 </body>
 </html>
