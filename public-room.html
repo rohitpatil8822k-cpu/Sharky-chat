@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sharky Elite — Public Room</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <style>
+    :root { 
+      --primary-neon: #f1ec67; 
+      --bg-dark: #0b0d11; 
+      --card-bg: rgba(25, 28, 35, 0.95); 
+      --glass-border: rgba(241, 236, 103, 0.2); 
+      --h-height: 48px; 
+    }
+    
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+    body { background: var(--bg-dark); font-family: 'Inter', sans-serif; color: #e2e8f0; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* Performance optimization: Hardware acceleration */
+    .messages-container { 
+        flex: 1; overflow-y: auto; padding: 15px; 
+        display: flex; flex-direction: column; gap: 10px; 
+        will-change: transform; -webkit-overflow-scrolling: touch;
+    }
+
+    .app-main { flex: 1; display: flex; flex-direction: column; margin-top: var(--h-height); height: calc(100dvh - var(--h-height)); position: relative; }
+    .room-header { height: 55px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: #16191f; border-bottom: 1px solid var(--glass-border); flex-shrink: 0; }
+    
+    .message { display: flex; gap: 10px; max-width: 95%; contain: content; }
+    .user-avatar { width: 38px; height: 38px; border-radius: 8px; border: 1px solid var(--glass-border); object-fit: cover; background: #222; }
+    .msg-content { background: var(--card-bg); padding: 10px; border-radius: 2px 12px 12px 12px; flex: 1; border: 1px solid rgba(255,255,255,0.02); }
+    .msg-user { font-size: 0.72rem; font-weight: 700; color: var(--primary-neon); font-family: 'Orbitron'; }
+    .msg-text { font-size: 0.88rem; color: #cfd8dc; margin-top: 3px; word-break: break-word; }
+
+    .input-wrapper { background: #0b0d11; border-top: 1px solid #1a1d23; padding: 10px 12px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+    .input-bar { background: #1a1d23; border-radius: 12px; padding: 2px 12px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--glass-border); }
+    #messageInput { flex: 1; background: transparent; border: none; color: white; padding: 10px 0; font-size: 0.9rem; }
+    
+    /* Online Side Panel */
+    .active-panel { position: fixed; right: -105%; top: 0; width: 280px; height: 100%; background: #0b0d11; border-left: 1px solid var(--glass-border); z-index: 3000; transition: 0.3s ease; padding: 70px 15px 20px; }
+    .active-panel.open { right: 0; }
+    .player-card { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 10px; margin-bottom: 8px; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #00ff88; box-shadow: 0 0 5px #00ff88; }
+    
+    .overlay-main { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); display: none; z-index: 2500; }
+    .overlay-main.show { display: block; }
+
+    .role-tag { font-size: 7px; padding: 1px 4px; border-radius: 3px; color: #000; font-weight: 900; background: var(--primary-neon); text-transform: uppercase; margin-left: 4px; }
+  </style>
+</head>
+<body>
+
+  <script src="header.js"></script>
+
+  <div class="app-main">
+    <div class="room-header">
+      <div onclick="window.history.back()" style="cursor:pointer;"><svg viewBox="0 0 24 24" width="20" fill="white"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></div>
+      <div style="text-align:center;">
+        <h2 style="font-family:'Orbitron'; font-size:0.8rem; color:var(--primary-neon);">PUBLIC ROOM</h2>
+        <div style="font-size: 9px; color: #546e7a;">ONLINE: <span id="onlineCount" style="color:#00ff88">0</span></div>
+      </div>
+      <div onclick="toggleActivePanel(true)" style="cursor:pointer;"><svg viewBox="0 0 24 24" width="22" fill="#78909c"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+    </div>
+
+    <div class="messages-container" id="messages"></div>
+
+    <div class="input-wrapper">
+        <div class="input-bar">
+          <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
+          <button id="sendBtn" onclick="sendMessage()" style="background:none; border:none; color:var(--primary-neon); cursor:pointer;">
+            <svg viewBox="0 0 24 24" width="22" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
+        </div>
+    </div>
+  </div>
+
+  <div class="active-panel" id="activePanel">
+    <div style="color:var(--primary-neon); font-family:'Orbitron'; font-size:0.8rem; margin-bottom:15px; display:flex; justify-content:space-between;">
+        <span>ONLINE</span>
+        <span onclick="toggleActivePanel(false)" style="color:#555; cursor:pointer;">CLOSE</span>
+    </div>
+    <div id="activeUsersList"></div>
+  </div>
+
+  <div class="overlay-main" id="overlay" onclick="toggleActivePanel(false)"></div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGfgy9OeMTJ__oOAFxoBW-eIOYlvhObZM",
+      authDomain: "sharky-chat-007.firebaseapp.com",
+      projectId: "sharky-chat-007",
+      storageBucket: "sharky-chat-007.appspot.com",
+      messagingSenderId: "637104796242",
+      appId: "1:637104796242:web:74ac36b86af91be15ea58b"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore(), auth = firebase.auth();
+    const msgCol = "sharky_global_chat_v3_secure"; 
+    const onlineCol = "online_v3_realtime";
+
+    let userUid, userData = {};
+
+    auth.onAuthStateChanged(async user => {
+      if(!user) return;
+      userUid = user.uid;
+      const uDoc = await db.collection("users").doc(userUid).get();
+      userData = uDoc.data() || { ign: "Survivor" };
+      
+      initChat(); 
+      setupPresence();
+    });
+
+    // Fix: Baar baar refresh na ho isliye metadata changes monitor karenge
+    function initChat() {
+      const cont = document.getElementById("messages");
+      
+      db.collection(msgCol).orderBy("createdAt", "desc").limit(40).onSnapshot(snap => {
+        // Sirf naye changes ko process karo (Don't clear innerHTML every time)
+        if (snap.metadata.hasPendingWrites) return;
+
+        let fullHTML = "";
+        const docs = snap.docs.reverse();
+        
+        docs.forEach(doc => {
+          const m = doc.data();
+          fullHTML += `
+            <div class="message">
+              <img src="${m.pic || 'https://via.placeholder.com/38'}" class="user-avatar" loading="lazy">
+              <div class="msg-content">
+                <div class="msg-user">${m.name}${m.role ? '<span class="role-tag">'+m.role+'</span>' : ''}</div>
+                <div class="msg-text">${m.text}</div>
+              </div>
+            </div>`;
+        });
+        
+        cont.innerHTML = fullHTML;
+        cont.scrollTop = cont.scrollHeight;
+      });
+    }
+
+    function setupPresence() {
+      const userRef = db.collection(onlineCol).doc(userUid);
+      const updateStatus = () => {
+        userRef.set({ name: userData.ign, pic: userData.profilePic || "", lastSeen: Date.now() }, { merge: true });
+      };
+
+      updateStatus();
+      setInterval(updateStatus, 15000); // 15s is enough, kam refresh hoga
+
+      // Online list sync (Optimized)
+      db.collection(onlineCol).onSnapshot(snap => {
+        const listUI = document.getElementById("activeUsersList");
+        const countUI = document.getElementById("onlineCount");
+        const now = Date.now();
+        let html = ""; let count = 0;
+
+        snap.forEach(doc => {
+          const u = doc.data();
+          if (now - u.lastSeen < 40000) { // Extended window to prevent flickering
+            count++;
+            html += `
+              <div class="player-card">
+                <div style="position:relative;"><img src="${u.pic || 'https://via.placeholder.com/35'}" style="width:30px; height:30px; border-radius:5px;"><div class="status-dot" style="position:absolute; bottom:-1px; right:-1px;"></div></div>
+                <span style="font-size:0.75rem; color:#fff;">${u.name}</span>
+              </div>`;
+          }
+        });
+        listUI.innerHTML = html;
+        countUI.innerText = count;
+      });
+    }
+
+    async function sendMessage() {
+      const inp = document.getElementById("messageInput");
+      const txt = inp.value.trim();
+      if(!txt) return;
+      inp.value = "";
+      
+      await db.collection(msgCol).add({
+        uid: userUid, name: userData.ign, pic: userData.profilePic || "",
+        text: txt, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    function toggleActivePanel(s) {
+      document.getElementById('activePanel').classList.toggle('open', s);
+      document.getElementById('overlay').classList.toggle('show', s);
+    }
+
+    document.getElementById("messageInput").onkeypress = e => { if(e.key === "Enter") sendMessage(); };
+  </script>
+</body>
+</html>
