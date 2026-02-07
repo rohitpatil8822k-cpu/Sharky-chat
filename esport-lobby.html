@@ -47,6 +47,11 @@
     .m-btn.active { border-color: var(--neon); background: rgba(0,229,255,0.1); }
     .m-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
     .btn-create { width: 100%; margin-top: 25px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.15); padding: 18px; border-radius: 20px; color: #94a3b8; font-weight: 600; cursor: pointer; display: none; align-items: center; justify-content: center; gap: 10px; }
+    .popup-content { text-align: center; }
+    .popup-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; }
+    .popup-icon.error { background: rgba(255,71,87,0.1); color: var(--danger); }
+    .popup-icon.success { background: rgba(0,229,255,0.1); color: var(--neon); }
+    .popup-msg { font-size: 0.9rem; color: #94a3b8; line-height: 1.5; margin-bottom: 25px; }
   </style>
 </head>
 <body>
@@ -102,8 +107,12 @@
 
 <div id="actionModal" class="modal"><div class="m-box" id="actionContent"></div></div>
 
+<div id="popupModal" class="modal">
+    <div class="m-box popup-content" id="popupContent"></div>
+</div>
+
 <script type="module">
-  import { getFirestore, collection, doc, onSnapshot, addDoc, getDoc, updateDoc, query, where, getDocs, runTransaction, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  import { getFirestore, collection, doc, onSnapshot, addDoc, getDoc, updateDoc, query, where, getDocs, runTransaction, serverTimestamp, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
   let db, auth, currentRole = "user", currentBal = 0, currentType = "chat", savedIGN = "";
@@ -129,6 +138,31 @@
 
   window.closeM = (id) => document.getElementById(id).style.display = 'none';
 
+  window.showPopup = (type, title, msg, btnType) => {
+    const box = document.getElementById('popupContent');
+    const isError = type === 'error';
+    const isBalance = type === 'balance';
+    
+    let buttons = `<button class="btn-main" onclick="closeM('popupModal')">OKAY</button>`;
+    if(isBalance) {
+        buttons = `
+            <button class="btn-main" onclick="location.href='add-money.html'">ADD BALANCE</button>
+            <button class="btn-danger" style="margin-top:10px" onclick="closeM('popupModal')">CLOSE</button>
+        `;
+    }
+
+    box.innerHTML = `
+        <div class="popup-icon ${isError || isBalance ? 'error' : 'success'}">
+            <i data-lucide="${isError || isBalance ? 'alert-circle' : 'check-circle'}" size="32"></i>
+        </div>
+        <h3>${title}</h3>
+        <p class="popup-msg">${msg}</p>
+        ${buttons}
+    `;
+    document.getElementById('popupModal').style.display = 'flex';
+    lucide.createIcons();
+  };
+
   window.openCreateM = () => {
     document.getElementById('createModal').style.display = 'flex';
   };
@@ -143,13 +177,14 @@
 
   window.processCreate = async () => {
     const name = document.getElementById('rName').value, limit = document.getElementById('rLimit').value;
-    if(!name || !limit) return alert("Fill all fields");
+    if(!name || !limit) return showPopup('error', 'MISSING INFO', 'Please fill all fields before publishing.');
     await addDoc(collection(db, "lobbies"), { 
         name, limit: parseInt(limit), fee: currentType === 'tour' ? parseInt(document.getElementById('rFee').value || 0) : 0, 
         desc: document.getElementById('rDesc').value, rules: document.getElementById('rRules').value || "",
         type: currentType, status: "online", joined: 0, createdBy: auth.currentUser.uid, createdAt: serverTimestamp() 
     });
     closeM('createModal');
+    showPopup('success', 'ARENA CREATED', 'Your arena is now live and ready for players.');
   };
 
   window.handlePublicEntry = () => {
@@ -182,6 +217,7 @@
         const acc = await getDoc(doc(db, "users", auth.currentUser.uid, "arena_access", room.id));
         if(acc.exists()) hasAccess = true;
     }
+    const isFull = room.joined >= room.limit;
     box.innerHTML = `
       <div class="close-x" onclick="closeM('actionModal')"><i data-lucide="x"></i></div>
       <h3 style="margin-bottom:5px">${room.name}</h3>
@@ -198,7 +234,9 @@
         <p style="font-size:0.8rem; color:#94a3b8">${room.desc || ''}</p>
         ${room.rules ? `<p style="font-size:0.8rem; color:var(--neon); margin-top:10px; white-space:pre-line">${room.rules}</p>` : ''}
       </div>
-      <button class="btn-main" style="margin-top:20px" onclick="startJoinProcess('${room.id}', ${room.fee}, '${room.type}', ${isOwner || hasAccess})">ENTER ARENA</button>
+      <button class="btn-main" style="margin-top:20px" ${!hasAccess && !isOwner && isFull ? 'disabled' : ''} onclick="startJoinProcess('${room.id}', ${room.fee}, '${room.type}', ${isOwner || hasAccess})">
+        ${!hasAccess && !isOwner && isFull ? 'ARENA FULL' : 'ENTER ARENA'}
+      </button>
       ${(isOwner || isAdmin) ? `<button class="btn-danger" onclick="closeArena('${room.id}')">CLOSE ARENA</button>` : ''}
     `;
     document.getElementById('actionModal').style.display = 'flex';
@@ -213,31 +251,50 @@
 
   window.startJoinProcess = async (id, fee, type, bypassPay) => {
     const ign = document.getElementById('playerIGN').value.trim();
-    if(!ign || ign.length < 3) return alert("Enter valid IGN");
+    if(!ign || ign.length < 3) return showPopup('error', 'INVALID IGN', 'In-Game Name must be at least 3 characters long.');
+    
     if(ign !== savedIGN) {
         const q = query(collection(db, "users"), where("ign", "==", ign));
         const check = await getDocs(q);
-        if(!check.empty) return alert("IGN already exists. Try a different one!");
+        if(!check.empty) return showPopup('error', 'IGN EXISTS', 'This In-Game Name is already taken by another player.');
         await updateDoc(doc(db, "users", auth.currentUser.uid), { ign: ign });
         savedIGN = ign;
     }
+
     try {
-        if(!bypassPay && fee > 0) {
+        if(!bypassPay) {
             await runTransaction(db, async (tx) => {
-                const wRef = doc(db, "wallets", auth.currentUser.uid);
-                const wSnap = await tx.get(wRef);
-                if(wSnap.data().realMoney < fee) throw "Low Balance";
-                tx.update(wRef, { realMoney: wSnap.data().realMoney - fee });
+                const roomRef = doc(db, "lobbies", id);
+                const roomSnap = await tx.get(roomRef);
+                const rData = roomSnap.data();
+                if(rData.joined >= rData.limit) throw "ARENA_FULL";
+                
+                if(fee > 0) {
+                    const wRef = doc(db, "wallets", auth.currentUser.uid);
+                    const wSnap = await tx.get(wRef);
+                    if(wSnap.data().realMoney < fee) throw "LOW_BALANCE";
+                    tx.update(wRef, { realMoney: wSnap.data().realMoney - fee });
+                }
+                
+                tx.update(roomRef, { joined: increment(1) });
                 tx.set(doc(db, "users", auth.currentUser.uid, "arena_access", id), { paid: fee, time: serverTimestamp() });
             });
         }
         if(id === 'public') { window.location.href = 'public-room.html'; return; }
         window.location.href = type === 'chat' ? `chat-lobby.html?arena=${id}` : `t1-lobby.html?arena=${id}`;
-    } catch (e) { alert(e); }
+    } catch (e) { 
+        if(e === "LOW_BALANCE") showPopup('balance', 'INSUFFICIENT BALANCE', 'You do not have enough funds to join this arena. Please add money to your wallet.');
+        else if(e === "ARENA_FULL") showPopup('error', 'ARENA FULL', 'The slots for this arena have just been filled.');
+        else showPopup('error', 'PROCESS FAILED', 'An unexpected error occurred. Please try again later.');
+    }
   };
 
   window.closeArena = async (id) => { 
-    if(confirm("Permanently delete?")) { await deleteDoc(doc(db, "lobbies", id)); closeM('actionModal'); } 
+    if(confirm("Permanently delete?")) { 
+        await deleteDoc(doc(db, "lobbies", id)); 
+        closeM('actionModal');
+        showPopup('success', 'ARENA CLOSED', 'The arena has been successfully removed.');
+    } 
   };
 
   function loadRooms() {
@@ -258,7 +315,7 @@
         div.onclick = () => handleRoomClick(r);
         div.innerHTML = `
           <div class="c-left"><div class="c-icon"><i data-lucide="${r.type === 'chat' ? 'message-square' : 'swords'}"></i></div>
-          <div class="c-info"><span class="name">${r.name}</span>
+          <div class="c-info"><span class="name">${r.name} ${r.joined >= r.limit ? '<span style="color:var(--danger); font-size:0.6rem;">[FULL]</span>' : ''}</span>
           <div class="meta"><div class="tag">${r.type}</div><span class="count-pill">${r.joined}/${r.limit}</span><span>₹${r.fee}</span></div></div></div><i data-lucide="chevron-right" size="18"></i>`;
         list.appendChild(div);
       });
