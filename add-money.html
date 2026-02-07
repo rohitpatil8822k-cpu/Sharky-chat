@@ -152,8 +152,8 @@
       </div>
 
       <div class="input-group">
-        <label>AMOUNT (MIN ₹100)</label>
-        <input type="number" id="w_amt" class="field" placeholder="100.00">
+        <label>AMOUNT (MIN ₹20)</label>
+        <input type="number" id="w_amt" class="field" placeholder="20.00">
       </div>
 
       <div class="input-group">
@@ -221,7 +221,7 @@
       const amt = parseInt(document.getElementById('w_amt').value);
       const name = document.getElementById('w_name').value;
       const method = document.getElementById('w_method').value;
-      if(!amt || amt < 100) return alert("Min ₹100 required");
+      if(!amt || amt < 20) return alert("Min ₹20 required");
       if(!name) return alert("Enter holder name");
 
       let pDetails = { method, name, amount: amt };
