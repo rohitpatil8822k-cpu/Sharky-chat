@@ -3,126 +3,163 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Sharky Chat | Active Rooms</title>
+  <title>Sharky Chat | Discovery</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet"/>
   <script src="https://unpkg.com/lucide@latest"></script>
   
   <style>
     :root {
       --primary: #00d2ff;
-      --bg-dark: #05070a;
-      --card-bg: rgba(255, 255, 255, 0.03);
-      --border: rgba(255, 255, 255, 0.08);
-      --error: #ff4757;
+      --pro: #f8fafc;
+      --premium: #ffd700;
+      --bg-dark: #030712;
+      --card-bg: rgba(17, 24, 39, 0.4);
+      --border: rgba(255, 255, 255, 0.06);
+      --success: #10b981;
+      --danger: #ef4444;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-
+    
     body {
       min-height: 100vh;
-      background-color: var(--bg-dark);
-      background-image: radial-gradient(circle at top left, rgba(0, 212, 255, 0.07), transparent 400px);
-      color: #e2e8f0;
-      font-family: 'Inter', sans-serif;
-      /* Notice page jaisa padding */
-      padding: 75px 16px 40px; 
+      background: var(--bg-dark);
+      background-image: radial-gradient(circle at 50% -20%, rgba(0, 210, 255, 0.12), transparent 50%);
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 70px 20px 30px;
     }
 
-    main { width: 100%; max-width: 550px; margin: 0 auto; }
+    main { width: 100%; max-width: 420px; margin: 0 auto; }
 
+    .brand-section { text-align: center; margin-bottom: 25px; }
     .page-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.4rem;
-      background: linear-gradient(to right, #fff, var(--primary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 25px;
-      text-align: center;
+      font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
+      letter-spacing: 4px; color: #fff; text-transform: uppercase; opacity: 0.9;
     }
 
-    /* Normal Loading Text */
-    #roomLoader {
-      text-align: center;
-      padding: 40px;
-      color: var(--primary);
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 2px;
-    }
+    #roomList { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
 
-    #roomList { display: grid; gap: 14px; }
-
-    .room {
+    .room-card {
       background: var(--card-bg);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 18px;
+      padding: 16px;
+      transition: 0.3s ease;
       display: flex;
-      align-items: center;
-      gap: 14px;
+      flex-direction: column;
+      gap: 12px;
       cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .room:active { transform: scale(0.98); background: rgba(255,255,255,0.06); }
-    .room.full { opacity: 0.5; cursor: not-allowed; }
-
-    .room-icon-box {
-      width: 48px; height: 48px;
-      background: rgba(0, 212, 255, 0.08);
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--primary);
-      border: 1px solid rgba(0, 212, 255, 0.1);
-    }
-
-    .room-info { flex: 1; }
-    .room-title { font-weight: 600; font-size: 1.05rem; color: #fff; margin-bottom: 4px; }
-    
-    .user-count { 
-      font-size: 0.8rem; color: #94a3b8; 
-      display: flex; align-items: center; gap: 6px; 
     }
     
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
-    .room.full .status-dot { background: var(--error); }
+    .room-card:active { transform: scale(0.97); }
+    .room-card.premium { border-right: 3px solid var(--premium); }
+    .room-card.pro { border-right: 3px solid var(--pro); }
+    .room-card.basic { border-right: 3px solid var(--primary); }
 
-    .lobby-btn {
-      width: 100%; margin-top: 35px;
-      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
-      padding: 18px; border-radius: 16px;
-      color: #fff; text-decoration: none; font-weight: 900;
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      font-family: 'Orbitron', sans-serif; font-size: 0.9rem;
-      box-shadow: 0 8px 20px rgba(0, 212, 255, 0.15);
+    .card-top { display: flex; align-items: center; gap: 14px; }
+    .icon-box { 
+        width: 42px; height: 42px; border-radius: 12px; 
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(0,0,0,0.2);
     }
 
-    footer { padding: 50px 20px; text-align: center; color: #475569; font-size: 0.75rem; font-family: 'Orbitron', sans-serif; }
+    .room-info { flex: 1; overflow: hidden; }
+    .room-name { font-weight: 700; font-size: 1rem; color: #fff; }
+    .room-desc { font-size: 0.75rem; color: #94a3b8; margin-top: 2px; }
+
+    .stats-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .live-indicator { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; font-weight: 700; color: var(--success); }
+    .pulse-dot { width: 6px; height: 6px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite; }
+    
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    .action-group { display: flex; flex-direction: column; gap: 10px; }
+    .btn {
+      width: 100%; padding: 16px; border-radius: 16px; border: none;
+      font-family: 'Orbitron', sans-serif; font-size: 0.75rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;
+    }
+
+    .btn-create { background: var(--premium); color: #000; display: none; }
+    .btn-arena { background: #fff; color: #000; }
+
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; z-index: 2000; }
+    .sheet {
+      position: fixed; bottom: -100%; left: 0; width: 100%; background: #0a0c12;
+      border-radius: 24px 24px 0 0; padding: 30px 24px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2001;
+      border-top: 1px solid var(--border);
+    }
+    body.show-sheet .overlay { display: block; }
+    body.show-sheet .sheet { bottom: 0; }
+
+    .modal { position: fixed; inset: 0; background: #000; display: none; align-items: center; justify-content: center; z-index: 3000; padding: 20px; }
+    .modal-box { width: 100%; max-width: 350px; background: #111827; padding: 25px; border-radius: 24px; }
+    .modal-box input { width: 100%; padding: 14px; margin: 8px 0; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; color: #fff; }
+
+    footer { text-align: center; color: #475569; font-size: 0.65rem; font-family: 'Orbitron'; margin-top: 30px; opacity: 0.5; }
   </style>
 </head>
-<body>
+<body id="pageBody">
 
   <script src="header.js"></script>
 
   <main>
-    <h1 class="page-title">Active Rooms</h1>
-    
-    <div id="roomLoader">
-        <p>SCANNING CHANNELS...</p>
+    <div class="brand-section">
+        <h1 class="page-title">Active Channels</h1>
     </div>
 
     <div id="roomList"></div>
 
-    <a href="esport-lobby.html" class="lobby-btn">
-      <i data-lucide="shield-check"></i> ESPORTS ARENA
-    </a>
+    <div class="action-group">
+        <button id="createBtn" class="btn btn-create" onclick="toggleModal(true)">
+            <i data-lucide="plus"></i> NEW LOBBY
+        </button>
+        <button class="btn btn-arena" onclick="window.location.href='esport-lobby.html'">
+            <i data-lucide="zap"></i> ESPORTS ARENA
+        </button>
+    </div>
+
+    <footer>&copy; SHARKY CHAT 2026</footer>
   </main>
 
-  <footer>&copy; SHARKY CHAT 2026</footer>
+  <div class="overlay" onclick="closeSheet()"></div>
+  <div class="sheet" id="roomSheet">
+    <div style="text-align: center; margin-bottom: 25px;">
+        <h2 id="sTitle" style="font-family:'Orbitron'; font-size:1.1rem; color:#fff;"></h2>
+        <p id="sDesc" style="color:#94a3b8; font-size:0.8rem; margin-top:6px;"></p>
+    </div>
+    <div id="ownerControls" style="display:none; flex-direction:column; gap:10px;">
+        <button class="btn" style="background:var(--primary); color:#000;" id="joinAction">ENTER LOBBY</button>
+        <button class="btn" style="background:rgba(255,255,255,0.05); color:#fff; border:1px solid var(--border);" id="statusAction">CLOSE LOBBY</button>
+        <button class="btn" style="background:rgba(239, 68, 68, 0.1); color:var(--danger); border:1px solid rgba(239, 68, 68, 0.2);" id="delAction">DELETE PERMANENTLY</button>
+    </div>
+    <div id="guestControls">
+        <button class="btn" style="background:var(--primary); color:#000; width:100%;" id="guestJoin">ENTER LOBBY</button>
+    </div>
+    <button class="btn" onclick="closeSheet()" style="background:transparent; color:#64748b; font-size: 0.7rem; margin-top:10px;">DISMISS</button>
+  </div>
+
+  <div class="modal" id="cModal">
+    <div class="modal-box">
+        <h2 style="font-family:'Orbitron'; color:#fff; font-size:0.9rem; text-align:center; margin-bottom:15px;">CREATE PERMANENT LOBBY</h2>
+        <input type="text" id="inTitle" placeholder="Lobby Name">
+        <input type="number" id="inLimit" placeholder="User Limit">
+        <input type="text" id="inDesc" placeholder="Small Description">
+        <button class="btn btn-create" style="display:flex; margin-top:15px; width:100%;" onclick="processCreate()">ACTIVATE</button>
+        <p onclick="toggleModal(false)" style="text-align:center; margin-top:15px; cursor:pointer; font-size:0.7rem; color:#475569;">CANCEL</p>
+    </div>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -142,62 +179,113 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(async (user) => {
       if (!user) { window.location.href = "login.html"; return; }
-      loadChatRooms();
+      const uDoc = await db.collection("users").doc(user.uid).get();
+      if(uDoc.exists && uDoc.data().membershipPlan === "premium") {
+          db.collection("chatrooms").where("createdBy", "==", user.uid).onSnapshot(snap => {
+              document.getElementById("createBtn").style.display = snap.empty ? "flex" : "none";
+          });
+      }
+      renderRooms();
     });
 
-    function loadChatRooms() {
-      const roomList = document.getElementById("roomList");
-      const roomLoader = document.getElementById("roomLoader");
-
-      db.collection("chatrooms").onSnapshot((snapshot) => {
-        // Hiding the specific room loader, not the whole page
-        if (roomLoader) roomLoader.style.display = "none";
-        roomList.innerHTML = "";
-        
-        snapshot.forEach((doc) => {
-          const room = doc.data();
-          const roomId = doc.id;
-          const max = room.maxUsers || 20;
+    function renderRooms() {
+      const list = document.getElementById("roomList");
+      db.collection("chatrooms").onSnapshot(snap => {
+        list.innerHTML = "";
+        snap.forEach(doc => {
+          const data = doc.data();
+          const isOwner = auth.currentUser && auth.currentUser.uid === data.createdBy;
           
-          const div = document.createElement("div");
-          div.className = "room";
-          div.id = `rc-${roomId}`;
-          div.innerHTML = `
-            <div class="room-icon-box"><i data-lucide="cpu"></i></div>
-            <div class="room-info">
-              <div class="room-title">${room.name}</div>
-              <div class="user-count"><div class="status-dot"></div><span id="c-${roomId}">Syncing...</span></div>
+          if (data.status === "offline" && !isOwner) return;
+
+          const card = document.createElement("div");
+          card.className = `room-card ${data.membershipPlan || 'basic'}`;
+          if(data.status === "offline") card.style.opacity = "0.5";
+          
+          card.innerHTML = `
+            <div class="card-top">
+                <div class="icon-box"><i data-lucide="${data.membershipPlan === 'premium' ? 'crown' : 'message-square'}"></i></div>
+                <div class="room-info">
+                    <div class="room-name">${data.name} ${data.status === 'offline' ? '(OFFLINE)' : ''}</div>
+                    <div class="room-desc">${data.description || 'Sharky Public Chatroom'}</div>
+                </div>
             </div>
-            <i data-lucide="chevron-right" style="width:16px; opacity:0.3"></i>
+            <div class="stats-container">
+                <div class="live-indicator">
+                    <div class="pulse-dot" style="background:${data.status === 'offline' ? '#64748b' : ''}"></div>
+                    <span id="active-${doc.id}">${data.status === 'offline' ? 'OFFLINE' : '0 ONLINE'}</span>
+                </div>
+                <div class="capacity-tag" style="font-family:Orbitron; font-size:0.6rem; opacity:0.4;">CAP: ${data.maxUsers}</div>
+            </div>
           `;
-          roomList.appendChild(div);
+          card.onclick = () => openSheet(doc.id, data);
+          list.appendChild(card);
 
-          // Real-time Active Count
-          db.collection("roomActiveUsers").doc(roomId).collection("users").onSnapshot((uSnap) => {
-            let active = 0; const now = Date.now();
-            uSnap.forEach(uDoc => { 
-              const u = uDoc.data();
-              if(u.lastSeen && (now - u.lastSeen.toMillis() < 32000)) active++; 
+          if(data.status !== "offline") {
+            db.collection("roomActiveUsers").doc(doc.id).collection("users").onSnapshot(uSnap => {
+                let active = 0; const now = Date.now();
+                uSnap.forEach(u => { if(u.data().lastSeen && (now - u.data().lastSeen.toMillis() < 32000)) active++; });
+                const el = document.getElementById(`active-${doc.id}`);
+                if(el) el.innerText = `${active} ONLINE`;
             });
-
-            const cEl = document.getElementById(`c-${roomId}`);
-            const rEl = document.getElementById(`rc-${roomId}`);
-            if(cEl && rEl) {
-              cEl.innerText = `${active} / ${max} Online`;
-              if(active >= max) {
-                rEl.classList.add('full');
-                rEl.onclick = () => alert("Room is full, bhai!");
-              } else {
-                rEl.classList.remove('full');
-                rEl.onclick = () => window.location.href = room.file || "#";
-              }
-            }
-          });
+          }
         });
-        if(window.lucide) lucide.createIcons();
+        lucide.createIcons();
       });
+    }
+
+    function openSheet(id, data) {
+      document.getElementById("sTitle").innerText = data.name;
+      document.getElementById("sDesc").innerText = data.description || 'Sharky Public Chatroom';
+      
+      const isOwner = auth.currentUser && auth.currentUser.uid === data.createdBy;
+      const oCtrl = document.getElementById("ownerControls");
+      const gCtrl = document.getElementById("guestControls");
+
+      if(isOwner) {
+          oCtrl.style.display = "flex";
+          gCtrl.style.display = "none";
+          document.getElementById("joinAction").onclick = () => window.location.href = `premium-chat.html?id=${id}`;
+          
+          const sBtn = document.getElementById("statusAction");
+          sBtn.innerText = data.status === "offline" ? "GO ONLINE" : "CLOSE LOBBY";
+          sBtn.onclick = async () => {
+              await db.collection("chatrooms").doc(id).update({ status: data.status === "offline" ? "online" : "offline" });
+              closeSheet();
+          };
+
+          document.getElementById("delAction").onclick = async () => {
+              if(confirm("Delete lobby forever?")) {
+                  await db.collection("chatrooms").doc(id).delete();
+                  closeSheet();
+              }
+          };
+      } else {
+          oCtrl.style.display = "none";
+          gCtrl.style.display = "block";
+          document.getElementById("guestJoin").onclick = () => window.location.href = `premium-chat.html?id=${id}`;
+      }
+      
+      document.getElementById("pageBody").classList.add("show-sheet");
+    }
+
+    function closeSheet() { document.getElementById("pageBody").classList.remove("show-sheet"); }
+    function toggleModal(v) { document.getElementById("cModal").style.display = v ? 'flex' : 'none'; }
+
+    async function processCreate() {
+      const t = document.getElementById("inTitle").value;
+      const l = document.getElementById("inLimit").value;
+      const d = document.getElementById("inDesc").value;
+      if(t && l) {
+          await db.collection("chatrooms").add({
+              name: t, maxUsers: parseInt(l), description: d || "Sharky Public Chatroom",
+              membershipPlan: "premium", createdBy: auth.currentUser.uid, createdAt: new Date(),
+              status: "online"
+          });
+          toggleModal(false);
+      }
     }
   </script>
 </body>
