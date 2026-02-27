@@ -50,20 +50,30 @@
       position: relative;
     }
     .room-card:active { transform: scale(0.96); }
-    .room-card.pinned { border: 1px solid rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.05); }
+    .room-card.pinned { border: 1px solid rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.08); }
     .room-card.premium { border-right: 3px solid var(--premium); }
     .room-card.pro { border-right: 3px solid var(--pro); }
     .room-card.basic { border-right: 3px solid var(--primary); }
-    .pin-badge { position: absolute; top: 12px; right: 12px; color: var(--premium); display: flex; align-items: center; }
-    .card-top { display: flex; align-items: center; gap: 14px; }
+    .pin-badge { position: absolute; top: 10px; left: 10px; color: var(--premium); z-index: 5; }
+    .card-top { display: flex; align-items: center; gap: 14px; position: relative; }
     .icon-box { 
         width: 42px; height: 42px; border-radius: 12px; 
         display: flex; align-items: center; justify-content: center;
         background: rgba(0,0,0,0.2);
     }
     .room-info { flex: 1; overflow: hidden; }
-    .room-name { font-weight: 700; font-size: 1rem; color: #fff; }
-    .room-desc { font-size: 0.75rem; color: #94a3b8; margin-top: 2px; }
+    .room-name { font-weight: 700; font-size: 0.95rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .room-desc { font-size: 0.7rem; color: #94a3b8; margin-top: 2px; }
+    
+    .owner-mini-box {
+        display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+        position: absolute; right: 0; top: 0;
+    }
+    .owner-label { font-size: 0.5rem; font-weight: 800; color: #64748b; letter-spacing: 1px; text-transform: uppercase; }
+    .owner-profile { display: flex; align-items: center; gap: 6px; }
+    .owner-img { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border); object-fit: cover; }
+    .owner-name { font-size: 0.65rem; font-weight: 600; color: #cbd5e1; max-width: 60px; overflow: hidden; text-overflow: ellipsis; }
+
     .stats-container {
         display: flex;
         align-items: center;
@@ -82,7 +92,7 @@
     }
     .btn-create { background: var(--premium); color: #000; }
     .btn-arena { background: #fff; color: #000; }
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; z-index: 2000; }
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; z-index: 2000; }
     .sheet {
       position: fixed; bottom: -100%; left: 0; width: 100%; background: #0a0c12;
       border-radius: 24px 24px 0 0; padding: 30px 24px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2001;
@@ -91,9 +101,9 @@
     body.show-sheet { overflow: hidden; }
     body.show-sheet .overlay { display: block; }
     body.show-sheet .sheet { bottom: 0; }
-    .modal { position: fixed; inset: 0; background: #000; display: none; align-items: center; justify-content: center; z-index: 3000; padding: 20px; }
-    .modal-box { width: 100%; max-width: 350px; background: #111827; padding: 25px; border-radius: 24px; }
-    .modal-box input { width: 100%; padding: 14px; margin: 8px 0; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 3000; padding: 20px; }
+    .modal-box { width: 100%; max-width: 350px; background: #111827; padding: 25px; border-radius: 24px; border: 1px solid var(--border); }
+    .modal-box input, .modal-box select { width: 100%; padding: 14px; margin: 8px 0; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; font-family: inherit; }
     footer { text-align: center; color: #475569; font-size: 0.65rem; font-family: 'Orbitron'; margin-top: 10px; opacity: 0.5; padding-bottom: 20px; }
   </style>
 </head>
@@ -138,9 +148,14 @@
   <div class="modal" id="cModal">
     <div class="modal-box">
         <h2 style="font-family:'Orbitron'; color:#fff; font-size:0.9rem; text-align:center; margin-bottom:15px;">CREATE PERMANENT LOBBY</h2>
-        <input type="text" id="inTitle" placeholder="Lobby Name">
+        <input type="text" id="inTitle" placeholder="Lobby Name" maxlength="16">
         <input type="number" id="inLimit" placeholder="User Limit">
         <input type="text" id="inDesc" placeholder="Small Description">
+        <select id="priceSelect" onchange="togglePriceInput(this.value)">
+            <option value="0">Free Access</option>
+            <option value="custom">Set Membership Price (30 Days)</option>
+        </select>
+        <input type="number" id="manualPrice" placeholder="Enter Price in ₹" style="display:none;">
         <button class="btn btn-create" style="display:flex; margin-top:15px; width:100%;" onclick="processCreate()">ACTIVATE</button>
         <p onclick="toggleModal(false)" style="text-align:center; margin-top:15px; cursor:pointer; font-size:0.7rem; color:#475569;">CANCEL</p>
     </div>
@@ -158,7 +173,6 @@
       messagingSenderId: "637104796242",
       appId: "1:637104796242:web:74ac36b86af91be15ea58b"
     };
-
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
@@ -178,95 +192,135 @@
       renderRooms();
     });
 
-    function renderRooms() {
+    function togglePriceInput(val) {
+        document.getElementById("manualPrice").style.display = (val === 'custom') ? 'block' : 'none';
+    }
+
+    async function renderRooms() {
       const list = document.getElementById("roomList");
-      db.collection("chatrooms").onSnapshot(snap => {
+      db.collection("chatrooms").onSnapshot(async snap => {
         const rooms = [];
         snap.forEach(doc => rooms.push({ id: doc.id, ...doc.data() }));
         
         rooms.sort((a, b) => {
-            if (a.isPinned && !b.isPinned) return -1;
-            if (!a.isPinned && b.isPinned) return 1;
-            return 0;
+            if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
+            const dateA = a.createdAt?.seconds || 0;
+            const dateB = b.createdAt?.seconds || 0;
+            return dateA - dateB;
         });
 
         list.innerHTML = "";
-        rooms.forEach(data => {
+        for (const data of rooms) {
           const isOwner = auth.currentUser && auth.currentUser.uid === data.createdBy;
-          if (data.status === "offline" && !isOwner) return;
+          if (data.status === "offline" && !isOwner) continue;
+
+          let ownerHtml = "";
+          if(data.membershipPlan === "premium" || data.membershipPlan === "pro") {
+              const ownerDoc = await db.collection("users").doc(data.createdBy).get();
+              if(ownerDoc.exists) {
+                  const ownerInfo = ownerDoc.data();
+                  ownerHtml = `
+                    <div class="owner-mini-box">
+                        <span class="owner-label">Owner</span>
+                        <div class="owner-profile">
+                            <span class="owner-name">${ownerInfo.username}</span>
+                            <img src="${ownerInfo.profilePic}" class="owner-img">
+                        </div>
+                    </div>`;
+              }
+          }
 
           const card = document.createElement("div");
           card.className = `room-card ${data.isPinned ? 'pinned' : ''} ${data.membershipPlan || 'basic'}`;
           if(data.status === "offline") card.style.opacity = "0.5";
+          const fees = data.membershipFees || 0;
           
           card.innerHTML = `
             ${data.isPinned ? '<div class="pin-badge"><i data-lucide="pin" style="width:12px;"></i></div>' : ''}
             <div class="card-top">
                 <div class="icon-box"><i data-lucide="${data.membershipPlan === 'premium' ? 'crown' : 'message-square'}"></i></div>
                 <div class="room-info">
-                    <div class="room-name">${data.name} ${data.status === 'offline' ? '(OFFLINE)' : ''}</div>
+                    <div class="room-name">${data.name.substring(0, 16)}</div>
                     <div class="room-desc">${data.description || 'Sharky Public Chatroom'}</div>
                 </div>
+                ${ownerHtml}
             </div>
             <div class="stats-container">
-                <div class="live-indicator">
-                    <div class="pulse-dot" style="background:${data.status === 'offline' ? '#64748b' : ''}"></div>
-                    <span>${data.status === 'offline' ? 'OFFLINE' : (data.activeUsers || 0) + ' ONLINE'}</span>
+                <div class="live-indicator"><div class="pulse-dot"></div><span>${(data.activeUsers || 0)} ONLINE</span></div>
+                <div class="access-tag" style="font-family:Orbitron; font-size:0.6rem; color:${fees > 0 ? 'var(--premium)' : 'var(--success)'}; letter-spacing:1px;">
+                    ${fees > 0 ? 'MEMBERSHIP: ₹' + fees : 'FREE ACCESS'}
                 </div>
-                <div class="access-tag" style="font-family:Orbitron; font-size:0.6rem; color:var(--success); letter-spacing:1px;">FREE ACCESS</div>
-            </div>
-          `;
+            </div>`;
           card.onclick = () => openSheet(data.id, data);
           list.appendChild(card);
-        });
-        lucide.createIcons();
+          lucide.createIcons();
+        }
       });
+    }
+
+    async function checkAndJoin(id, data) {
+        const uid = auth.currentUser.uid;
+        const ownerId = data.createdBy;
+        const fees = data.membershipFees || 0;
+        const redirectLink = data.file || `${id}.html`;
+        if(uid === ownerId || fees === 0) { window.location.href = redirectLink; return; }
+        const subDoc = await db.collection("memberships").doc(`${uid}_${ownerId}`).get();
+        const now = Date.now();
+        if(subDoc.exists && subDoc.data().expiry > now) { window.location.href = redirectLink; return; }
+        if(confirm(`Membership required! Pay ₹${fees} for 30 days access?`)) {
+            try {
+                await db.runTransaction(async (transaction) => {
+                    const myWalletRef = db.collection("wallets").doc(uid);
+                    const ownerWalletRef = db.collection("wallets").doc(ownerId);
+                    const myW = await transaction.get(myWalletRef);
+                    if(!myW.exists || myW.data().realMoney < fees) throw "Insufficient funds!";
+                    const tax = fees * 0.2;
+                    const finalAmount = fees - tax;
+                    transaction.update(myWalletRef, { realMoney: firebase.firestore.FieldValue.increment(-fees) });
+                    transaction.update(ownerWalletRef, { realMoney: firebase.firestore.FieldValue.increment(finalAmount) });
+                    transaction.set(db.collection("memberships").doc(`${uid}_${ownerId}`), {
+                        userId: uid, ownerId: ownerId, expiry: now + (30 * 24 * 60 * 60 * 1000)
+                    });
+                });
+                alert("Membership Activated! Enjoy.");
+                window.location.href = redirectLink;
+            } catch(e) { 
+                if(e === "Insufficient funds!") {
+                    if(confirm("Insufficient funds! Add money now?")) window.location.href = "add-money.html";
+                } else { alert(e); }
+            }
+        }
     }
 
     function openSheet(id, data) {
       document.getElementById("sTitle").innerText = data.name;
       document.getElementById("sDesc").innerText = data.description || 'Sharky Public Chatroom';
-      
       const isOwner = auth.currentUser && auth.currentUser.uid === data.createdBy;
       const isAdmin = currentUserData && currentUserData.role === "admin";
-      
-      const adminCtrl = document.getElementById("adminControls");
-      const oCtrl = document.getElementById("ownerControls");
-      const gCtrl = document.getElementById("guestControls");
-      const redirectLink = data.file || `${id}.html`;
-
+      document.getElementById("adminControls").style.display = isAdmin ? "flex" : "none";
       if(isAdmin) {
-          adminCtrl.style.display = "flex";
-          const pBtn = document.getElementById("pinAction");
-          pBtn.innerText = data.isPinned ? "UNPIN ROOM" : "PIN TO TOP";
-          pBtn.onclick = async () => {
+          const pinBtn = document.getElementById("pinAction");
+          pinBtn.innerText = data.isPinned ? "UNPIN FROM TOP" : "PIN TO TOP";
+          pinBtn.onclick = async () => {
               await db.collection("chatrooms").doc(id).update({ isPinned: !data.isPinned });
               closeSheet();
           };
-      } else {
-          adminCtrl.style.display = "none";
       }
-
       if(isOwner) {
-          oCtrl.style.display = "flex";
-          gCtrl.style.display = "none";
-          document.getElementById("joinAction").onclick = () => window.location.href = redirectLink;
-          const sBtn = document.getElementById("statusAction");
-          sBtn.innerText = data.status === "offline" ? "GO ONLINE" : "CLOSE LOBBY";
-          sBtn.onclick = async () => {
+          document.getElementById("ownerControls").style.display = "flex";
+          document.getElementById("guestControls").style.display = "none";
+          document.getElementById("joinAction").onclick = () => window.location.href = data.file || `${id}.html`;
+          document.getElementById("statusAction").onclick = async () => {
               await db.collection("chatrooms").doc(id).update({ status: data.status === "offline" ? "online" : "offline" });
               closeSheet();
           };
           document.getElementById("delAction").onclick = async () => {
-              if(confirm("Delete lobby forever?")) {
-                  await db.collection("chatrooms").doc(id).delete();
-                  closeSheet();
-              }
+              if(confirm("Delete lobby?")) { await db.collection("chatrooms").doc(id).delete(); closeSheet(); }
           };
       } else {
-          oCtrl.style.display = "none";
-          gCtrl.style.display = "block";
-          document.getElementById("guestJoin").onclick = () => window.location.href = redirectLink;
+          document.getElementById("ownerControls").style.display = "none";
+          document.getElementById("guestControls").style.display = "block";
+          document.getElementById("guestJoin").onclick = () => checkAndJoin(id, data);
       }
       document.getElementById("pageBody").classList.add("show-sheet");
     }
@@ -278,19 +332,15 @@
       const t = document.getElementById("inTitle").value;
       const l = document.getElementById("inLimit").value;
       const d = document.getElementById("inDesc").value;
+      const pMode = document.getElementById("priceSelect").value;
+      const pVal = pMode === 'custom' ? parseInt(document.getElementById("manualPrice").value) : 0;
       if(t && l) {
           const newDocRef = db.collection("chatrooms").doc();
           await newDocRef.set({
-              name: t, 
-              maxUsers: parseInt(l), 
-              description: d || "Sharky Public Chatroom",
-              membershipPlan: "premium", 
-              createdBy: auth.currentUser.uid, 
-              createdAt: new Date(),
-              status: "online",
-              activeUsers: 0,
-              isPinned: false,
-              file: `${newDocRef.id}.html`
+              name: t, maxUsers: parseInt(l), description: d || "Sharky Public Chatroom",
+              membershipPlan: "premium", createdBy: auth.currentUser.uid, 
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              status: "online", activeUsers: 0, isPinned: false, membershipFees: pVal, file: `${newDocRef.id}.html`
           });
           toggleModal(false);
       }
