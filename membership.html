@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Sharky Membership | Elite Hub</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Orbitron:wght@700;900&family=IBM+Plex+Mono:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --m-bg: #030406;
+      --m-accent: #00d4ff;
+      --m-gold: #fbbf24;
+      --m-premium: #ff47bb;
+      --m-border: rgba(255, 255, 255, 0.08);
+      --m-glass: rgba(255, 255, 255, 0.03);
+    }
+    body.m-page-body {
+      background: var(--m-bg); color: #fff; font-family: 'Inter', sans-serif;
+      padding-top: 60px; overflow-x: hidden; min-height: 100vh;
+    }
+    .m-container { max-width: 1200px; margin: 0 auto; padding: 0 16px; position: relative; z-index: 10; }
+    .m-sub-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; margin-bottom: 10px; }
+    .m-label { font-family: 'Orbitron'; font-size: 10px; letter-spacing: 2px; color: #444; font-weight: 800; text-transform: uppercase; }
+    .m-wallet-display {
+      background: rgba(0, 212, 255, 0.05); border: 1px solid var(--m-accent);
+      padding: 6px 15px; border-radius: 50px; display: flex; align-items: center; gap: 8px; cursor: pointer;
+    }
+    .m-wallet-display span { font-family: 'Orbitron'; font-size: 13px; color: var(--m-accent); }
+    .m-hero-wrap { text-align: center; padding: 20px 0; }
+    .m-hero-wrap h1 { 
+      font-family: 'Orbitron'; font-size: 2.2rem; font-weight: 900;
+      background: linear-gradient(to right, #fff, var(--m-accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;
+    }
+    .m-timer-card {
+      display: none; background: rgba(251, 191, 36, 0.04); border: 1px solid rgba(251, 191, 36, 0.15);
+      padding: 10px 25px; border-radius: 15px; margin: 10px auto; max-width: fit-content; backdrop-filter: blur(10px);
+    }
+    .m-timer-text { font-family: 'IBM Plex Mono'; font-size: 1.2rem; color: var(--m-gold); letter-spacing: 1px; }
+    
+    .m-plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; padding: 20px 0; }
+    .m-plan-card {
+      background: var(--m-glass); border: 1px solid var(--m-border);
+      border-radius: 30px; padding: 35px 25px; transition: 0.4s; position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .m-plan-card:hover { transform: translateY(-5px); border-color: var(--m-accent); }
+    .m-plan-card.m-active-plan { border: 2px solid var(--m-gold); box-shadow: 0 0 30px rgba(251, 191, 36, 0.1); }
+    
+    .m-plan-tag { position: absolute; top: 15px; right: 15px; font-size: 9px; font-family: 'Orbitron'; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,0.05); }
+    
+    .m-price-box { font-size: 2.5rem; font-weight: 900; margin: 15px 0; display: flex; align-items: baseline; gap: 5px; font-family: 'Outfit'; }
+    .m-price-box span { font-size: 0.9rem; color: #555; font-weight: 400; }
+
+    .m-feature-list { list-style: none; margin-bottom: 30px; flex-grow: 1; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; }
+    .m-feature-list li { margin-bottom: 10px; color: #a1a1aa; font-size: 0.88rem; display: flex; align-items: center; gap: 10px; }
+    .m-feature-list i { color: var(--m-accent); flex-shrink: 0; }
+    
+    .m-action-btn {
+      width: 100%; padding: 16px; border-radius: 18px; border: none; font-family: 'Orbitron';
+      font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.8rem;
+    }
+    .m-btn-prime { background: var(--m-accent); color: #000; box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2); }
+    .m-btn-gold { background: var(--m-gold); color: #000; }
+    .m-btn-disabled { background: rgba(74, 222, 128, 0.05); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.2); cursor: default; }
+
+    .m-modal-mask {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none;
+      justify-content: center; align-items: center; z-index: 5000; backdrop-filter: blur(15px);
+    }
+    .m-modal-frame { background: #07080a; border: 1px solid var(--m-border); padding: 35px; border-radius: 35px; text-align: center; max-width: 360px; width: 92%; }
+    .m-confirm-title { font-family: 'Orbitron'; font-size: 1.3rem; margin-bottom: 10px; }
+    .m-confirm-desc { color: #71717a; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5; }
+    .m-final-btn { width: 100%; padding: 15px; border-radius: 15px; border: none; font-family: 'Orbitron'; font-weight: 800; cursor: pointer; margin-bottom: 15px; }
+    .m-close-text { color: #3f3f46; font-size: 0.75rem; cursor: pointer; font-family: 'Orbitron'; text-decoration: underline; }
+    #m-snack-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 12px 30px; border-radius: 50px; font-weight: 900; z-index: 6000; display: none; font-size: 10px; font-family: 'Orbitron'; }
+  </style>
+</head>
+<body class="m-page-body">
+
+  <script src="header.js"></script>
+
+  <div class="m-container">
+    <div class="m-sub-nav">
+      <div class="m-label">Sharky Membership</div>
+      <div class="m-wallet-display" onclick="window.location.href='add-money.html'">
+        <i data-lucide="wallet" size="14"></i>
+        <span id="m-user-balance">₹--</span>
+      </div>
+    </div>
+    <div class="m-hero-wrap">
+      <h1>SHARKY MEMBERSHIP</h1>
+      <div class="m-timer-card" id="m-expiry-timer">
+        <p style="font-size: 8px; color: #666; letter-spacing: 2px; margin-bottom: 5px; font-weight: 800;">CURRENT PLAN EXPIRES IN</p>
+        <div class="m-timer-text" id="m-timer-val">00d : 00h : 00m</div>
+      </div>
+    </div>
+    <div class="m-plans-grid" id="m-plans-render">
+      <div style="grid-column: 1/-1; text-align:center; padding: 50px; color:#444; font-family:'Orbitron'; font-size:12px;">ESTABLISHING ENCRYPTED CONNECTION...</div>
+    </div>
+  </div>
+
+  <div class="m-modal-mask" id="m-global-modal">
+    <div class="m-modal-frame">
+      <div id="m-modal-icon" style="margin-bottom: 15px;"></div>
+      <h2 class="m-confirm-title" id="m-modal-title">Confirm</h2>
+      <p class="m-confirm-desc" id="m-modal-desc"></p>
+      <button class="m-final-btn" id="m-modal-action-btn"></button>
+      <div class="m-close-text" onclick="closeM()">CANCEL TRANSACTION</div>
+    </div>
+  </div>
+
+  <div id="m-snack-bar"></div>
+
+  <script type="module">
+    import { getFirestore, doc, onSnapshot, updateDoc, Timestamp, runTransaction, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+    let walletData = 0;
+    let currentMembership = "free";
+    let expiryDate = null;
+
+    const membershipPlans = [
+      { id: "basic", name: "BASIC", price: 1, icon: "shield", rank: 1, tag: "STARTER", perks: ["Basic badge", "Daily 10 Sharky coins", "Basic sticker pack", "Unlock Bronze theme", "Basic support"] },
+      { id: "pro", name: "PRO", price: 49, icon: "zap", rank: 2, tag: "POPULAR", perks: ["Pro badge", "Unlock pro theme", "Daily 20 Coins & 2 Gold", "Pro sticker pack", "10 Custom stickers", "Unlock pro chat tints", "Unlock gradient usernames", "Quick customer Support", "Access to VIP rooms"] },
+      { id: "premium", name: "PREMIUM", price: 99, icon: "crown", rank: 3, tag: "ELITE", perks: ["Premium badge", "Unlock premium theme", "Daily 40 Coins & 4 Gold", "Premium sticker pack", "20 Custom stickers", "Unlock premium tints", "Gradient premium colors", "Create Own Chat room", "Unlock Your own membership", "Start earning system", "Priority Support"] }
+    ];
+
+    function startApp() {
+      const auth = getAuth();
+      const db = getFirestore();
+      onAuthStateChanged(auth, user => {
+        if(user) {
+          onSnapshot(doc(db, "users", user.uid), snap => {
+            const d = snap.data();
+            currentMembership = d?.membershipPlan || "free";
+            expiryDate = d?.planExpiry ? d.planExpiry.toDate() : null;
+            renderUI();
+            runTimer(db, auth);
+          });
+          onSnapshot(doc(db, "wallets", user.uid), snap => {
+            walletData = snap.data()?.realMoney || 0;
+            document.getElementById('m-user-balance').innerText = "₹" + walletData;
+          });
+        }
+      });
+
+      window.triggerConfirm = (pid, cost) => {
+        const modal = document.getElementById('m-global-modal');
+        const icon = document.getElementById('m-modal-icon');
+        const title = document.getElementById('m-modal-title');
+        const desc = document.getElementById('m-modal-desc');
+        const btn = document.getElementById('m-modal-action-btn');
+
+        if(walletData < cost) {
+          icon.innerHTML = `<i data-lucide="alert-circle" size="44" color="#ff4757"></i>`;
+          title.innerText = "INSUFFICIENT FUNDS"; title.style.color = "#ff4757";
+          desc.innerText = "You need ₹" + (cost - walletData) + " more to unlock this rank. Please top up your wallet.";
+          btn.innerText = "RECHARGE WALLET"; btn.style.background = "#ff4757";
+          btn.onclick = () => window.location.href = 'add-money.html';
+        } else {
+          const isRenew = currentMembership === pid;
+          icon.innerHTML = `<i data-lucide="${isRenew ? 'refresh-cw' : 'check-circle'}" size="44" color="${isRenew ? '#fbbf24' : '#00d4ff'}"></i>`;
+          title.innerText = isRenew ? "EXTEND RANK" : "UPGRADE RANK"; title.style.color = isRenew ? "#fbbf24" : "#00d4ff";
+          desc.innerText = isRenew ? "Extend your " + pid.toUpperCase() + " rank for 30 more days. ₹" + cost + " will be debited." : "Authorize " + pid.toUpperCase() + " rank activation. ₹" + cost + " will be debited.";
+          btn.innerText = "CONFIRM & ACTIVATE"; btn.style.background = isRenew ? "#fbbf24" : "#00d4ff";
+          btn.onclick = () => processPurchase(db, auth, pid, cost);
+        }
+        lucide.createIcons();
+        modal.style.display = 'flex';
+      };
+    }
+
+    const checkFirebase = setInterval(() => {
+      try { if (getAuth()) { clearInterval(checkFirebase); startApp(); } } catch (e) {}
+    }, 500);
+
+    function renderUI() {
+      const grid = document.getElementById('m-plans-render');
+      const uRank = membershipPlans.find(p => p.id === currentMembership)?.rank || 0;
+      grid.innerHTML = membershipPlans.map(p => {
+        const isActive = currentMembership === p.id;
+        const isUnlocked = uRank > p.rank;
+        let btnLabel = "GET STARTED", btnStyle = "m-btn-prime";
+        if(isActive) { btnLabel = "RENEW RANK"; btnStyle = "m-btn-gold"; }
+        else if(isUnlocked) { btnLabel = "RANK UNLOCKED"; btnStyle = "m-btn-disabled"; }
+        return `<div class="m-plan-card ${isActive ? 'm-active-plan' : ''}">
+            <div class="m-plan-tag" style="color:${p.id==='premium'?'#ff47bb':(p.id==='pro'?'#fbbf24':'#00d4ff')}">${p.tag}</div>
+            <div style="color:${p.id==='premium'?'#ff47bb':(p.id==='pro'?'#fbbf24':'#00d4ff')}; margin-bottom:10px"><i data-lucide="${p.icon}" size="40"></i></div>
+            <h2 style="font-family:'Orbitron'; font-size:1.3rem; letter-spacing:1px;">${p.name}</h2>
+            <div class="m-price-box">₹${p.price}<span>/ 30 Days</span></div>
+            <ul class="m-feature-list">${p.perks.map(perk => `<li><i data-lucide="check-circle" size="14"></i> ${perk}</li>`).join('')}</ul>
+            <button class="m-action-btn ${btnStyle}" onclick="triggerConfirm('${p.id}', ${p.price})" ${isUnlocked ? 'disabled' : ''}>${btnLabel}</button>
+          </div>`;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    async function processPurchase(db, auth, pid, price) {
+      document.getElementById('m-global-modal').style.display = 'none';
+      try {
+        await runTransaction(db, async (transaction) => {
+          const userRef = doc(db, "users", auth.currentUser.uid);
+          const walletRef = doc(db, "wallets", auth.currentUser.uid);
+          const userSnap = await transaction.get(userRef);
+          let finalExpiry = (currentMembership === pid && userSnap.data().planExpiry)
+            ? new Date(userSnap.data().planExpiry.toDate().getTime() + 2592000000)
+            : new Date(Date.now() + 2592000000);
+          transaction.update(walletRef, { realMoney: increment(-price) });
+          transaction.update(userRef, { membershipPlan: pid, planExpiry: Timestamp.fromDate(finalExpiry) });
+        });
+        notify("RANK ACTIVATED! 🚀");
+      } catch(e) { notify("TRANSACTION FAILED: " + e.message); }
+    }
+
+    function notify(text) {
+      const s = document.getElementById('m-snack-bar');
+      s.innerText = text; s.style.display = 'block';
+      setTimeout(() => s.style.display = 'none', 3000);
+    }
+
+    window.closeM = () => document.getElementById('m-global-modal').style.display = 'none';
+
+    let tId;
+    function runTimer(db, auth) {
+      const box = document.getElementById('m-expiry-timer'), val = document.getElementById('m-timer-val');
+      if(!expiryDate || currentMembership === "free") { box.style.display = "none"; return; }
+      box.style.display = "block";
+      if(tId) clearInterval(tId);
+      tId = setInterval(() => {
+        const diff = expiryDate.getTime() - Date.now();
+        if(diff < 0) {
+          updateDoc(doc(db, "users", auth.currentUser.uid), { membershipPlan: "free" });
+          clearInterval(tId); return;
+        }
+        const d = Math.floor(diff/864e5).toString().padStart(2,'0');
+        const h = Math.floor((diff%864e5)/36e5).toString().padStart(2,'0');
+        const m = Math.floor((diff%36e5)/6e4).toString().padStart(2,'0');
+        val.innerText = `${d}d : ${h}h : ${m}m`;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
